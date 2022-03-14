@@ -5,30 +5,38 @@
 ### The Graph
 
 -   Optimism
-    -   https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism
+    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism`
+    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
 -   Optimism Kovan
-    -   https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan
+    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan`
+    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
+    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
 -   Optimism Kovan Dev 1
-    -   https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev1
+    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
+    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
+    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
 -   Optimism Kovan Dev 2
-    -   https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev2
+    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
+    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
+    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
 
 ### Self-hosted Graph Node
 
 -   Optimism
-    -   Explorer: https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
+    -   Explorer: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql`
     -   HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     -   WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
 -   Optimism Kovan
-    -   Explorer: https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan/graphql
+    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan/graphql`
     -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
     -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
 -   Optimism Kovan Dev 1
-    -   Explorer: https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1/graphql
+    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1/graphql`
     -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
     -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
 -   Optimism Kovan Dev 2
-    -   Explorer: https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2/graphql
+    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2/graphql`
     -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
     -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
 
