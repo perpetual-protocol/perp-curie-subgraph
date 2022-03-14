@@ -1,0 +1,13 @@
+import { Address, TypedMap } from "@graphprotocol/graph-ts"
+
+export const Network = "{{ network }}"
+export const ChainId = "{{ chainId }}"
+export const Version = "{{ version }}"
+export const USDCAddress = Address.fromString("{{ externalContracts.USDC }}")
+export const QuoteTokenAddress = Address.fromString("{{ contracts.QuoteToken.address }}")
+export const UniswapV3FactoryAddress = Address.fromString("{{ externalContracts.UniswapV3Factory }}")
+
+export const baseTokenSymbolMap = new TypedMap<Address, string>()
+{{ #pools }}
+baseTokenSymbolMap.set(Address.fromString("{{ baseAddress }}"), "{{ baseSymbol }}")
+{{ /pools }}
