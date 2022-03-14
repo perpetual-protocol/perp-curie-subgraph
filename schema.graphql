@@ -1,0 +1,493 @@
+# MarketRegistry
+
+type Protocol @entity {
+    "hardcoded as 'perpetual-protocol'"
+    id: ID!
+    "network name"
+    network: String!
+    "chain id"
+    chainId: String!
+    "contract version"
+    contractVersion: String!
+    "number of public markets"
+    publicMarketCount: BigInt!
+    "cumulative trading volume"
+    tradingVolume: BigDecimal!
+    "cumulative trading fee"
+    tradingFee: BigDecimal!
+    "total value locked"
+    totalValueLocked: BigDecimal!
+    "bad debt"
+    badDebt: BigDecimal!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type Market @entity {
+    "format: baseToken address"
+    id: ID!
+    "baseToken address"
+    baseToken: Bytes!
+    "quoteToken address"
+    quoteToken: Bytes!
+    "pool address"
+    pool: Bytes!
+    "fee ratio: 500 (0.05%), 3000 (0.3%), 10000 (1%)"
+    feeRatio: BigInt!
+    "cumulative trading volume"
+    tradingVolume: BigDecimal!
+    "cumulative trading fee"
+    tradingFee: BigDecimal!
+    "provided liquidity base amount"
+    baseAmount: BigDecimal!
+    "provided liquidity quote amount"
+    quoteAmount: BigDecimal!
+
+    "block number the pool was added to ClearingHouse"
+    blockNumberAdded: BigInt!
+    "block timestamp the pool was added to ClearingHouse"
+    timestampAdded: BigInt!
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "positions"
+    positions: [Position!]! @derivedFrom(field: "marketRef")
+    "open orders"
+    openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
+}
+
+# Vault
+
+type Deposited @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "collateralToken address"
+    collateralToken: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type Withdrawn @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "collateralToken address"
+    collateralToken: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# Exchange
+
+type PositionChanged @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "exchanged position size: + is long and - is short"
+    exchangedPositionSize: BigDecimal!
+    "exchanged position notional: - is long and + is short"
+    exchangedPositionNotional: BigDecimal!
+    "trading fee"
+    fee: BigDecimal!
+    "average open notional after this tx"
+    openNotional: BigDecimal!
+    "realized pnl of this tx"
+    realizedPnl: BigDecimal!
+
+    "position size after this tx"
+    positionSizeAfter: BigDecimal!
+    "swapped price of this tx = abs(exchangedPositionNotionalWithFee / exchangedPositionSize)"
+    swappedPrice: BigDecimal!
+    "average entry price after this tx = abs(position.openNotional / position.positionSize)"
+    entryPriceAfter: BigDecimal!
+    "market price after this tx"
+    marketPriceAfter: BigDecimal!
+    "from function signature"
+    fromFunctionSignature: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+
+    "referrer code as passed in to the contract, this is automatically provided when interacting with perp front end"
+    referralCode: ReferralCode
+}
+
+type FundingUpdated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "mark price twap"
+    markTwap: BigDecimal!
+    "index price twap"
+    indexTwap: BigDecimal!
+    "daily funding rate"
+    dailyFundingRate: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type FundingPaymentSettled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "amount of funding payment"
+    fundingPayment: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type Trader @entity {
+    "format: trader address"
+    id: ID!
+    "total deposited collateral + cumulative total pnl"
+    collateral: BigDecimal!
+    "cumulative trading volume"
+    tradingVolume: BigDecimal!
+    "cumulative realize pnl"
+    realizedPnl: BigDecimal!
+    "cumulative funding payment: - is received and + is sent"
+    fundingPayment: BigDecimal!
+    "cumulative trading fee"
+    tradingFee: BigDecimal!
+    "cumulative liquidation fee"
+    liquidationFee: BigDecimal!
+    "cumulative maker fee"
+    makerFee: BigDecimal!
+    "cumulative total pnl = realizedPnl (fee included) - fundingPayment - liquidationFee + makerFee"
+    totalPnl: BigDecimal!
+    "cumulative bad debt"
+    badDebt: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "positions"
+    positions: [Position!]! @derivedFrom(field: "traderRef")
+
+    dayData: [TraderDayData!] @derivedFrom(field: "trader")
+    "the referral code the trader owns and provides to other traders"
+    referrerCode: ReferralCode
+    "the referral code the trader has registered to themselve"
+    refereeCode: ReferralCode
+}
+
+type Position @entity {
+    "format: <trader address>-<baseToken address>"
+    id: ID!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "current position size"
+    positionSize: BigDecimal!
+    "average open notional of the current position"
+    openNotional: BigDecimal!
+    "average entry price of the current position = abs(openNotional / positionSize)"
+    entryPrice: BigDecimal!
+    "cumulative trading volume"
+    tradingVolume: BigDecimal!
+    "cumulative realize pnl"
+    realizedPnl: BigDecimal!
+    "cumulative funding payment: - is received and + is sent"
+    fundingPayment: BigDecimal!
+    "cumulative trading fee"
+    tradingFee: BigDecimal!
+    "cumulative liquidation fee"
+    liquidationFee: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "foreign key to Trader"
+    traderRef: Trader!
+    "foreign key to Market"
+    marketRef: Market!
+}
+
+type PositionHistory @entity {
+    "format: <position id>-<tx hash>-<tx log index>"
+    id: ID!
+    trader: Bytes!
+    baseToken: Bytes!
+    positionSize: BigDecimal!
+    openNotional: BigDecimal!
+    entryPrice: BigDecimal!
+    realizedPnl: BigDecimal!
+    fundingPayment: BigDecimal!
+    tradingFee: BigDecimal!
+    liquidationFee: BigDecimal!
+    blockNumber: BigInt!
+    timestamp: BigInt!
+}
+
+# ClearingHouse
+
+type PositionLiquidated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "liquidator address"
+    liquidator: Bytes!
+    "liquidated position notional abs"
+    positionNotionalAbs: BigDecimal!
+    "liquidated position size abs"
+    positionSizeAbs: BigDecimal!
+    "liquidation penalty"
+    liquidationFee: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# TODO: Do we still need this?
+type Maker @entity {
+    "format: maker address"
+    id: ID!
+    "total collected maker fee across all openOrders"
+    collectedFee: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "open orders"
+    openOrders: [OpenOrder!]! @derivedFrom(field: "makerRef")
+}
+
+type OpenOrder @entity {
+    "format: <maker address>-<baseToken address>-<lowerTick>-<upperTick>"
+    id: ID!
+    "maker address"
+    maker: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "lower tick"
+    lowerTick: BigInt!
+    "upper tick"
+    upperTick: BigInt!
+    "provided liquidity base amount"
+    baseAmount: BigDecimal!
+    "provided liquidity quote amount"
+    quoteAmount: BigDecimal!
+    "current liquidity"
+    liquidity: BigInt!
+    "total collected maker fee"
+    collectedFee: BigDecimal!
+    "collected maker fee in this lifecycle"
+    collectedFeeInThisLifecycle: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "foreign key to Maker"
+    makerRef: Maker!
+    "foreign key to Market"
+    marketRef: Market!
+}
+
+type LiquidityChanged @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "maker address"
+    maker: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "quoteToken address"
+    quoteToken: Bytes!
+    "lower tick"
+    lowerTick: BigInt!
+    "upper tick"
+    upperTick: BigInt!
+    "amount of base token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
+    base: BigDecimal!
+    "amount of quote token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
+    quote: BigDecimal!
+    "amount of liquidity unit added (+: add liquidity, -: remove liquidity)"
+    liquidity: BigInt!
+    "amount of quote token the maker received as fee"
+    quoteFee: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# AccountBalance
+
+type PnlRealized @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# No such contract event, this is artificial for monitoring only
+type BadDebtHappened @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# Trader Historical Data
+
+type TraderDayData @entity {
+    "format: <trader id>-<day id>"
+    id: ID!
+    trader: Trader!
+    "timestamp"
+    date: BigInt!
+    "trading volume aggregated per day for trader"
+    tradingVolume: BigDecimal!
+    "trading fee aggregated per day for trader"
+    fee: BigInt!
+    "total pnl aggregated per day for trader"
+    realizedPnl: BigInt!
+}
+
+# For tracking day trade metrics for referral codes on a per trader basis
+type ReferralCodeTraderDayData @entity {
+    "format: <referal code>-<day id>-<trader>"
+    id: ID!
+    "relationship to trader"
+    trader: Trader!
+    "relationship to referral day data"
+    referralCodeDayData: ReferralCodeDayData!
+    "trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "fees in notional value"
+    fees: BigDecimal!
+}
+
+type ReferralCodeDayData @entity {
+    "format: <referal code>-<day id>"
+    id: ID!
+    referralCode: ReferralCode!
+    "timestamp"
+    date: BigInt!
+    "total trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "total fees paid during day"
+    fees: BigDecimal!
+    "trading volume and fees grouped by trader"
+    traderData: [ReferralCodeTraderDayData!]! @derivedFrom(field: "referralCodeDayData")
+    "a list of new referees added today"
+    newReferees: [Trader!]!
+    "a list of referees which have traded on the day"
+    activeReferees: [Trader!]!
+}
+
+type ReferralCode @entity {
+    id: ID!
+    "referrer/partner address"
+    referrer: Trader!
+    "list of registered referees"
+    referees: [Trader!]! @derivedFrom(field: "refereeCode")
+    "date created at"
+    createdAt: BigInt!
+    "day data link"
+    dayData: [ReferralCodeDayData!] @derivedFrom(field: "referralCode")
+    "if user is vip tier"
+    vipTier: String
+    "how long user has been vip since"
+    vipSince: BigInt
+    "whether or not the referral code exists in the referral contract"
+    registeredOnChain: Boolean
+    "total number of registered referees"
+    numReferees: BigInt!
+}
