@@ -1,4 +1,4 @@
-# perp-subgraph
+# perp-curie-subgraph
 
 ## Subgraphs
 
