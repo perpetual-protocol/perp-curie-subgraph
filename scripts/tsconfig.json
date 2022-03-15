@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+      "baseUrl": "./",
+      "rootDir": "./",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "lib": ["esnext"],
+      "module": "commonjs",
+      "sourceMap": true,
+      "target": "esnext",
+      "declaration": true,
+      "declarationMap": true,
+      "strict": true,
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "allowJs": true,
+  }
+}

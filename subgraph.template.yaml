@@ -1,0 +1,174 @@
+specVersion: 0.0.3
+description: Perpetual Protocol Curie (V2) Subgraph
+repository: https://github.com/perpetual-protocol/perp-curie-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: MarketRegistry
+    network: {{ network }}
+    source:
+      abi: MarketRegistry
+      address: "{{ contracts.MarketRegistry.address }}"
+      startBlock: {{ contracts.MarketRegistry.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/marketRegistry.ts
+      entities:
+        - Protocol
+        - Market
+      abis:
+        - name: MarketRegistry
+          file: ./abis/MarketRegistry.json
+      eventHandlers:
+        - event: PoolAdded(indexed address,indexed uint24,indexed address)
+          handler: handlePoolAdded
+        - event: FeeRatioChanged(address,uint24)
+          handler: handleFeeRatioChanged
+
+  - kind: ethereum/contract
+    name: Vault
+    network: {{ network }}
+    source:
+      abi: Vault
+      address: "{{ contracts.Vault.address }}"
+      startBlock: {{ contracts.MarketRegistry.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/vault.ts
+      entities:
+        - Deposited
+        - Withdrawn
+        - Protocol
+        - Trader
+      abis:
+        - name: Vault
+          file: ./abis/Vault.json
+      eventHandlers:
+        - event: Deposited(indexed address,indexed address,uint256)
+          handler: handleDeposited
+        - event: Withdrawn(indexed address,indexed address,uint256)
+          handler: handleWithdrawn
+
+  - kind: ethereum/contract
+    name: Exchange
+    network: {{ network }}
+    source:
+      abi: Exchange
+      address: "{{ contracts.Exchange.address }}"
+      startBlock: {{ contracts.Exchange.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/exchange.ts
+      entities:
+        - FundingUpdated
+      abis:
+        - name: Exchange
+          file: ./abis/Exchange.json
+      eventHandlers:
+        - event: FundingUpdated(indexed address,uint256,uint256)
+          handler: handleFundingUpdated
+
+  - kind: ethereum/contract
+    name: ClearingHouse
+    network: {{ network }}
+    source:
+      abi: ClearingHouse
+      address: "{{ contracts.ClearingHouse.address }}"
+      startBlock: {{ contracts.ClearingHouse.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/clearingHouse.ts
+      entities:
+        - PositionChanged
+        - Protocol
+        - Market
+        - Trader
+        - Position
+        - PositionHistory
+        - PositionLiquidated
+        - LiquidityChanged
+        - Maker
+        - OpenOrder
+        - FundingPaymentSettled
+        - TraderDayData
+        - ReferralCodeDayData
+        - ReferralCodeWeeklyData
+        - ReferralCode
+      abis:
+        - name: ClearingHouse
+          file: ./abis/ClearingHouse.json
+      eventHandlers:
+        - event: PositionChanged(indexed address,indexed address,int256,int256,uint256,int256,int256,uint256)
+          handler: handlePositionChanged
+        - event: PositionLiquidated(indexed address,indexed address,uint256,uint256,uint256,address)
+          handler: handlePositionLiquidated
+        - event: LiquidityChanged(indexed address,indexed address,indexed address,int24,int24,int256,int256,int128,uint256)
+          handler: handleLiquidityChanged
+        - event: FundingPaymentSettled(indexed address,indexed address,int256)
+          handler: handleFundingPaymentSettled
+        - event: ReferredPositionChanged(indexed bytes32)
+          handler: handleReferralPositionChanged
+
+  - kind: ethereum/contract
+    name: AccountBalance
+    network: {{ network }}
+    source:
+      abi: AccountBalance
+      address: "{{ contracts.AccountBalance.address }}"
+      startBlock: {{ contracts.AccountBalance.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/accountBalance.ts
+      entities:
+        - Protocol
+        - PnlRealized
+        - Trader
+      abis:
+        - name: AccountBalance
+          file: ./abis/AccountBalance.json
+      eventHandlers:
+        - event: PnlRealized(indexed address,int256)
+          handler: handlePnlRealized
+
+  {{#referralContracts}}
+  - kind: ethereum/contract
+    name: Referrer
+    network: {{ network }}
+    source:
+      abi: Referrer
+      address: "{{ referralContracts.PerpetualProtocolReferrer }}"
+      startBlock: {{ contracts.ClearingHouse.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/referrer.ts
+      entities:
+        - ReferralCode
+        - Trader
+        - ReferralCodeDayData
+        - ReferralCodeWeeklyData
+      abis:
+        - name: Referrer
+          file: ./abis/Referrer.json
+      eventHandlers:
+        - event: OnReferralCodeCreated(address,address,uint256,string)
+          handler: handleReferralCodeCreated
+        - event: OnReferralCodeUpserted(address,uint8,uint256,string,string)
+          handler: handleReferralCodeUpserted
+        - event: OnUncappedPartnerAssigned(address,string)
+          handler: handleUncappedPartnerUpserted
+        - event: OnUncappedPartnerRemoved(address)
+          handler: handleUncappedPartnerRemoved
+  {{/referralContracts}}

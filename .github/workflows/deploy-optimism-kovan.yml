@@ -1,0 +1,57 @@
+name: Deploy Staging (Optimism Kovan)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install
+        run: npm ci
+
+      - name: Deploy to The Graph
+        run: |
+          npx graph auth --product hosted-service ${{ secrets.THE_GRAPH_ACCESS_TOKEN }}
+          npm run deploy-the-graph:optimism-kovan
+
+      - name: Configure AWS Credentials - aws eks update-kubeconfig
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: "${{ secrets.AWS_SUBGRAPH_STAGING_DEPLOYER_ACCESS_KEY_ID }}"
+          aws-secret-access-key: "${{ secrets.AWS_SUBGRAPH_STAGING_DEPLOYER_SECRET_ACCESS_KEY }}"
+          aws-region: ap-northeast-1
+
+      - name: Setup kubeconfig
+        env:
+          AWS_REGION: ap-northeast-1
+          AWS_EKS_CLUSTER: perp-staging
+        run: |
+          aws eks --region $AWS_REGION update-kubeconfig --name $AWS_EKS_CLUSTER
+
+      - name: Deploy to Self-hosted Graph Node
+        run: |
+          kubectl port-forward service/graph-node 8020:8020 &
+          npm run deploy-self-hosted:optimism-kovan
+
+  notify:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_RELEASE_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: >-
+            **[staging]** Perp v2 Subgraph deployed (Optimism Kovan)
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref }}

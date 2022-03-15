@@ -1,0 +1,22 @@
+{
+    "cSpell.words": [
+        "arbitrum",
+        "ipfs",
+        "lushan",
+        "perp",
+        "twap",
+        "wasm"
+    ],
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    }
+}
