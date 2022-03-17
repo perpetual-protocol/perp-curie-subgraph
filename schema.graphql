@@ -223,6 +223,8 @@ type Trader @entity {
     referrerCode: ReferralCode
     "the referral code the trader has registered to themselve"
     refereeCode: ReferralCode
+    "A list of markets that the traders have traded on"
+    markets: [Market!]!
 }
 
 type TraderMarket @entity {
