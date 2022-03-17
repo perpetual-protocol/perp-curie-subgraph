@@ -224,12 +224,16 @@ type Trader @entity {
     "the referral code the trader has registered to themselve"
     refereeCode: ReferralCode
     "A list of markets that the traders have traded on"
-    markets: [Market!]!
+    traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
 }
 
 type TraderMarket @entity {
     "format: <trader address>-<baseToken address>"
     id: ID!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"
@@ -246,6 +250,10 @@ type TraderMarket @entity {
     blockNumber: BigInt!
     "last updated block timestamp"
     timestamp: BigInt!
+    "foreign key to Trader"
+    traderRef: Trader!
+    "foreign key to Market"
+    marketRef: Market!
 }
 
 type Position @entity {

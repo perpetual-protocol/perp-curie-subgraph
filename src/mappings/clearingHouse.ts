@@ -1,4 +1,4 @@
-import {Address, BigInt, Bytes} from "@graphprotocol/graph-ts"
+import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -6,16 +6,9 @@ import {
     PositionLiquidated as PositionLiquidatedEvent,
     ReferredPositionChanged,
 } from "../../generated/ClearingHouse/ClearingHouse"
+import { FundingPaymentSettled, LiquidityChanged, PositionChanged, PositionLiquidated } from "../../generated/schema"
+import { abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
-    FundingPaymentSettled,
-    LiquidityChanged,
-    PositionChanged,
-    PositionLiquidated,
-    Trader
-} from "../../generated/schema"
-import {abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei} from "../utils/numbers"
-import {
-    formatMarketId,
     getBlockNumberLogIndex,
     getOrCreateMaker,
     getOrCreateMarket,
@@ -30,13 +23,6 @@ import {
     getTraderDayData,
     saveToPositionHistory,
 } from "../utils/stores"
-
-function updateMarketsInTrader(trader: Trader, baseToken: Address) {
-    const marketId = formatMarketId(baseToken)
-    if (!trader.markets.filter(it => marketId === it).pop()) {
-        trader.markets.push(marketId)
-    }
-}
 
 export function handlePositionChanged(event: PositionChangedEvent): void {
     // insert PositionChanged
@@ -88,15 +74,14 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     trader.tradingVolume = trader.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     trader.realizedPnl = trader.realizedPnl.plus(positionChanged.realizedPnl)
     trader.tradingFee = trader.tradingFee.plus(positionChanged.fee)
-    updateMarketsInTrader(trader, event.params.baseToken)
 
     // upsert TraderMarket
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
-    traderMarket.tradingVolume = trader.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
+    traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     traderMarket.realizedPnl.plus(positionChanged.realizedPnl)
-    traderMarket.tradingFee = trader.tradingFee.plus(positionChanged.fee)
+    traderMarket.tradingFee = traderMarket.tradingFee.plus(positionChanged.fee)
 
     // upsert Position
     const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
@@ -166,7 +151,7 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
-    traderMarket.liquidationFee = trader.liquidationFee.plus(positionLiquidated.liquidationFee)
+    traderMarket.liquidationFee = traderMarket.liquidationFee.plus(positionLiquidated.liquidationFee)
 
     // commit changes
     positionLiquidated.save()
@@ -206,13 +191,12 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     trader.blockNumber = event.block.number
     trader.timestamp = event.block.timestamp
     trader.makerFee = trader.makerFee.plus(liquidityChanged.quoteFee)
-    updateMarketsInTrader(trader, event.params.baseToken)
 
     // upsert TraderMarket
     const traderMarket = getOrCreateTraderMarket(event.params.maker, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
-    traderMarket.makerFee = trader.makerFee.plus(liquidityChanged.quoteFee)
+    traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
 
     // upsert OpenOrder
     const openOrder = getOrCreateOpenOrder(
@@ -278,7 +262,7 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
-    traderMarket.fundingPayment = trader.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
+    traderMarket.fundingPayment = traderMarket.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
 
     // commit changes
     fundingPaymentSettled.save()
