@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import {BigInt, Bytes} from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -6,8 +6,8 @@ import {
     PositionLiquidated as PositionLiquidatedEvent,
     ReferredPositionChanged,
 } from "../../generated/ClearingHouse/ClearingHouse"
-import { FundingPaymentSettled, LiquidityChanged, PositionChanged, PositionLiquidated } from "../../generated/schema"
-import { abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei } from "../utils/numbers"
+import {FundingPaymentSettled, LiquidityChanged, PositionChanged, PositionLiquidated} from "../../generated/schema"
+import {abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei} from "../utils/numbers"
 import {
     getBlockNumberLogIndex,
     getOrCreateMaker,
@@ -16,6 +16,7 @@ import {
     getOrCreatePosition,
     getOrCreateProtocol,
     getOrCreateTrader,
+    getOrCreateTraderMarket,
     getReferralCode,
     getReferralCodeDayData,
     getReferralCodeTraderDayData,
@@ -74,6 +75,14 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     trader.realizedPnl = trader.realizedPnl.plus(positionChanged.realizedPnl)
     trader.tradingFee = trader.tradingFee.plus(positionChanged.fee)
 
+    // upsert TraderMarket
+    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.tradingVolume = trader.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
+    traderMarket.realizedPnl.plus(positionChanged.realizedPnl)
+    traderMarket.tradingFee = trader.tradingFee.plus(positionChanged.fee)
+
     // upsert Position
     const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
     position.blockNumber = event.block.number
@@ -104,6 +113,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     protocol.save()
     market.save()
     trader.save()
+    traderMarket.save()
     position.save()
     traderDayData.save()
     saveToPositionHistory(position, event)
@@ -137,10 +147,17 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     trader.timestamp = event.block.timestamp
     trader.liquidationFee = trader.liquidationFee.plus(positionLiquidated.liquidationFee)
 
+    // upsert Trader
+    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.liquidationFee = trader.liquidationFee.plus(positionLiquidated.liquidationFee)
+
     // commit changes
     positionLiquidated.save()
     position.save()
     trader.save()
+    traderMarket.save()
 }
 
 export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
@@ -175,6 +192,12 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     trader.timestamp = event.block.timestamp
     trader.makerFee = trader.makerFee.plus(liquidityChanged.quoteFee)
 
+    // upsert TraderMarket
+    const traderMarket = getOrCreateTraderMarket(event.params.maker, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.makerFee = trader.makerFee.plus(liquidityChanged.quoteFee)
+
     // upsert OpenOrder
     const openOrder = getOrCreateOpenOrder(
         event.params.maker,
@@ -205,6 +228,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     liquidityChanged.save()
     maker.save()
     trader.save()
+    traderMarket.save()
     openOrder.save()
     market.save()
 }
@@ -234,10 +258,17 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     trader.timestamp = event.block.timestamp
     trader.fundingPayment = trader.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
 
+    // upsert TraderMarket
+    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.fundingPayment = trader.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
+
     // commit changes
     fundingPaymentSettled.save()
     position.save()
     trader.save()
+    traderMarket.save()
 }
 
 export function handleReferralPositionChanged(event: ReferredPositionChanged): void {

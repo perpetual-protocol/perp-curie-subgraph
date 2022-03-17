@@ -225,6 +225,27 @@ type Trader @entity {
     refereeCode: ReferralCode
 }
 
+type TraderMarket @entity {
+    "format: <trader address>-<baseToken address>"
+    id: ID!
+    "cumulative trading volume"
+    tradingVolume: BigDecimal!
+    "cumulative realize pnl"
+    realizedPnl: BigDecimal!
+    "cumulative funding payment: - is received and + is sent"
+    fundingPayment: BigDecimal!
+    "cumulative trading fee"
+    tradingFee: BigDecimal!
+    "cumulative liquidation fee"
+    liquidationFee: BigDecimal!
+    "cumulative maker fee"
+    makerFee: BigDecimal!
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+}
+
 type Position @entity {
     "format: <trader address>-<baseToken address>"
     id: ID!

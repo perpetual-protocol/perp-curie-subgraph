@@ -1,4 +1,4 @@
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
+import {Address, BigInt, ethereum} from "@graphprotocol/graph-ts"
 import {
     Maker,
     Market,
@@ -11,9 +11,10 @@ import {
     ReferralCodeTraderDayData,
     Trader,
     TraderDayData,
+    TraderMarket,
 } from "../../generated/schema"
-import { ChainId, Network, Version } from "../constants"
-import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
+import {ChainId, Network, Version} from "../constants"
+import {ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO} from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     return event.block.number.times(BigInt.fromI32(1000)).plus(event.logIndex)
@@ -90,6 +91,28 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
         trader.save()
     }
     return trader
+}
+
+export function formatTraderMarketId(trader: Address, baseToken: Address): string {
+    return `${trader.toHexString()}-${baseToken.toHexString()}`
+}
+
+export function getOrCreateTraderMarket(traderAddr: Address, baseToken: Address): TraderMarket {
+    const id = formatTraderMarketId(traderAddr, baseToken)
+    let traderMarket = TraderMarket.load(id)
+    if (!traderMarket) {
+        traderMarket = new TraderMarket(id)
+        traderMarket.tradingVolume = BD_ZERO
+        traderMarket.realizedPnl = BD_ZERO
+        traderMarket.fundingPayment = BD_ZERO
+        traderMarket.tradingFee = BD_ZERO
+        traderMarket.liquidationFee = BD_ZERO
+        traderMarket.makerFee = BD_ZERO
+        traderMarket.blockNumber = BI_ZERO
+        traderMarket.timestamp = BI_ZERO
+        traderMarket.save()
+    }
+    return traderMarket
 }
 
 export function formatPositionId(trader: Address, baseToken: Address): string {
