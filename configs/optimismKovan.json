@@ -31,6 +31,16 @@
             "createdBlockNumber": 748012,
             "name": "contracts/ClearingHouseConfig.sol:ClearingHouseConfig"
         },
+        "DAIUSDChainlinkPriceFeed": {
+            "address": "0x8E5D6cFfD43438758eCdc953DFF887699C94ad8d",
+            "createdBlockNumber": 1413149,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "ETH2USDChainlinkPriceFeed": {
+            "address": "0x68a2C673D1D0E3153A38746BEeEc77b0103d9439",
+            "createdBlockNumber": 1572368,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "ETHUSDChainlinkPriceFeed": {
             "address": "0xfAb3Bc6674a38cA766083838E0eba7bB3Ef96177",
             "createdBlockNumber": 748123,
@@ -121,9 +131,19 @@
             "createdBlockNumber": 1019223,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
+        "vDAI": {
+            "address": "0x151Ce109B67bc0Dd7Fa49bC2F4e7D6A20b66944B",
+            "createdBlockNumber": 1413347,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
         "vETH": {
             "address": "0x5802918dC503c465F969DA0847b71E3Fbe9B141c",
             "createdBlockNumber": 748138,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vETH2": {
+            "address": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
+            "createdBlockNumber": 1573019,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vLINK": {
@@ -255,6 +275,20 @@
             "address": "0x2635326c50793860b8D89f442aCe2C4134d7bDa3",
             "baseAddress": "0x96c2B49ad13792700B4123bcB43D3E1f351aCdF7",
             "baseSymbol": "vTSLA",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x1De1A676E84b1e54fD48F1D5F59F0E48e184d958",
+            "baseAddress": "0x151Ce109B67bc0Dd7Fa49bC2F4e7D6A20b66944B",
+            "baseSymbol": "vDAI",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x62483DDAB027976404AE000E766c824b29AaD091",
+            "baseAddress": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
+            "baseSymbol": "vETH2",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         }
