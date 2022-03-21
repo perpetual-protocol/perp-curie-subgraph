@@ -80,7 +80,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
-    traderMarket.realizedPnl.plus(positionChanged.realizedPnl)
+    traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionChanged.realizedPnl)
     traderMarket.tradingFee = traderMarket.tradingFee.plus(positionChanged.fee)
 
     // upsert Position
@@ -147,7 +147,7 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     trader.timestamp = event.block.timestamp
     trader.liquidationFee = trader.liquidationFee.plus(positionLiquidated.liquidationFee)
 
-    // upsert Trader
+    // upsert TraderMarket
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp

@@ -112,7 +112,7 @@ export function getOrCreateTraderMarket(traderAddr: Address, baseToken: Address)
         traderMarket.makerFee = BD_ZERO
         traderMarket.blockNumber = BI_ZERO
         traderMarket.timestamp = BI_ZERO
-        traderMarket.traderRef = formatMakerId(traderAddr)
+        traderMarket.traderRef = formatTraderId(traderAddr)
         traderMarket.marketRef = formatMarketId(baseToken)
         traderMarket.save()
     }
