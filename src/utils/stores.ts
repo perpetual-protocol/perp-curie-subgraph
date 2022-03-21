@@ -11,6 +11,7 @@ import {
     ReferralCodeTraderDayData,
     Trader,
     TraderDayData,
+    TraderMarket,
 } from "../../generated/schema"
 import { ChainId, Network, Version } from "../constants"
 import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
@@ -90,6 +91,32 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
         trader.save()
     }
     return trader
+}
+
+export function formatTraderMarketId(trader: Address, baseToken: Address): string {
+    return `${trader.toHexString()}-${baseToken.toHexString()}`
+}
+
+export function getOrCreateTraderMarket(traderAddr: Address, baseToken: Address): TraderMarket {
+    const id = formatTraderMarketId(traderAddr, baseToken)
+    let traderMarket = TraderMarket.load(id)
+    if (!traderMarket) {
+        traderMarket = new TraderMarket(id)
+        traderMarket.trader = traderAddr
+        traderMarket.baseToken = baseToken
+        traderMarket.tradingVolume = BD_ZERO
+        traderMarket.realizedPnl = BD_ZERO
+        traderMarket.fundingPayment = BD_ZERO
+        traderMarket.tradingFee = BD_ZERO
+        traderMarket.liquidationFee = BD_ZERO
+        traderMarket.makerFee = BD_ZERO
+        traderMarket.blockNumber = BI_ZERO
+        traderMarket.timestamp = BI_ZERO
+        traderMarket.traderRef = formatTraderId(traderAddr)
+        traderMarket.marketRef = formatMarketId(baseToken)
+        traderMarket.save()
+    }
+    return traderMarket
 }
 
 export function formatPositionId(trader: Address, baseToken: Address): string {
