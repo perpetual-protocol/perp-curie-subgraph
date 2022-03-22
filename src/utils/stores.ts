@@ -9,11 +9,14 @@ import {
     ReferralCode,
     ReferralCodeDayData,
     ReferralCodeTraderDayData,
+    Token,
+    TokenBalance,
     Trader,
     TraderDayData,
     TraderMarket,
 } from "../../generated/schema"
 import { ChainId, Network, Version } from "../constants"
+import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/token"
 import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
@@ -31,7 +34,7 @@ export function getOrCreateProtocol(): Protocol {
         protocol.publicMarketCount = BI_ZERO
         protocol.tradingFee = BD_ZERO
         protocol.tradingVolume = BD_ZERO
-        protocol.totalValueLocked = BD_ZERO
+        protocol.totalSettlementTokenBalance = BD_ZERO
         protocol.badDebt = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
@@ -73,7 +76,7 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
     let trader = Trader.load(traderId)
     if (!trader) {
         trader = new Trader(traderId)
-        trader.collateral = BD_ZERO
+        trader.settlementTokenBalance = BD_ZERO
         trader.tradingVolume = BD_ZERO
         trader.realizedPnl = BD_ZERO
         trader.fundingPayment = BD_ZERO
@@ -193,6 +196,35 @@ export function getOrCreateOpenOrder(
         openOrder.save()
     }
     return openOrder
+}
+
+export function getOrCreateToken(tokenAddr: Address): Token {
+    let token = Token.load(tokenAddr.toHexString())
+    if (!token) {
+        token = new Token(tokenAddr.toHexString())
+        token.name = fetchTokenName(tokenAddr)
+        token.symbol = fetchTokenSymbol(tokenAddr)
+        token.decimals = fetchTokenDecimals(tokenAddr)
+        token.totalDeposited = BD_ZERO
+        token.save()
+    }
+    return token
+}
+
+export function formatTokenBalanceId(traderAddr: Address, tokenAddr: Address): string {
+    return `${traderAddr.toHexString()}-${tokenAddr.toHexString()}`
+}
+
+export function getOrCreateTokenBalance(traderAddr: Address, tokenAddr: Address): TokenBalance {
+    const TokenBalanceId = formatTokenBalanceId(traderAddr, tokenAddr)
+    let tokenBalance = TokenBalance.load(TokenBalanceId)
+    if (!tokenBalance) {
+        tokenBalance = new TokenBalance(TokenBalanceId)
+        tokenBalance.amount = BD_ZERO
+        tokenBalance.trader = formatTraderId(traderAddr)
+        tokenBalance.save()
+    }
+    return tokenBalance
 }
 
 export function saveToPositionHistory(position: Position, event: ethereum.Event): void {

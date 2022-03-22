@@ -2,7 +2,15 @@ import fs from "fs"
 
 async function main(): Promise<void> {
     const env = process.argv[2]
-    const abiNames = ["AccountBalance", "ClearingHouse", "Exchange", "MarketRegistry", "OrderBook", "Vault"]
+    const abiNames = [
+        "AccountBalance",
+        "ClearingHouse",
+        "Exchange",
+        "MarketRegistry",
+        "OrderBook",
+        "Vault",
+        "CollateralManager",
+    ]
     for (const abiName of abiNames) {
         const artifact = await import(
             `@perp/curie-deployments/${env}/core/artifacts/contracts/${abiName}.sol/${abiName}.json`

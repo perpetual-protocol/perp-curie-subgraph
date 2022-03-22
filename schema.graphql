@@ -15,8 +15,10 @@ type Protocol @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
-    "total value locked"
-    totalValueLocked: BigDecimal!
+    "total settlement token"
+    totalSettlementTokenBalance: BigDecimal!
+    "total non settlement tokens"
+    totalNonSettlementTokenBalances: [TokenBalance!]
     "bad debt"
     badDebt: BigDecimal!
     "block number"
@@ -56,6 +58,31 @@ type Market @entity {
     openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
 }
 
+type Token @entity {
+    "format: <token address>"
+    id: ID!
+    "token name"
+    name: String!
+    "token symbol"
+    symbol: String!
+    "token decimals"
+    decimals: BigInt!
+
+    "total amount deposited"
+    totalDeposited: BigDecimal!
+}
+
+type TokenBalance @entity {
+    "format: <trader address>-<token address>, 0x0 means whole protocol"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    token: Token!
+    "foreign key to Trader"
+    trader: Trader
+}
+
 # Vault
 
 type Deposited @entity {
@@ -89,6 +116,32 @@ type Withdrawn @entity {
     collateralToken: Bytes!
     "amount"
     amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type CollateralLiquidated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "collateralToken address"
+    collateralToken: Bytes!
+    "liquidator address"
+    liquidator: Bytes!
+    "amount of collateral token liquidated"
+    amount: BigDecimal!
+    "repayAmount"
+    repayAmount: BigDecimal!
+    "insuranceFund fee"
+    insuranceFundFee: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -215,8 +268,10 @@ type FundingPaymentSettled @entity {
 type Trader @entity {
     "format: trader address"
     id: ID!
-    "total deposited collateral + cumulative total pnl"
-    collateral: BigDecimal!
+    "total deposited settlement collateral + cumulative total pnl"
+    settlementTokenBalance: BigDecimal!
+    "total deposited non-settlement collateral"
+    nonSettlementTokenBalances: [TokenBalance!] @derivedFrom(field: "trader")
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"

@@ -26,11 +26,6 @@
             "createdBlockNumber": 513569,
             "name": "contracts/AccountBalance.sol:AccountBalance"
         },
-        "BNBUSDChainlinkPriceFeed": {
-            "address": "0xcAd994415747355c8A2E6556d1021905B4E204Ce",
-            "createdBlockNumber": 4498994,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
-        },
         "BTCUSDChainlinkPriceFeed": {
             "address": "0x8774a1038471Ff73E10B1dbe165287c03289eb8b",
             "createdBlockNumber": 2584278,
@@ -154,11 +149,6 @@
         "vAVAX": {
             "address": "0x5FAa136Fc58B6136fFDAeAAC320076C4865c070F",
             "createdBlockNumber": 2390611,
-            "name": "contracts/BaseToken.sol:BaseToken"
-        },
-        "vBNB": {
-            "address": "0xb6599Bd362120Dc70D48409B8a08888807050700",
-            "createdBlockNumber": 4533613,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vBTC": {
