@@ -76,6 +76,11 @@
             "createdBlockNumber": 748039,
             "name": "contracts/OrderBook.sol:OrderBook"
         },
+        "PERPUSDBandPriceFeed": {
+            "address": "0xa49d8b6a77fC30f2EF6f45Fe0b112F7767785626",
+            "createdBlockNumber": 1683467,
+            "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
+        },
         "QuoteToken": {
             "address": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "createdBlockNumber": 748017,
@@ -154,6 +159,11 @@
         "vLUNA": {
             "address": "0x798310F8dD81E9f0117a66A8615ad769b3f801AE",
             "createdBlockNumber": 968188,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vPERP": {
+            "address": "0x298129B9c8613CD49A9235Af92F74DF50c3E4EE5",
+            "createdBlockNumber": 1684111,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vSAND": {
@@ -289,6 +299,13 @@
             "address": "0x62483DDAB027976404AE000E766c824b29AaD091",
             "baseAddress": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
             "baseSymbol": "vETH2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x191AF74427ee73b5D9d63E1782C7aCa00857bA74",
+            "baseAddress": "0x298129B9c8613CD49A9235Af92F74DF50c3E4EE5",
+            "baseSymbol": "vPERP",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         }
