@@ -18,7 +18,7 @@ type Protocol @entity {
     "total settlement token"
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
-    totalNonSettlementTokenBalances: [TokenBalance!]
+    totalNonSettlementTokenBalances: [ProtocolTokenBalance!]
     "block number"
     blockNumber: BigInt!
     "block timestamp"
@@ -70,15 +70,26 @@ type Token @entity {
     totalDeposited: BigDecimal!
 }
 
-type TokenBalance @entity {
-    "format: <trader address>-<token address>, 0x0 means whole protocol"
+type TraderTokenBalance @entity {
+    "format: <trader address>-<token address>"
     id: ID!
     "amount"
     amount: BigDecimal!
 
     token: Token!
     "foreign key to Trader"
-    trader: Trader
+    trader: Trader!
+}
+
+type ProtocolTokenBalance @entity {
+    "format: <token address>"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    token: Token!
+    "foreign key to Protocol"
+    protocol: Protocol!
 }
 
 # Vault
@@ -269,7 +280,7 @@ type Trader @entity {
     "total deposited settlement collateral + cumulative total pnl"
     settlementTokenBalance: BigDecimal!
     "total deposited non-settlement collateral"
-    nonSettlementTokenBalances: [TokenBalance!] @derivedFrom(field: "trader")
+    nonSettlementTokenBalances: [TraderTokenBalance!] @derivedFrom(field: "trader")
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"

@@ -1,19 +1,18 @@
-import { Address } from "@graphprotocol/graph-ts"
-import { CollateralLiquidated, Deposited, TokenBalance, Trader, Withdrawn } from "../../generated/schema"
+import { CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
 import {
     CollateralLiquidated as CollateralLiquidatedEvent,
     Deposited as DepositedEvent,
     Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
-import { ADDRESS_ZERO, fromWei } from "../utils/numbers"
+import { fromWei } from "../utils/numbers"
 import {
-    formatTokenBalanceId,
     getBlockNumberLogIndex,
     getOrCreateProtocol,
+    getOrCreateProtocolTokenBalance,
     getOrCreateToken,
-    getOrCreateTokenBalance,
     getOrCreateTrader,
+    getOrCreateTraderTokenBalance,
 } from "../utils/stores"
 
 export function handleDeposited(event: DepositedEvent): void {
@@ -47,14 +46,11 @@ export function handleDeposited(event: DepositedEvent): void {
         trader.settlementTokenBalance = trader.settlementTokenBalance.plus(amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.plus(amount)
     } else {
-        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(
+        const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
             event.params.collateralToken,
         )
-        const protocolNonSettlementTokenBalance = getOrCreateTokenBalance(
-            Address.fromString(ADDRESS_ZERO),
-            event.params.collateralToken,
-        )
+        const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
         traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.plus(amount)
         protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.plus(amount)
         traderNonSettlementTokenBalance.save()
@@ -99,14 +95,11 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
         trader.settlementTokenBalance = trader.settlementTokenBalance.minus(withdrawn.amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.minus(withdrawn.amount)
     } else {
-        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(
+        const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
             event.params.collateralToken,
         )
-        const protocolNonSettlementTokenBalance = getOrCreateTokenBalance(
-            Address.fromString(ADDRESS_ZERO),
-            event.params.collateralToken,
-        )
+        const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
         traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(withdrawn.amount)
         protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(withdrawn.amount)
         traderNonSettlementTokenBalance.save()
@@ -144,9 +137,10 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     collateralLiquidated.insuranceFundFee = insuranceFundFee
 
     // update trader's non settlement token balance
-    const traderNonSettlementTokenBalance = TokenBalance.load(
-        formatTokenBalanceId(event.params.trader, event.params.collateralToken),
-    ) as TokenBalance
+    const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
+        event.params.trader,
+        event.params.collateralToken,
+    )
     traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
     // update trader's settlement token balance
@@ -154,9 +148,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repayAmount)
 
     // update protocol's non settlement token balance
-    const protocolNonSettlementTokenBalance = TokenBalance.load(
-        formatTokenBalanceId(Address.fromString(ADDRESS_ZERO), event.params.collateralToken),
-    ) as TokenBalance
+    const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
     protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
     // update protocol's settlement token balance
