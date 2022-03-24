@@ -96,6 +96,11 @@
             "createdBlockNumber": 513540,
             "name": "contracts/OrderBook.sol:OrderBook"
         },
+        "PERPUSDBandPriceFeed": {
+            "address": "0xFb8627C9ff2Bf7C9f524c15b4d0A582DfECd1571",
+            "createdBlockNumber": 4738293,
+            "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
+        },
         "QuoteToken": {
             "address": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
             "createdBlockNumber": 513502,
@@ -174,6 +179,11 @@
         "vONE": {
             "address": "0x77d0cc9568605bFfF32F918C8FFaa53F72901416",
             "createdBlockNumber": 3816202,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vPERP": {
+            "address": "0x9482AaFdCed6b899626f465e1FA0Cf1B1418d797",
+            "createdBlockNumber": 4779604,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vSAND": {
@@ -289,6 +299,13 @@
             "address": "0xf4d40ebCBf7063D4ff56C6Df0179a86287C648dE",
             "baseAddress": "0xb6599Bd362120Dc70D48409B8a08888807050700",
             "baseSymbol": "vBNB",
+            "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x86f03C6E26B0488b6e39b34d7f10D843ae8e3d1b",
+            "baseAddress": "0x9482AaFdCed6b899626f465e1FA0Cf1B1418d797",
+            "baseSymbol": "vPERP",
             "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
             "quoteSymbol": "vUSD"
         }
