@@ -220,6 +220,7 @@ export function getOrCreateTokenBalance(traderAddr: Address, tokenAddr: Address)
         tokenBalance = new TokenBalance(TokenBalanceId)
         tokenBalance.amount = BD_ZERO
         tokenBalance.trader = formatTraderId(traderAddr)
+        tokenBalance.token = getOrCreateToken(tokenAddr).id
         tokenBalance.save()
     }
     return tokenBalance
