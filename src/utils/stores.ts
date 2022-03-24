@@ -35,7 +35,6 @@ export function getOrCreateProtocol(): Protocol {
         protocol.tradingFee = BD_ZERO
         protocol.tradingVolume = BD_ZERO
         protocol.totalSettlementTokenBalance = BD_ZERO
-        protocol.badDebt = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
         protocol.save()
@@ -84,7 +83,6 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
         trader.liquidationFee = BD_ZERO
         trader.makerFee = BD_ZERO
         trader.totalPnl = BD_ZERO
-        trader.badDebt = BD_ZERO
         trader.blockNumber = BI_ZERO
         trader.timestamp = BI_ZERO
         trader.refereeCode = ""

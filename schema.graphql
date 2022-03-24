@@ -19,8 +19,6 @@ type Protocol @entity {
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
     totalNonSettlementTokenBalances: [TokenBalance!]
-    "bad debt"
-    badDebt: BigDecimal!
     "block number"
     blockNumber: BigInt!
     "block timestamp"
@@ -286,8 +284,6 @@ type Trader @entity {
     makerFee: BigDecimal!
     "cumulative total pnl = realizedPnl (fee included) - fundingPayment - liquidationFee + makerFee"
     totalPnl: BigDecimal!
-    "cumulative bad debt"
-    badDebt: BigDecimal!
 
     "last updated block number"
     blockNumber: BigInt!
@@ -505,25 +501,6 @@ type LiquidityChanged @entity {
 # AccountBalance
 
 type PnlRealized @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "amount"
-    amount: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-# No such contract event, this is artificial for monitoring only
-type BadDebtHappened @entity {
     "format: <tx hash>-<tx log index>"
     id: ID!
     "transaction hash"

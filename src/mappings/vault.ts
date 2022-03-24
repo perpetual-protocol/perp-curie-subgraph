@@ -1,20 +1,12 @@
 import { Address } from "@graphprotocol/graph-ts"
-import {
-    BadDebtHappened,
-    CollateralLiquidated,
-    Deposited,
-    TokenBalance,
-    Trader,
-    Withdrawn,
-} from "../../generated/schema"
+import { CollateralLiquidated, Deposited, TokenBalance, Trader, Withdrawn } from "../../generated/schema"
 import {
     CollateralLiquidated as CollateralLiquidatedEvent,
     Deposited as DepositedEvent,
     Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
-import { getBadDebt } from "../utils/models"
-import { ADDRESS_ZERO, BD_ZERO, fromWei } from "../utils/numbers"
+import { ADDRESS_ZERO, fromWei } from "../utils/numbers"
 import {
     formatTokenBalanceId,
     getBlockNumberLogIndex,
@@ -42,16 +34,11 @@ export function handleDeposited(event: DepositedEvent): void {
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
-    const oldTraderBadDebt = getBadDebt(trader.settlementTokenBalance)
     trader.blockNumber = event.block.number
     trader.timestamp = event.block.timestamp
 
-    const increasedTraderBadDebt = getBadDebt(trader.settlementTokenBalance).minus(oldTraderBadDebt)
-    trader.badDebt = trader.badDebt.plus(increasedTraderBadDebt)
-
     // upsert Protocol
     const protocol = getOrCreateProtocol()
-    protocol.badDebt = protocol.badDebt.plus(increasedTraderBadDebt)
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
@@ -60,10 +47,13 @@ export function handleDeposited(event: DepositedEvent): void {
         trader.settlementTokenBalance = trader.settlementTokenBalance.plus(amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.plus(amount)
     } else {
-        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(event.params.trader, deposited.collateralToken)
+        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(
+            event.params.trader,
+            event.params.collateralToken,
+        )
         const protocolNonSettlementTokenBalance = getOrCreateTokenBalance(
             Address.fromString(ADDRESS_ZERO),
-            deposited.collateralToken,
+            event.params.collateralToken,
         )
         traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.plus(amount)
         protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.plus(amount)
@@ -76,20 +66,6 @@ export function handleDeposited(event: DepositedEvent): void {
     deposited.save()
     trader.save()
     protocol.save()
-
-    // insert BadDebtHappened
-    if (increasedTraderBadDebt.gt(BD_ZERO)) {
-        const badDebtHappened = new BadDebtHappened(
-            `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
-        )
-        badDebtHappened.blockNumberLogIndex = getBlockNumberLogIndex(event)
-        badDebtHappened.blockNumber = event.block.number
-        badDebtHappened.timestamp = event.block.timestamp
-        badDebtHappened.txHash = event.transaction.hash
-        badDebtHappened.trader = event.params.trader
-        badDebtHappened.amount = increasedTraderBadDebt
-        badDebtHappened.save()
-    }
 }
 
 export function handleWithdrawn(event: WithdrawnEvent): void {
@@ -110,15 +86,11 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
-    const oldTraderBadDebt = getBadDebt(trader.settlementTokenBalance)
     trader.blockNumber = event.block.number
     trader.timestamp = event.block.timestamp
-    const increasedTraderBadDebt = getBadDebt(trader.settlementTokenBalance).minus(oldTraderBadDebt)
-    trader.badDebt = trader.badDebt.plus(increasedTraderBadDebt)
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
-    protocol.badDebt = protocol.badDebt.plus(increasedTraderBadDebt)
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
@@ -127,10 +99,13 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
         trader.settlementTokenBalance = trader.settlementTokenBalance.minus(withdrawn.amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.minus(withdrawn.amount)
     } else {
-        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(event.params.trader, withdrawn.collateralToken)
+        const traderNonSettlementTokenBalance = getOrCreateTokenBalance(
+            event.params.trader,
+            event.params.collateralToken,
+        )
         const protocolNonSettlementTokenBalance = getOrCreateTokenBalance(
             Address.fromString(ADDRESS_ZERO),
-            withdrawn.collateralToken,
+            event.params.collateralToken,
         )
         traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(withdrawn.amount)
         protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(withdrawn.amount)
@@ -143,20 +118,6 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
     withdrawn.save()
     trader.save()
     protocol.save()
-
-    // insert BadDebtHappened
-    if (increasedTraderBadDebt.gt(BD_ZERO)) {
-        const badDebtHappened = new BadDebtHappened(
-            `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
-        )
-        badDebtHappened.blockNumberLogIndex = getBlockNumberLogIndex(event)
-        badDebtHappened.blockNumber = event.block.number
-        badDebtHappened.timestamp = event.block.timestamp
-        badDebtHappened.txHash = event.transaction.hash
-        badDebtHappened.trader = event.params.trader
-        badDebtHappened.amount = increasedTraderBadDebt
-        badDebtHappened.save()
-    }
 }
 
 export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): void {
@@ -184,18 +145,18 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
 
     // update trader's non settlement token balance
     const traderNonSettlementTokenBalance = TokenBalance.load(
-        formatTokenBalanceId(collateralLiquidated.trader, collateralLiquidated.collateralToken),
-    )
+        formatTokenBalanceId(event.params.trader, event.params.collateralToken),
+    ) as TokenBalance
     traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
     // update trader's settlement token balance
-    const trader = Trader.load(collateralLiquidated.trader.toHexString())
+    const trader = Trader.load(event.params.trader.toHexString()) as Trader
     trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repayAmount)
 
     // update protocol's non settlement token balance
     const protocolNonSettlementTokenBalance = TokenBalance.load(
-        formatTokenBalanceId(Address.fromString(ADDRESS_ZERO), collateralLiquidated.collateralToken),
-    )
+        formatTokenBalanceId(Address.fromString(ADDRESS_ZERO), event.params.collateralToken),
+    ) as TokenBalance
     protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
     // update protocol's settlement token balance
