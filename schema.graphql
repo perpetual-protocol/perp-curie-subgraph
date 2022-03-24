@@ -18,7 +18,7 @@ type Protocol @entity {
     "total settlement token"
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
-    totalNonSettlementTokenBalances: [ProtocolTokenBalance!]
+    totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
     "block number"
     blockNumber: BigInt!
     "block timestamp"
