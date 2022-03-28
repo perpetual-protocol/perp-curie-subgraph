@@ -1,6 +1,6 @@
 # perp-curie-subgraph
 
-## Subgraphss
+## Subgraphs
 
 ### The Graph
 
