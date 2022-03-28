@@ -1,6 +1,6 @@
 # perp-curie-subgraph
 
-## Subgraphs
+## Subgraphss
 
 ### The Graph
 
@@ -11,11 +11,11 @@
 -   Optimism Kovan
     -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan`
     -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
-    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
+    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
 -   Optimism Kovan Dev 1
     -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
     -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
+    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
 -   Optimism Kovan Dev 2
     -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
     -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
