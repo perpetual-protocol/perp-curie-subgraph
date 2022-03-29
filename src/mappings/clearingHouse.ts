@@ -209,20 +209,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     openOrder.timestamp = event.block.timestamp
     openOrder.liquidity = openOrder.liquidity.plus(liquidityChanged.liquidity)
     if (openOrder.liquidity.equals(BI_ZERO)) {
-        openOrder.baseAmount = BD_ZERO
-        openOrder.quoteAmount = BD_ZERO
         openOrder.collectedFeeInThisLifecycle = BD_ZERO
     } else {
-        openOrder.baseAmount = openOrder.baseAmount.plus(liquidityChanged.base)
-        openOrder.quoteAmount = openOrder.quoteAmount.plus(liquidityChanged.quote)
         openOrder.collectedFeeInThisLifecycle = openOrder.collectedFeeInThisLifecycle.plus(liquidityChanged.quoteFee)
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
-
-    // upsert market
-    const market = getOrCreateMarket(event.params.baseToken)
-    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
-    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
     // commit changes
     liquidityChanged.save()
@@ -230,7 +221,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     trader.save()
     traderMarket.save()
     openOrder.save()
-    market.save()
 }
 
 export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): void {
