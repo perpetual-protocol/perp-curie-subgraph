@@ -36,6 +36,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "baseToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "uint24",
         "name": "feeRatio",
         "type": "uint24"
