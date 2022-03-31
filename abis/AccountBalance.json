@@ -212,25 +212,6 @@
         "type": "address"
       }
     ],
-    "name": "getMarginRequirementForCollateralLiquidation",
-    "outputs": [
-      {
-        "internalType": "int256",
-        "name": "",
-        "type": "int256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "trader",
-        "type": "address"
-      }
-    ],
     "name": "getMarginRequirementForLiquidation",
     "outputs": [
       {

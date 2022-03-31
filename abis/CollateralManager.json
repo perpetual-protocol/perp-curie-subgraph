@@ -18,6 +18,19 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "clearingHouseConfig",
+        "type": "address"
+      }
+    ],
+    "name": "ClearingHouseConfigChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "token",
         "type": "address"
       },
@@ -315,6 +328,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getClearingHouseConfig",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -479,6 +505,16 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "clearingHouseConfigArg",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vaultArg",
+        "type": "address"
+      },
+      {
         "internalType": "uint8",
         "name": "maxCollateralTokensPerAccountArg",
         "type": "uint8"
@@ -582,11 +618,43 @@
     "inputs": [
       {
         "internalType": "uint24",
+        "name": "maintenanceMarginRatioBuffer",
+        "type": "uint24"
+      }
+    ],
+    "name": "requireValidCollateralMmRatio",
+    "outputs": [
+      {
+        "internalType": "uint24",
+        "name": "",
+        "type": "uint24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint24",
         "name": "clInsuranceFundFeeRatio",
         "type": "uint24"
       }
     ],
     "name": "setCLInsuranceFundFeeRatio",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "clearingHouseConfig",
+        "type": "address"
+      }
+    ],
+    "name": "setClearingHouseConfig",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

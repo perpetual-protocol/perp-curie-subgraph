@@ -5,6 +5,19 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "clearingHouse",
+        "type": "address"
+      }
+    ],
+    "name": "ClearingHouseChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "collateralToken",
         "type": "address"
       },
@@ -29,17 +42,36 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "repayAmountX10_D",
+        "name": "repayAmountX10_S",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "insuranceFundFeeX10_D",
+        "name": "insuranceFundFeeX10_S",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint24",
+        "name": "discountRatio",
+        "type": "uint24"
       }
     ],
     "name": "CollateralLiquidated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "collateralManager",
+        "type": "address"
+      }
+    ],
+    "name": "CollateralManagerChanged",
     "type": "event"
   },
   {
@@ -103,6 +135,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "trustedForwarder",
+        "type": "address"
+      }
+    ],
+    "name": "TrustedForwarderChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "address",
         "name": "trustedForwarder",
@@ -123,6 +168,19 @@
       }
     ],
     "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "WETH9",
+        "type": "address"
+      }
+    ],
+    "name": "WETH9Changed",
     "type": "event"
   },
   {
@@ -219,7 +277,7 @@
   },
   {
     "inputs": [],
-    "name": "depositETH",
+    "name": "depositEther",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -232,7 +290,7 @@
         "type": "address"
       }
     ],
-    "name": "depositETHFor",
+    "name": "depositEtherFor",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"
@@ -516,7 +574,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "settlementTokenAmountX10_D",
+        "name": "settlementTokenAmountX10_S",
         "type": "uint256"
       }
     ],
@@ -532,7 +590,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "settlementTokenAmountX10_D",
+        "name": "settlementTokenAmountX10_S",
         "type": "uint256"
       }
     ],
@@ -542,6 +600,25 @@
         "internalType": "uint256",
         "name": "collateralTokenAmount",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "trader",
+        "type": "address"
+      }
+    ],
+    "name": "getMarginRequirementForCollateralLiquidation",
+    "outputs": [
+      {
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
       }
     ],
     "stateMutability": "view",
@@ -564,7 +641,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "maxSettlementTokenAmountX10D",
+        "name": "maxSettlementTokenAmountX10_S",
         "type": "uint256"
       },
       {
@@ -727,44 +804,20 @@
       },
       {
         "internalType": "uint256",
-        "name": "settlementTokenAmountX10_D",
+        "name": "amount",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isDenominatedInSettlementToken",
+        "type": "bool"
       }
     ],
-    "name": "liquidateCollateralExactInput",
+    "name": "liquidateCollateral",
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "collateralTokenAmount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "trader",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "collateralTokenAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "liquidateCollateralExactOutput",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "settlementTokenAmountX10_D",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -929,7 +982,7 @@
         "type": "uint256"
       }
     ],
-    "name": "withdrawETH",
+    "name": "withdrawEther",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

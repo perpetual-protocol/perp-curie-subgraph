@@ -118,8 +118,8 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     const collateralToken = getOrCreateToken(event.params.collateralToken)
     const liquidatedAmount = fromWei(event.params.collateralTokenAmount, collateralToken.decimals)
     const settlementToken = getOrCreateToken(USDCAddress)
-    const repayAmount = fromWei(event.params.repayAmountX10_D, settlementToken.decimals)
-    const insuranceFundFee = fromWei(event.params.insuranceFundFeeX10_D, settlementToken.decimals)
+    const repayAmount = fromWei(event.params.repayAmountX10_S, settlementToken.decimals)
+    const insuranceFundFee = fromWei(event.params.insuranceFundFeeX10_S, settlementToken.decimals)
 
     // insert CollateralLiquidated
     const collateralLiquidated = new CollateralLiquidated(
@@ -135,6 +135,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     collateralLiquidated.amount = liquidatedAmount
     collateralLiquidated.repayAmount = repayAmount
     collateralLiquidated.insuranceFundFee = insuranceFundFee
+    collateralLiquidated.discountRatio = event.params.discountRatio
 
     // update trader's non settlement token balance
     const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(

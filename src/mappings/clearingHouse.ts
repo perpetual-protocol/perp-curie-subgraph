@@ -153,6 +153,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.timestamp = event.block.timestamp
     market.tradingVolume = market.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
+    market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
+    market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)

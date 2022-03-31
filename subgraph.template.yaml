@@ -56,7 +56,7 @@ dataSources:
           handler: handleDeposited
         - event: Withdrawn(indexed address,indexed address,uint256)
           handler: handleWithdrawn
-        - event: CollateralLiquidated(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+        - event: CollateralLiquidated(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint24)
           handler: handleCollateralLiquidated
 
   - kind: ethereum/contract

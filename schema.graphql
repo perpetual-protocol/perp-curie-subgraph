@@ -151,6 +151,8 @@ type CollateralLiquidated @entity {
     repayAmount: BigDecimal!
     "insuranceFund fee"
     insuranceFundFee: BigDecimal!
+    "discount ratio"
+    discountRatio: Int!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!

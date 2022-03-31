@@ -51,6 +51,11 @@
             "createdBlockNumber": 1413149,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
+        "ETH2USDChainlinkPriceFeed": {
+            "address": "0x68a2C673D1D0E3153A38746BEeEc77b0103d9439",
+            "createdBlockNumber": 1572368,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "ETHUSDChainlinkPriceFeed": {
             "address": "0xfAb3Bc6674a38cA766083838E0eba7bB3Ef96177",
             "createdBlockNumber": 748123,
@@ -179,6 +184,11 @@
         "vETH": {
             "address": "0x5802918dC503c465F969DA0847b71E3Fbe9B141c",
             "createdBlockNumber": 748138,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vETH2": {
+            "address": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
+            "createdBlockNumber": 1573019,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vLINK": {
