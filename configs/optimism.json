@@ -313,5 +313,5 @@
     "referralContracts": {
         "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106"
     },
-    "version": "1.0.15"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#bac1ae0b6dd633275b175e06169c5cb02896b8e5"
 }

@@ -3,10 +3,17 @@ import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
     PositionChanged as PositionChangedEvent,
+    PositionClosed as PositionClosedEvent,
     PositionLiquidated as PositionLiquidatedEvent,
     ReferredPositionChanged,
 } from "../../generated/ClearingHouse/ClearingHouse"
-import { FundingPaymentSettled, LiquidityChanged, PositionChanged, PositionLiquidated } from "../../generated/schema"
+import {
+    FundingPaymentSettled,
+    LiquidityChanged,
+    PositionChanged,
+    PositionClosed,
+    PositionLiquidated,
+} from "../../generated/schema"
 import { abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
     getBlockNumberLogIndex,
@@ -23,6 +30,74 @@ import {
     getTraderDayData,
     saveToPositionHistory,
 } from "../utils/stores"
+
+export function handlePositionClosed(event: PositionClosedEvent): void {
+    // insert PositionClosed
+    const positionClosed = new PositionClosed(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
+    positionClosed.txHash = event.transaction.hash
+    positionClosed.trader = event.params.trader
+    positionClosed.baseToken = event.params.baseToken
+    positionClosed.closedPositionSize = fromWei(event.params.closedPositionSize)
+    positionClosed.closedPositionNotional = fromWei(event.params.closedPositionNotional)
+    positionClosed.openNotional = fromWei(event.params.openNotional)
+    positionClosed.realizedPnl = fromWei(event.params.realizedPnl)
+    positionClosed.closedPrice = fromWei(event.params.closedPrice)
+
+    positionClosed.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    positionClosed.blockNumber = event.block.number
+    positionClosed.timestamp = event.block.timestamp
+
+    // upsert Protocol
+    const protocol = getOrCreateProtocol()
+    protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
+    // upsert Market
+    const market = getOrCreateMarket(event.params.baseToken)
+    market.blockNumber = event.block.number
+    market.timestamp = event.block.timestamp
+    market.tradingVolume = market.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
+    // upsert Trader
+    const trader = getOrCreateTrader(event.params.trader)
+    trader.blockNumber = event.block.number
+    trader.timestamp = event.block.timestamp
+    trader.tradingVolume = trader.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    trader.realizedPnl = trader.realizedPnl.plus(positionClosed.realizedPnl)
+
+    // upsert TraderMarket
+    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
+
+    // upsert Position
+    const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
+    position.blockNumber = event.block.number
+    position.timestamp = event.block.timestamp
+    // NOTE: position size does not consider maker position
+    position.positionSize = position.positionSize.plus(positionClosed.closedPositionSize)
+    position.openNotional = positionClosed.openNotional
+    position.realizedPnl = position.realizedPnl.plus(positionClosed.realizedPnl)
+    position.entryPrice = BD_ZERO
+    position.tradingVolume = position.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
+    // update trader day data
+    const traderDayData = getTraderDayData(event, event.params.trader)
+    traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
+
+    // commit changes
+    positionClosed.save()
+    protocol.save()
+    market.save()
+    trader.save()
+    traderMarket.save()
+    position.save()
+    traderDayData.save()
+}
 
 export function handlePositionChanged(event: PositionChangedEvent): void {
     // insert PositionChanged
