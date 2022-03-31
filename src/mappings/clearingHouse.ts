@@ -178,6 +178,8 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     liquidityChanged.quote = fromWei(event.params.quote)
     liquidityChanged.liquidity = event.params.liquidity
     liquidityChanged.quoteFee = fromWei(event.params.quoteFee)
+    const functionSignature = event.transaction.input.slice(0, 4)
+    liquidityChanged.fromFunctionSignature = Bytes.fromUint8Array(functionSignature)
 
     // upsert Maker
     // NOTE: we don't remove entities from Maker table even if they have no open orders
