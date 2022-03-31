@@ -407,6 +407,8 @@ type LiquidityChanged @entity {
     liquidity: BigInt!
     "amount of quote token the maker received as fee"
     quoteFee: BigDecimal!
+    "from function signature"
+    fromFunctionSignature: Bytes!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
