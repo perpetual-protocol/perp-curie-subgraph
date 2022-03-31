@@ -146,6 +146,34 @@ type PositionChanged @entity {
     referralCode: ReferralCode
 }
 
+type PositionClosed @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "closed position size: + is long and - is short"
+    closedPositionSize: BigDecimal!
+    "closed position notional: - is long and + is short"
+    closedPositionNotional: BigDecimal!
+    "average open notional after this tx"
+    openNotional: BigDecimal!
+    "realized pnl of this tx"
+    realizedPnl: BigDecimal!
+    "closed price of this tx"
+    closedPrice: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 type FundingUpdated @entity {
     "format: <tx hash>-<tx log index>"
     id: ID!
@@ -407,6 +435,8 @@ type LiquidityChanged @entity {
     liquidity: BigInt!
     "amount of quote token the maker received as fee"
     quoteFee: BigDecimal!
+    "from function signature"
+    fromFunctionSignature: Bytes!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
