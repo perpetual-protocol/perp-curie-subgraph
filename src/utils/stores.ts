@@ -55,8 +55,6 @@ export function getOrCreateMarket(baseToken: Address): Market {
         market.feeRatio = BI_ZERO
         market.tradingFee = BD_ZERO
         market.tradingVolume = BD_ZERO
-        market.baseAmount = BD_ZERO
-        market.quoteAmount = BD_ZERO
         market.blockNumberAdded = BI_ZERO
         market.timestampAdded = BI_ZERO
         market.blockNumber = BI_ZERO
@@ -182,8 +180,6 @@ export function getOrCreateOpenOrder(
         openOrder.baseToken = baseToken
         openOrder.lowerTick = lowerTick
         openOrder.upperTick = upperTick
-        openOrder.baseAmount = BD_ZERO
-        openOrder.quoteAmount = BD_ZERO
         openOrder.liquidity = BI_ZERO
         openOrder.collectedFee = BD_ZERO
         openOrder.collectedFeeInThisLifecycle = BD_ZERO
