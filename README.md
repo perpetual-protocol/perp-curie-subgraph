@@ -4,6 +4,10 @@
 
 # perp-curie-subgraph
 
+## Changelog
+
+[Changelog](CHANGELOG.md)
+
 ## Subgraphs
 
 ### The Graph
