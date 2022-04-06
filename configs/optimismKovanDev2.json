@@ -6,6 +6,11 @@
             "createdBlockNumber": 2075298,
             "name": "contracts/AccountBalance.sol:AccountBalance"
         },
+        "BTC2USDChainlinkPriceFeed": {
+            "address": "0xFbE9268A3542838f48C135A3813eBAA19bF17C83",
+            "createdBlockNumber": 1753496,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "BTCUSDChainlinkPriceFeed": {
             "address": "0x8a796eea6B299Eb632F63fa1BBCb2D98D076F181",
             "createdBlockNumber": 2075436,
@@ -86,6 +91,20 @@
             "baseAddress": "0x34a0D6e94317895170684Ec73959fa146AdEF7d8",
             "baseSymbol": "vBTC",
             "quoteAddress": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
+            "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
+            "baseSymbol": "vBTC2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x07a12bDCE554820d7DC76C4F28B539e95305aB5F",
+            "baseAddress": "0xA1A6A4edd6b00Eee723b895B91358097828f73d9",
+            "baseSymbol": "vLINK2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         }
     ],

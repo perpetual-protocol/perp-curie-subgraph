@@ -7,6 +7,7 @@ import {
 import { USDCAddress } from "../constants"
 import { fromWei } from "../utils/numbers"
 import {
+    formatTraderId,
     getBlockNumberLogIndex,
     getOrCreateProtocol,
     getOrCreateProtocolTokenBalance,
@@ -114,7 +115,6 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
 }
 
 export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): void {
-    // upsert Token
     const collateralToken = getOrCreateToken(event.params.collateralToken)
     const liquidatedAmount = fromWei(event.params.collateralTokenAmount, collateralToken.decimals)
     const settlementToken = getOrCreateToken(USDCAddress)
@@ -145,7 +145,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
     // update trader's settlement token balance
-    const trader = Trader.load(event.params.trader.toHexString()) as Trader
+    const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
     trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repayAmount)
 
     // update protocol's non settlement token balance

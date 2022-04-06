@@ -13,6 +13,7 @@ import {
     Token,
     Trader,
     TraderDayData,
+    TraderMarket,
     TraderTokenBalance,
 } from "../../generated/schema"
 import { ChainId, Network, Version } from "../constants"

@@ -18,13 +18,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "collateralToken",
+        "name": "trader",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "trader",
+        "name": "collateralToken",
         "type": "address"
       },
       {

@@ -51,6 +51,10 @@ dataSources:
           file: ./abis/Vault.json
         - name: ERC20
           file: ./external-abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./external-abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./external-abis/ERC20NameBytes.json
       eventHandlers:
         - event: Deposited(indexed address,indexed address,uint256)
           handler: handleDeposited
@@ -165,6 +169,10 @@ dataSources:
           file: ./abis/CollateralManager.json
         - name: ERC20
           file: ./external-abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./external-abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./external-abis/ERC20NameBytes.json
       eventHandlers:
         - event: CollateralAdded(indexed address,address,uint24,uint24,uint256)
           handler: handleCollateralAdded
