@@ -76,6 +76,11 @@
             "createdBlockNumber": 1866843,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
+        "MATICUSDChainlinkPriceFeed": {
+            "address": "0xf44e50784264d4f227FBF426484a9645704367B2",
+            "createdBlockNumber": 5393293,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "MarketRegistry": {
             "address": "0xd5820eE0F55205f6cdE8BB0647072143b3060067",
             "createdBlockNumber": 513520,
