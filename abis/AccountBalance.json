@@ -699,45 +699,6 @@
         "internalType": "address",
         "name": "baseToken",
         "type": "address"
-      }
-    ],
-    "name": "settlePositionInClosedMarket",
-    "outputs": [
-      {
-        "internalType": "int256",
-        "name": "positionNotional",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "openNotional",
-        "type": "int256"
-      },
-      {
-        "internalType": "int256",
-        "name": "realizedPnl",
-        "type": "int256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "closedPrice",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "trader",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "baseToken",
-        "type": "address"
       },
       {
         "internalType": "int256",

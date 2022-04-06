@@ -79,6 +79,11 @@
             "createdBlockNumber": 1783902,
             "name": "contracts/QuoteToken.sol:QuoteToken"
         },
+        "USDTUSDChainlinkPriceFeed": {
+            "address": "0x42ce1FFd533b15Ccdf9ad796b4b2241b1B6f28e9",
+            "createdBlockNumber": 1593749,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "Vault": {
             "address": "0x0d979a2700260B7ac43b2F250b80bEf777fB4D43",
             "createdBlockNumber": 1783966,
