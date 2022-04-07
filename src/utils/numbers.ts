@@ -5,6 +5,7 @@ export const BI_ONE = BigInt.fromI32(1)
 export const BD_ZERO = BigDecimal.fromString("0.0")
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
 export const DEFAULT_DECIMALS = BigInt.fromI32(18)
+export const RATIO_ONE = BigDecimal.fromString("1000000")
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
     let bd = BigDecimal.fromString("1")

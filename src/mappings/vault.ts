@@ -1,3 +1,4 @@
+import { BigDecimal } from "@graphprotocol/graph-ts"
 import { CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
 import {
     CollateralLiquidated as CollateralLiquidatedEvent,
@@ -5,7 +6,7 @@ import {
     Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
-import { fromWei } from "../utils/numbers"
+import { fromWei, RATIO_ONE } from "../utils/numbers"
 import {
     formatTraderId,
     getBlockNumberLogIndex,
@@ -135,7 +136,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     collateralLiquidated.amount = liquidatedAmount
     collateralLiquidated.repayAmount = repayAmount
     collateralLiquidated.insuranceFundFee = insuranceFundFee
-    collateralLiquidated.discountRatio = event.params.discountRatio
+    collateralLiquidated.discountRatio = BigDecimal.fromString(event.params.discountRatio.toString()).div(RATIO_ONE)
 
     // update trader's non settlement token balance
     const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
