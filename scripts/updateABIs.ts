@@ -12,9 +12,15 @@ async function main(): Promise<void> {
         "CollateralManager",
     ]
     for (const abiName of abiNames) {
-        const artifact = await import(
-            `@perp/curie-deployments/${env}/core/artifacts/contracts/${abiName}.sol/${abiName}.json`
-        )
+        let artifact
+        try {
+            artifact = await import(
+                `@perp/curie-deployments/${env}/core/artifacts/contracts/${abiName}.sol/${abiName}.json`
+            )
+        } catch (error) {
+            console.warn(`ABI of contract ${abiName} not found in ${env}`)
+            continue
+        }
         const abiStr = JSON.stringify(artifact.abi, null, 2)
         await fs.promises.mkdir("abis", { recursive: true })
         await fs.promises.writeFile(`abis/${abiName}.json`, abiStr, "utf8")
