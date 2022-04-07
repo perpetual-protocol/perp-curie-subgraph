@@ -361,5 +361,5 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#bac1ae0b6dd633275b175e06169c5cb02896b8e5"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#05c8f565166b2c5b10dcd8ba61cb0b368903e7ca"
 }
