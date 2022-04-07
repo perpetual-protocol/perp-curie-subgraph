@@ -176,6 +176,11 @@
             "createdBlockNumber": 2458632,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
+        "vMATIC": {
+            "address": "0xBe5de48197fc974600929196239E264EcB703eE8",
+            "createdBlockNumber": 5465562,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
         "vNEAR": {
             "address": "0x3Fb3282e3BA34A0Bff94845f1800Eb93CC6850d4",
             "createdBlockNumber": 4078687,
@@ -311,6 +316,13 @@
             "address": "0x86f03C6E26B0488b6e39b34d7f10D843ae8e3d1b",
             "baseAddress": "0x9482AaFdCed6b899626f465e1FA0Cf1B1418d797",
             "baseSymbol": "vPERP",
+            "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x6f59c163AD6cC896145aF7D5922d1eAE174A1BCc",
+            "baseAddress": "0xBe5de48197fc974600929196239E264EcB703eE8",
+            "baseSymbol": "vMATIC",
             "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
             "quoteSymbol": "vUSD"
         }
