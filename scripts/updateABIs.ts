@@ -8,6 +8,7 @@ async function main(): Promise<void> {
             `@perp/curie-deployments/${env}/core/artifacts/contracts/${abiName}.sol/${abiName}.json`
         )
         const abiStr = JSON.stringify(artifact.abi, null, 2)
+        await fs.promises.mkdir("abis", { recursive: true })
         await fs.promises.writeFile(`abis/${abiName}.json`, abiStr, "utf8")
     }
 }
