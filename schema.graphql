@@ -258,6 +258,13 @@ type TraderMarket @entity {
     trader: Bytes!
     "baseToken address"
     baseToken: Bytes!
+
+    "current taker position size"
+    takerPositionSize: BigDecimal!
+    "average open notional of the current position"
+    openNotional: BigDecimal!
+    "average entry price of the current position = abs(openNotional / positionSize)"
+    entryPrice: BigDecimal!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"
@@ -270,10 +277,12 @@ type TraderMarket @entity {
     liquidationFee: BigDecimal!
     "cumulative maker fee"
     makerFee: BigDecimal!
+
     "last updated block number"
     blockNumber: BigInt!
     "last updated block timestamp"
     timestamp: BigInt!
+
     "foreign key to Trader"
     traderRef: Trader!
     "foreign key to Market"
