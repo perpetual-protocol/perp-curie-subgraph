@@ -39,7 +39,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     positionClosed.baseToken = event.params.baseToken
     positionClosed.closedPositionSize = fromWei(event.params.closedPositionSize)
     positionClosed.closedPositionNotional = fromWei(event.params.closedPositionNotional)
-    positionClosed.openNotional = fromWei(event.params.openNotional)
+    positionClosed.openNotionalBeforeClose = fromWei(event.params.openNotional)
     positionClosed.realizedPnl = fromWei(event.params.realizedPnl)
     positionClosed.closedPrice = fromWei(event.params.closedPrice)
 
@@ -71,7 +71,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.takerPositionSize = traderMarket.takerPositionSize.plus(positionClosed.closedPositionSize)
-    traderMarket.openNotional = positionClosed.openNotional
+    traderMarket.openNotional = BD_ZERO
     traderMarket.entryPrice = BD_ZERO
     traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
@@ -82,7 +82,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     position.timestamp = event.block.timestamp
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionClosed.closedPositionSize)
-    position.openNotional = positionClosed.openNotional
+    position.openNotional = BD_ZERO
     position.realizedPnl = position.realizedPnl.plus(positionClosed.realizedPnl)
     position.entryPrice = BD_ZERO
     position.tradingVolume = position.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
