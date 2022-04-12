@@ -102,6 +102,9 @@ export function getOrCreateTraderMarket(traderAddr: Address, baseToken: Address)
         traderMarket = new TraderMarket(id)
         traderMarket.trader = traderAddr
         traderMarket.baseToken = baseToken
+        traderMarket.takerPositionSize = BD_ZERO
+        traderMarket.openNotional = BD_ZERO
+        traderMarket.entryPrice = BD_ZERO
         traderMarket.tradingVolume = BD_ZERO
         traderMarket.realizedPnl = BD_ZERO
         traderMarket.fundingPayment = BD_ZERO

@@ -40,6 +40,9 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+abis/*
+# Referrer is not in @perp/curie-deployments
+!abis/Referrer.json
 
 # TypeScript v1 declaration files
 typings/

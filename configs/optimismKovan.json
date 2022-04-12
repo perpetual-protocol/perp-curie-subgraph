@@ -11,6 +11,11 @@
             "createdBlockNumber": 748053,
             "name": "contracts/AccountBalance.sol:AccountBalance"
         },
+        "BTC2USDChainlinkPriceFeed": {
+            "address": "0xFbE9268A3542838f48C135A3813eBAA19bF17C83",
+            "createdBlockNumber": 1753496,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "BTCUSDChainlinkPriceFeed": {
             "address": "0x5e92237D2F114094958A6d98403A50739A0Fe495",
             "createdBlockNumber": 748093,
@@ -56,6 +61,11 @@
             "createdBlockNumber": 748033,
             "name": "contracts/InsuranceFund.sol:InsuranceFund"
         },
+        "LINK2USDChainlinkPriceFeed": {
+            "address": "0xBb2973C92304D4227fE94b07a4F9b68B75bd48B0",
+            "createdBlockNumber": 1753649,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "LINKUSDChainlinkPriceFeed": {
             "address": "0x6AB251f9BFbdD258B33F42A77AA5fb448E11579e",
             "createdBlockNumber": 1171658,
@@ -65,6 +75,11 @@
             "address": "0x0A8F729970dbA727B053C75ba75974391427c874",
             "createdBlockNumber": 748166,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
+        },
+        "MATICUSDChainlinkPriceFeed": {
+            "address": "0xc91b1f0b1E1be79aDEC85FC760B5aFE05F4146E6",
+            "createdBlockNumber": 1911862,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
         "MarketRegistry": {
             "address": "0x51705d391e0d01fA684366407704De0856E4dBaB",
@@ -131,6 +146,11 @@
             "createdBlockNumber": 748098,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
+        "vBTC2": {
+            "address": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
+            "createdBlockNumber": 1753511,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
         "vCRV": {
             "address": "0xaa3168c0Aa6E69F415eB1C0c99FBB2d8654f4D3B",
             "createdBlockNumber": 1019223,
@@ -156,9 +176,19 @@
             "createdBlockNumber": 1171663,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
+        "vLINK2": {
+            "address": "0xA1A6A4edd6b00Eee723b895B91358097828f73d9",
+            "createdBlockNumber": 1753663,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
         "vLUNA": {
             "address": "0x798310F8dD81E9f0117a66A8615ad769b3f801AE",
             "createdBlockNumber": 968188,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vMATIC": {
+            "address": "0x7dbA23afeed3Fe9703BEedA9682b45EbFc5ffaaf",
+            "createdBlockNumber": 1912818,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vPERP": {
@@ -308,7 +338,28 @@
             "baseSymbol": "vPERP",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
+            "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
+            "baseSymbol": "vBTC2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x07a12bDCE554820d7DC76C4F28B539e95305aB5F",
+            "baseAddress": "0xA1A6A4edd6b00Eee723b895B91358097828f73d9",
+            "baseSymbol": "vLINK2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x02d6E440163a11E888cadDdedF89CF160ef410f8",
+            "baseAddress": "0x7dbA23afeed3Fe9703BEedA9682b45EbFc5ffaaf",
+            "baseSymbol": "vMATIC",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#bac1ae0b6dd633275b175e06169c5cb02896b8e5"
+    "version": "1.1.0"
 }
