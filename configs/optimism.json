@@ -76,6 +76,11 @@
             "createdBlockNumber": 1866843,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
+        "MATICUSDChainlinkPriceFeed": {
+            "address": "0xf44e50784264d4f227FBF426484a9645704367B2",
+            "createdBlockNumber": 5393293,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "MarketRegistry": {
             "address": "0xd5820eE0F55205f6cdE8BB0647072143b3060067",
             "createdBlockNumber": 513520,
@@ -169,6 +174,11 @@
         "vLUNA": {
             "address": "0xB24F50Dd9918934AB2228bE7A097411ca28F6C14",
             "createdBlockNumber": 2458632,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vMATIC": {
+            "address": "0xBe5de48197fc974600929196239E264EcB703eE8",
+            "createdBlockNumber": 5465562,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vNEAR": {
@@ -308,10 +318,17 @@
             "baseSymbol": "vPERP",
             "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x6f59c163AD6cC896145aF7D5922d1eAE174A1BCc",
+            "baseAddress": "0xBe5de48197fc974600929196239E264EcB703eE8",
+            "baseSymbol": "vMATIC",
+            "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
+            "quoteSymbol": "vUSD"
         }
     ],
     "referralContracts": {
         "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106"
     },
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#bac1ae0b6dd633275b175e06169c5cb02896b8e5"
+    "version": "1.1.0"
 }
