@@ -146,9 +146,9 @@ type CollateralLiquidated @entity {
     "liquidator address"
     liquidator: Bytes!
     "amount of collateral token liquidated"
-    amount: BigDecimal!
-    "repayAmount"
-    repayAmount: BigDecimal!
+    collateral: BigDecimal!
+    "repaidSettlementWithoutInsuranceFundFee"
+    repaidSettlementWithoutInsuranceFundFee: BigDecimal!
     "insuranceFund fee"
     insuranceFundFee: BigDecimal!
     "discount ratio"

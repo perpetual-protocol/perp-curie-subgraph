@@ -1,16 +1,6 @@
 {
     "chainId": 69,
     "contracts": {
-        "AAVEUSDChainlinkPriceFeed": {
-            "address": "0xd7A3F41b355Cb5C27eF0425Cc84b4c88180770A9",
-            "createdBlockNumber": 2052690,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
-        },
-        "APEUSDChainlinkPriceFeed": {
-            "address": "0x43832e6B389172E48984ad4d400aC2C437Ba3b5C",
-            "createdBlockNumber": 2150405,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
-        },
         "AVAXUSDBandPriceFeed": {
             "address": "0xC79e27575dD214c266039EEb5B1E2A7b6310c409",
             "createdBlockNumber": 748089,
@@ -145,16 +135,6 @@
             "address": "0xb4759e0afb8Ee0f4A257e5B818154312E84A91bC",
             "createdBlockNumber": 1212443,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
-        },
-        "vAAVE": {
-            "address": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
-            "createdBlockNumber": 2053536,
-            "name": "contracts/BaseToken.sol:BaseToken"
-        },
-        "vAPE": {
-            "address": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
-            "createdBlockNumber": 2151854,
-            "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vAVAX": {
             "address": "0x1dbC57cF0e38f3aB2e31DAe6c32829eACDe6Fd3A",
@@ -360,20 +340,6 @@
             "quoteSymbol": "vUSD"
         },
         {
-            "address": "0x7394264b07694Eee2aa54259F45bA04C5Fe89cC3",
-            "baseAddress": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
-            "baseSymbol": "vAAVE",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x7eD00399A572B78b9C30D631aE28984aC062f282",
-            "baseAddress": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
-            "baseSymbol": "vAPE",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
             "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
             "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
             "baseSymbol": "vBTC2",
@@ -395,5 +361,5 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "1.1.0"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#05c8f565166b2c5b10dcd8ba61cb0b368903e7ca"
 }

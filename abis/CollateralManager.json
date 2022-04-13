@@ -176,12 +176,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint24",
-        "name": "maintenanceMarginRatioBuffer",
-        "type": "uint24"
+        "internalType": "uint8",
+        "name": "maxCollateralTokensPerAccount",
+        "type": "uint8"
       }
     ],
-    "name": "MaintenanceMarginRatioBufferChanged",
+    "name": "MaxCollateralTokensPerAccountChanged",
     "type": "event"
   },
   {
@@ -189,12 +189,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint8",
-        "name": "maxCollateralTokensPerAccount",
-        "type": "uint8"
+        "internalType": "uint24",
+        "name": "mmRatioBuffer",
+        "type": "uint24"
       }
     ],
-    "name": "MaxCollateralTokensPerAccountChanged",
+    "name": "MmRatioBufferChanged",
     "type": "event"
   },
   {
@@ -435,12 +435,12 @@
   },
   {
     "inputs": [],
-    "name": "getMaintenanceMarginRatioBuffer",
+    "name": "getMaxCollateralTokensPerAccount",
     "outputs": [
       {
-        "internalType": "uint24",
+        "internalType": "uint8",
         "name": "",
-        "type": "uint24"
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -448,12 +448,12 @@
   },
   {
     "inputs": [],
-    "name": "getMaxCollateralTokensPerAccount",
+    "name": "getMmRatioBuffer",
     "outputs": [
       {
-        "internalType": "uint8",
+        "internalType": "uint24",
         "name": "",
-        "type": "uint8"
+        "type": "uint24"
       }
     ],
     "stateMutability": "view",
@@ -531,7 +531,7 @@
       },
       {
         "internalType": "uint24",
-        "name": "maintenanceMarginRatioBufferArg",
+        "name": "mmRatioBufferArg",
         "type": "uint24"
       },
       {
@@ -618,7 +618,7 @@
     "inputs": [
       {
         "internalType": "uint24",
-        "name": "maintenanceMarginRatioBuffer",
+        "name": "mmRatioBuffer",
         "type": "uint24"
       }
     ],
@@ -768,12 +768,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint24",
-        "name": "maintenanceMarginRatioBuffer",
-        "type": "uint24"
+        "internalType": "uint8",
+        "name": "maxCollateralTokensPerAccount",
+        "type": "uint8"
       }
     ],
-    "name": "setMaintenanceMarginRatioBuffer",
+    "name": "setMaxCollateralTokensPerAccount",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -781,12 +781,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint8",
-        "name": "maxCollateralTokensPerAccount",
-        "type": "uint8"
+        "internalType": "uint24",
+        "name": "mmRatioBuffer",
+        "type": "uint24"
       }
     ],
-    "name": "setMaxCollateralTokensPerAccount",
+    "name": "setMmRatioBuffer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

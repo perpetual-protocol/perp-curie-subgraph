@@ -117,9 +117,12 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
 
 export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): void {
     const collateralToken = getOrCreateToken(event.params.collateralToken)
-    const liquidatedAmount = fromWei(event.params.collateralTokenAmount, collateralToken.decimals)
+    const liquidatedAmount = fromWei(event.params.collateral, collateralToken.decimals)
     const settlementToken = getOrCreateToken(USDCAddress)
-    const repayAmount = fromWei(event.params.repayAmountX10_S, settlementToken.decimals)
+    const repaidSettlementWithoutInsuranceFundFee = fromWei(
+        event.params.repaidSettlementWithoutInsuranceFundFeeX10_S,
+        settlementToken.decimals,
+    )
     const insuranceFundFee = fromWei(event.params.insuranceFundFeeX10_S, settlementToken.decimals)
 
     // insert CollateralLiquidated
@@ -133,8 +136,8 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     collateralLiquidated.trader = event.params.trader
     collateralLiquidated.collateralToken = event.params.collateralToken
     collateralLiquidated.liquidator = event.params.liquidator
-    collateralLiquidated.amount = liquidatedAmount
-    collateralLiquidated.repayAmount = repayAmount
+    collateralLiquidated.collateral = liquidatedAmount
+    collateralLiquidated.repaidSettlementWithoutInsuranceFundFee = repaidSettlementWithoutInsuranceFundFee
     collateralLiquidated.insuranceFundFee = insuranceFundFee
     collateralLiquidated.discountRatio = BigDecimal.fromString(event.params.discountRatio.toString()).div(RATIO_ONE)
 
@@ -147,7 +150,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
 
     // update trader's settlement token balance
     const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
-    trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repayAmount)
+    trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repaidSettlementWithoutInsuranceFundFee)
 
     // update protocol's non settlement token balance
     const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
@@ -155,7 +158,9 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
 
     // update protocol's settlement token balance
     const protocol = getOrCreateProtocol()
-    protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.plus(repayAmount).plus(insuranceFundFee)
+    protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance
+        .plus(repaidSettlementWithoutInsuranceFundFee)
+        .plus(insuranceFundFee)
 
     collateralToken.save()
     settlementToken.save()
