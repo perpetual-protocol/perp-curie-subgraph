@@ -1,6 +1,11 @@
 {
     "chainId": 69,
     "contracts": {
+        "AAVEUSDChainlinkPriceFeed": {
+            "address": "0xd7A3F41b355Cb5C27eF0425Cc84b4c88180770A9",
+            "createdBlockNumber": 2052690,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "AVAXUSDBandPriceFeed": {
             "address": "0xC79e27575dD214c266039EEb5B1E2A7b6310c409",
             "createdBlockNumber": 748089,
@@ -135,6 +140,11 @@
             "address": "0xb4759e0afb8Ee0f4A257e5B818154312E84A91bC",
             "createdBlockNumber": 1212443,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "vAAVE": {
+            "address": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
+            "createdBlockNumber": 2053536,
+            "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vAVAX": {
             "address": "0x1dbC57cF0e38f3aB2e31DAe6c32829eACDe6Fd3A",
@@ -336,6 +346,13 @@
             "address": "0x191AF74427ee73b5D9d63E1782C7aCa00857bA74",
             "baseAddress": "0x298129B9c8613CD49A9235Af92F74DF50c3E4EE5",
             "baseSymbol": "vPERP",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x7394264b07694Eee2aa54259F45bA04C5Fe89cC3",
+            "baseAddress": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
+            "baseSymbol": "vAAVE",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
