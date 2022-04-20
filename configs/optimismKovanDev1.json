@@ -116,6 +116,13 @@
             "baseSymbol": "vETH",
             "quoteAddress": "0xb1026Cad9eAD429Fc68594b136Ec5C427Cb38df5",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x73dDe203af6c57d2Edd4dDAe1163F115fC63535c",
+            "baseAddress": "0x92C7355496c688803a5bE19FfC4F836cC8a65106",
+            "baseSymbol": "vBTC",
+            "quoteAddress": "0xb1026Cad9eAD429Fc68594b136Ec5C427Cb38df5",
+            "quoteSymbol": "vUSD"
         }
     ],
     "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#3b7ecf7ad735b4093e6b0cc8060f80c97558d280"
