@@ -34,7 +34,7 @@ dataSources:
     source:
       abi: Vault
       address: "{{ contracts.Vault.address }}"
-      startBlock: {{ contracts.MarketRegistry.createdBlockNumber }}
+      startBlock: {{ contracts.Vault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

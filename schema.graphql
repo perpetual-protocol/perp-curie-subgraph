@@ -290,38 +290,38 @@ type TraderMarket @entity {
 }
 
 type Position @entity {
-    "format: <trader address>-<baseToken address>"
-    id: ID!
-    "trader address"
-    trader: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "current position size"
-    positionSize: BigDecimal!
-    "average open notional of the current position"
-    openNotional: BigDecimal!
-    "average entry price of the current position = abs(openNotional / positionSize)"
-    entryPrice: BigDecimal!
-    "cumulative trading volume"
-    tradingVolume: BigDecimal!
-    "cumulative realize pnl"
-    realizedPnl: BigDecimal!
-    "cumulative funding payment: - is received and + is sent"
-    fundingPayment: BigDecimal!
-    "cumulative trading fee"
-    tradingFee: BigDecimal!
-    "cumulative liquidation fee"
-    liquidationFee: BigDecimal!
+    "deprecated: format: <trader address>-<baseToken address>"
+    id: ID! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: trader address"
+    trader: Bytes! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: baseToken address"
+    baseToken: Bytes! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: current position size"
+    positionSize: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: average open notional of the current position"
+    openNotional: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: average entry price of the current position = abs(openNotional / positionSize)"
+    entryPrice: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: cumulative trading volume"
+    tradingVolume: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: cumulative realize pnl"
+    realizedPnl: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: cumulative funding payment: - is received and + is sent"
+    fundingPayment: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: cumulative trading fee"
+    tradingFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: cumulative liquidation fee"
+    liquidationFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
 
-    "last updated block number"
-    blockNumber: BigInt!
-    "last updated block timestamp"
-    timestamp: BigInt!
+    "deprecated: last updated block number"
+    blockNumber: BigInt! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: last updated block timestamp"
+    timestamp: BigInt! @deprecated(reason: "Use TraderMarket instead.")
 
-    "foreign key to Trader"
-    traderRef: Trader!
-    "foreign key to Market"
-    marketRef: Market!
+    "deprecated: foreign key to Trader"
+    traderRef: Trader! @deprecated(reason: "Use TraderMarket instead.")
+    "deprecated: foreign key to Market"
+    marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
 type PositionHistory @entity {
