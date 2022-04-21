@@ -1,6 +1,32 @@
 {
     "chainId": 69,
+    "collaterals": [
+        {
+            "address": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
+            "decimals": 6,
+            "name": "Test Tether",
+            "priceFeedAddress": "0x56AC02B2d4751819dA542D1F2E2CbFf53CBdE73d",
+            "symbol": "TestUSDT"
+        },
+        {
+            "address": "0xf69460072321ed663Ad8E69Bc15771A57D18522d",
+            "decimals": 8,
+            "name": "Test Wrapped BTC",
+            "priceFeedAddress": "0x5e92237D2F114094958A6d98403A50739A0Fe495",
+            "symbol": "TestWBTC"
+        }
+    ],
     "contracts": {
+        "AAVEUSDChainlinkPriceFeed": {
+            "address": "0xd7A3F41b355Cb5C27eF0425Cc84b4c88180770A9",
+            "createdBlockNumber": 2052690,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "APEUSDChainlinkPriceFeed": {
+            "address": "0x43832e6B389172E48984ad4d400aC2C437Ba3b5C",
+            "createdBlockNumber": 2150405,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "AVAXUSDBandPriceFeed": {
             "address": "0xC79e27575dD214c266039EEb5B1E2A7b6310c409",
             "createdBlockNumber": 748089,
@@ -35,6 +61,11 @@
             "address": "0x22DdF6f4B1cd825324C6f96897c4040de9A1e1F4",
             "createdBlockNumber": 748012,
             "name": "contracts/ClearingHouseConfig.sol:ClearingHouseConfig"
+        },
+        "CollateralManager": {
+            "address": "0xfD8f8EbA454D01f2ABA8e7f6A7a000BffF4A7D92",
+            "createdBlockNumber": 2185077,
+            "name": "contracts/CollateralManager.sol:CollateralManager"
         },
         "DAIUSDChainlinkPriceFeed": {
             "address": "0x8E5D6cFfD43438758eCdc953DFF887699C94ad8d",
@@ -136,6 +167,16 @@
             "createdBlockNumber": 1212443,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
+        "vAAVE": {
+            "address": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
+            "createdBlockNumber": 2053536,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vAPE": {
+            "address": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
+            "createdBlockNumber": 2151854,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
         "vAVAX": {
             "address": "0x1dbC57cF0e38f3aB2e31DAe6c32829eACDe6Fd3A",
             "createdBlockNumber": 954471,
@@ -230,7 +271,9 @@
     "externalContracts": {
         "DefaultProxyAdmin": "0x1C0D9fe8f0A73e753bcF690d68E030918043088f",
         "USDC": "0x3e22e37Cb472c872B5dE121134cFD1B57Ef06560",
-        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+        "USDT": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
+        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "WBTC": "0xf69460072321ed663Ad8E69Bc15771A57D18522d"
     },
     "network": "optimism-kovan",
     "pools": [
@@ -340,6 +383,20 @@
             "quoteSymbol": "vUSD"
         },
         {
+            "address": "0x7394264b07694Eee2aa54259F45bA04C5Fe89cC3",
+            "baseAddress": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
+            "baseSymbol": "vAAVE",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x7eD00399A572B78b9C30D631aE28984aC062f282",
+            "baseAddress": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
+            "baseSymbol": "vAPE",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
             "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
             "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
             "baseSymbol": "vBTC2",
@@ -361,5 +418,5 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#05c8f565166b2c5b10dcd8ba61cb0b368903e7ca"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cbff670005d92e13704585d10e36d8477b5d4b7b"
 }
