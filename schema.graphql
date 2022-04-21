@@ -289,7 +289,7 @@ type TraderMarket @entity {
     marketRef: Market!
 }
 
-type Position @entity {
+type Position @entity @deprecated(reason: "Use TraderMarket instead.") {
     "format: <trader address>-<baseToken address>"
     id: ID!
     "trader address"
