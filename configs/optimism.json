@@ -6,6 +6,11 @@
             "createdBlockNumber": 5752016,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
+        "APEUSDChainlinkPriceFeed": {
+            "address": "0xB6dd13b843B1C272452c1bd5f74899544279B4e8",
+            "createdBlockNumber": 6129783,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
         "ATOMUSDChainlinkPriceFeed": {
             "address": "0x0593dB04e076817C045287FA56123f6DF586190F",
             "createdBlockNumber": 3718305,
@@ -134,6 +139,11 @@
         "vAAVE": {
             "address": "0x34235C8489b06482A99bb7fcaB6d7c467b92d248",
             "createdBlockNumber": 5790050,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vAPE": {
+            "address": "0x9d34F1D15C22e4C0924804e2a38cBe93DFB84bc2",
+            "createdBlockNumber": 6131878,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vATOM": {
@@ -333,6 +343,13 @@
             "address": "0x6c0bC93A4208EB1648AF4ED44Cb3b4df9547B42B",
             "baseAddress": "0x34235C8489b06482A99bb7fcaB6d7c467b92d248",
             "baseSymbol": "vAAVE",
+            "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x05B552C0a787c228624b389D51eB4277e1F0F348",
+            "baseAddress": "0x9d34F1D15C22e4C0924804e2a38cBe93DFB84bc2",
+            "baseSymbol": "vAPE",
             "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
             "quoteSymbol": "vUSD"
         },
