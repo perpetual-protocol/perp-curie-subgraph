@@ -23,6 +23,11 @@ type Protocol @entity {
     blockNumber: BigInt!
     "block timestamp"
     timestamp: BigInt!
+
+    "DEPRECATED: total settlement token in the protocol"
+    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
+    "DEPRECATED: bad debt"
+    badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 }
 
 type Market @entity {
@@ -40,6 +45,10 @@ type Market @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
+    "provided liquidity base amount"
+    baseAmount: BigDecimal!
+    "provided liquidity quote amount"
+    quoteAmount: BigDecimal!
 
     "block number the pool was added to ClearingHouse"
     blockNumberAdded: BigInt!
@@ -313,6 +322,11 @@ type Trader @entity {
     refereeCode: ReferralCode
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
+
+    "DEPRECATED: total deposited settlement token + cumulative total pnl"
+    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
+    "DEPRECATED: cumulative bad debt"
+    badDebt: BigDecimal!
 }
 
 type TraderMarket @entity {
@@ -597,4 +611,23 @@ type ReferralCode @entity {
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
+}
+
+# No such contract event, this is artificial for monitoring only
+type BadDebtHappened @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }

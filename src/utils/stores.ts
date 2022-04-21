@@ -37,6 +37,7 @@ export function getOrCreateProtocol(): Protocol {
         protocol.tradingFee = BD_ZERO
         protocol.tradingVolume = BD_ZERO
         protocol.totalSettlementTokenBalance = BD_ZERO
+        protocol.totalValueLocked = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
         protocol.save()
@@ -59,6 +60,8 @@ export function getOrCreateMarket(baseToken: Address): Market {
         market.feeRatio = BI_ZERO
         market.tradingFee = BD_ZERO
         market.tradingVolume = BD_ZERO
+        market.baseAmount = BD_ZERO
+        market.quoteAmount = BD_ZERO
         market.blockNumberAdded = BI_ZERO
         market.timestampAdded = BI_ZERO
         market.blockNumber = BI_ZERO
@@ -89,6 +92,7 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
         trader.timestamp = BI_ZERO
         trader.refereeCode = ""
         trader.referrerCode = ""
+        trader.collateral = BD_ZERO
         trader.save()
     }
     return trader

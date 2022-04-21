@@ -46,7 +46,9 @@ export function handleDeposited(event: DepositedEvent): void {
     // update deposited amount
     if (deposited.collateralToken.equals(USDCAddress)) {
         trader.settlementTokenBalance = trader.settlementTokenBalance.plus(amount)
+        trader.collateral = trader.collateral.plus(amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.plus(amount)
+        protocol.totalValueLocked = protocol.totalValueLocked.plus(amount)
     } else {
         const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
@@ -95,7 +97,9 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
     // update withdrawn amount
     if (withdrawn.collateralToken.equals(USDCAddress)) {
         trader.settlementTokenBalance = trader.settlementTokenBalance.minus(withdrawn.amount)
+        trader.collateral = trader.collateral.minus(withdrawn.amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.minus(withdrawn.amount)
+        protocol.totalValueLocked = protocol.totalValueLocked.minus(withdrawn.amount)
     } else {
         const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
@@ -151,6 +155,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     // update trader's settlement token balance
     const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
     trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repaidSettlementWithoutInsuranceFundFee)
+    trader.collateral = trader.collateral.plus(repaidSettlementWithoutInsuranceFundFee)
 
     // update protocol's non settlement token balance
     const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
@@ -159,6 +164,9 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     // update protocol's settlement token balance
     const protocol = getOrCreateProtocol()
     protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance
+        .plus(repaidSettlementWithoutInsuranceFundFee)
+        .plus(insuranceFundFee)
+    protocol.totalValueLocked = protocol.totalValueLocked
         .plus(repaidSettlementWithoutInsuranceFundFee)
         .plus(insuranceFundFee)
 
