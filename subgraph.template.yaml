@@ -98,6 +98,7 @@ dataSources:
       file: ./src/mappings/clearingHouse.ts
       entities:
         - PositionChanged
+        - PositionClosed
         - Protocol
         - Market
         - Trader
@@ -118,6 +119,8 @@ dataSources:
       eventHandlers:
         - event: PositionChanged(indexed address,indexed address,int256,int256,uint256,int256,int256,uint256)
           handler: handlePositionChanged
+        - event: PositionClosed(indexed address,indexed address,int256,int256,int256,int256,uint256)
+          handler: handlePositionClosed
         - event: PositionLiquidated(indexed address,indexed address,uint256,uint256,uint256,address)
           handler: handlePositionLiquidated
         - event: LiquidityChanged(indexed address,indexed address,indexed address,int24,int24,int256,int256,int128,uint256)
