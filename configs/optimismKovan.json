@@ -1,5 +1,28 @@
 {
     "chainId": 69,
+    "collaterals": [
+        {
+            "address": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
+            "decimals": 6,
+            "name": "Test Tether",
+            "priceFeedAddress": "0x56AC02B2d4751819dA542D1F2E2CbFf53CBdE73d",
+            "symbol": "TestUSDT"
+        },
+        {
+            "address": "0xf69460072321ed663Ad8E69Bc15771A57D18522d",
+            "decimals": 8,
+            "name": "Test Wrapped BTC",
+            "priceFeedAddress": "0x5e92237D2F114094958A6d98403A50739A0Fe495",
+            "symbol": "TestWBTC"
+        },
+        {
+            "address": "0x4200000000000000000000000000000000000006",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "priceFeedAddress": "0xfAb3Bc6674a38cA766083838E0eba7bB3Ef96177",
+            "symbol": "WETH"
+        }
+    ],
     "contracts": {
         "AAVEUSDChainlinkPriceFeed": {
             "address": "0xd7A3F41b355Cb5C27eF0425Cc84b4c88180770A9",
@@ -45,6 +68,11 @@
             "address": "0x22DdF6f4B1cd825324C6f96897c4040de9A1e1F4",
             "createdBlockNumber": 748012,
             "name": "contracts/ClearingHouseConfig.sol:ClearingHouseConfig"
+        },
+        "CollateralManager": {
+            "address": "0xfD8f8EbA454D01f2ABA8e7f6A7a000BffF4A7D92",
+            "createdBlockNumber": 2185077,
+            "name": "contracts/CollateralManager.sol:CollateralManager"
         },
         "DAIUSDChainlinkPriceFeed": {
             "address": "0x8E5D6cFfD43438758eCdc953DFF887699C94ad8d",
@@ -249,22 +277,25 @@
     },
     "externalContracts": {
         "DefaultProxyAdmin": "0x1C0D9fe8f0A73e753bcF690d68E030918043088f",
+        "TestUSDT": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
+        "TestWBTC": "0xf69460072321ed663Ad8E69Bc15771A57D18522d",
         "USDC": "0x3e22e37Cb472c872B5dE121134cFD1B57Ef06560",
-        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "WETH9": "0x4200000000000000000000000000000000000006"
     },
     "network": "optimism-kovan",
     "pools": [
         {
-            "address": "0xfb0cBBcc2Aa9405A852d6023D2789F802c7B9932",
-            "baseAddress": "0x5802918dC503c465F969DA0847b71E3Fbe9B141c",
-            "baseSymbol": "vETH",
+            "address": "0x7394264b07694Eee2aa54259F45bA04C5Fe89cC3",
+            "baseAddress": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
+            "baseSymbol": "vAAVE",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
         {
-            "address": "0xe12359A761054dACCA3e96b6D4FF727d98F62950",
-            "baseAddress": "0x1f91666a0706EF6e8E1506E3889171940c94B51A",
-            "baseSymbol": "vBTC",
+            "address": "0x7eD00399A572B78b9C30D631aE28984aC062f282",
+            "baseAddress": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
+            "baseSymbol": "vAPE",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
@@ -276,16 +307,16 @@
             "quoteSymbol": "vUSD"
         },
         {
-            "address": "0xc8dE4cCE04A7c15a4b48f5519b649C10D428dBC6",
-            "baseAddress": "0x798310F8dD81E9f0117a66A8615ad769b3f801AE",
-            "baseSymbol": "vLUNA",
+            "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
+            "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
+            "baseSymbol": "vBTC2",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
         {
-            "address": "0x9a231Fa1c9dEDAa0abbE781b4Edd64176fcdBae2",
-            "baseAddress": "0xB9C4bE24a7017990df526a7f179de7F30E1c0c87",
-            "baseSymbol": "vSOL",
+            "address": "0xe12359A761054dACCA3e96b6D4FF727d98F62950",
+            "baseAddress": "0x1f91666a0706EF6e8E1506E3889171940c94B51A",
+            "baseSymbol": "vBTC",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
@@ -293,48 +324,6 @@
             "address": "0xd7918C15740AAAd97B457e4d9233c7405D139Fbf",
             "baseAddress": "0xaa3168c0Aa6E69F415eB1C0c99FBB2d8654f4D3B",
             "baseSymbol": "vCRV",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x83dF4758591B65ae521648a6B1f3eA295c4C1b21",
-            "baseAddress": "0x9Fbffd56f7FBfb00D851C99128EEb6F125343906",
-            "baseSymbol": "vSAND",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0xbA011D181B52Bb817c29BF46B976726d4eC92a26",
-            "baseAddress": "0x775FC6903058E548cf1f6DF2ed0AF22f4A057998",
-            "baseSymbol": "vLINK",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x1e7D9127bFb7f76f580e3DcA6b108BBB475FCE60",
-            "baseAddress": "0x0Ae3f17a50Bc83B2eA953Ec323d6C4d77F2EA1f9",
-            "baseSymbol": "vsDEFI",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x9156832c9dd76Eb89cF53A4547539a418Ed6c8D9",
-            "baseAddress": "0x3954Ab063171136ed2a8Ad7321024c57152ac67d",
-            "baseSymbol": "vUSDT",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0xe0C5beB294157EbE552368a2b90Da37a234086F7",
-            "baseAddress": "0xA3c74184CB478C94EEE1E10e6c98DfFff5d2105f",
-            "baseSymbol": "vUSDC",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x2635326c50793860b8D89f442aCe2C4134d7bDa3",
-            "baseAddress": "0x96c2B49ad13792700B4123bcB43D3E1f351aCdF7",
-            "baseSymbol": "vTSLA",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
@@ -353,30 +342,9 @@
             "quoteSymbol": "vUSD"
         },
         {
-            "address": "0x191AF74427ee73b5D9d63E1782C7aCa00857bA74",
-            "baseAddress": "0x298129B9c8613CD49A9235Af92F74DF50c3E4EE5",
-            "baseSymbol": "vPERP",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x7394264b07694Eee2aa54259F45bA04C5Fe89cC3",
-            "baseAddress": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
-            "baseSymbol": "vAAVE",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x7eD00399A572B78b9C30D631aE28984aC062f282",
-            "baseAddress": "0x2Ac0A24fCD69064CDEE9022b1b4556A5a4e2ac58",
-            "baseSymbol": "vAPE",
-            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
-            "quoteSymbol": "vUSD"
-        },
-        {
-            "address": "0x342D68ce2C339C60b34aeAA622A4d757D0289782",
-            "baseAddress": "0x0B10bD3c0761b50D6da34e9050d6d10B48917D54",
-            "baseSymbol": "vBTC2",
+            "address": "0xfb0cBBcc2Aa9405A852d6023D2789F802c7B9932",
+            "baseAddress": "0x5802918dC503c465F969DA0847b71E3Fbe9B141c",
+            "baseSymbol": "vETH",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
@@ -388,12 +356,75 @@
             "quoteSymbol": "vUSD"
         },
         {
+            "address": "0xbA011D181B52Bb817c29BF46B976726d4eC92a26",
+            "baseAddress": "0x775FC6903058E548cf1f6DF2ed0AF22f4A057998",
+            "baseSymbol": "vLINK",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0xc8dE4cCE04A7c15a4b48f5519b649C10D428dBC6",
+            "baseAddress": "0x798310F8dD81E9f0117a66A8615ad769b3f801AE",
+            "baseSymbol": "vLUNA",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
             "address": "0x02d6E440163a11E888cadDdedF89CF160ef410f8",
             "baseAddress": "0x7dbA23afeed3Fe9703BEedA9682b45EbFc5ffaaf",
             "baseSymbol": "vMATIC",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x191AF74427ee73b5D9d63E1782C7aCa00857bA74",
+            "baseAddress": "0x298129B9c8613CD49A9235Af92F74DF50c3E4EE5",
+            "baseSymbol": "vPERP",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x83dF4758591B65ae521648a6B1f3eA295c4C1b21",
+            "baseAddress": "0x9Fbffd56f7FBfb00D851C99128EEb6F125343906",
+            "baseSymbol": "vSAND",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x9a231Fa1c9dEDAa0abbE781b4Edd64176fcdBae2",
+            "baseAddress": "0xB9C4bE24a7017990df526a7f179de7F30E1c0c87",
+            "baseSymbol": "vSOL",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x2635326c50793860b8D89f442aCe2C4134d7bDa3",
+            "baseAddress": "0x96c2B49ad13792700B4123bcB43D3E1f351aCdF7",
+            "baseSymbol": "vTSLA",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0xe0C5beB294157EbE552368a2b90Da37a234086F7",
+            "baseAddress": "0xA3c74184CB478C94EEE1E10e6c98DfFff5d2105f",
+            "baseSymbol": "vUSDC",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x9156832c9dd76Eb89cF53A4547539a418Ed6c8D9",
+            "baseAddress": "0x3954Ab063171136ed2a8Ad7321024c57152ac67d",
+            "baseSymbol": "vUSDT",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x1e7D9127bFb7f76f580e3DcA6b108BBB475FCE60",
+            "baseAddress": "0x0Ae3f17a50Bc83B2eA953Ec323d6C4d77F2EA1f9",
+            "baseSymbol": "vsDEFI",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
         }
     ],
-    "version": "1.1.0"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cbff670005d92e13704585d10e36d8477b5d4b7b"
 }

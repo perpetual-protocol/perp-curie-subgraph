@@ -153,6 +153,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.timestamp = event.block.timestamp
     market.tradingVolume = market.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
+    market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
+    market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
@@ -301,8 +303,13 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
         const baseTokenMap = hardFixedDataMap.get(txHash)
         if (baseTokenMap.has(baseToken)) {
             const fixedDataMap = baseTokenMap.get(baseToken)
+
             traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")
             traderMarket.openNotional = fixedDataMap.get("openNotional")
+
+            const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
+            position.positionSize = fixedDataMap.get("takerPositionSize")
+            position.openNotional = fixedDataMap.get("openNotional")
         }
     }
 
@@ -323,12 +330,18 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
 
+    // upsert market
+    const market = getOrCreateMarket(event.params.baseToken)
+    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
+    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
+
     // commit changes
     liquidityChanged.save()
     maker.save()
     trader.save()
     traderMarket.save()
     openOrder.save()
+    market.save()
 }
 
 export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): void {

@@ -34,7 +34,7 @@ dataSources:
     source:
       abi: Vault
       address: "{{ contracts.Vault.address }}"
-      startBlock: {{ contracts.MarketRegistry.createdBlockNumber }}
+      startBlock: {{ contracts.Vault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -45,14 +45,23 @@ dataSources:
         - Withdrawn
         - Protocol
         - Trader
+        - CollateralLiquidated
       abis:
         - name: Vault
           file: ./abis/Vault.json
+        - name: ERC20
+          file: ./external-abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./external-abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./external-abis/ERC20NameBytes.json
       eventHandlers:
         - event: Deposited(indexed address,indexed address,uint256)
           handler: handleDeposited
         - event: Withdrawn(indexed address,indexed address,uint256)
           handler: handleWithdrawn
+        - event: CollateralLiquidated(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint24)
+          handler: handleCollateralLiquidated
 
   - kind: ethereum/contract
     name: Exchange
@@ -140,6 +149,33 @@ dataSources:
       eventHandlers:
         - event: PnlRealized(indexed address,int256)
           handler: handlePnlRealized
+
+  - kind: ethereum/contract
+    name: CollateralManager
+    network: {{ network }}
+    source:
+      abi: CollateralManager
+      address: "{{ contracts.CollateralManager.address }}"
+      startBlock: {{ contracts.CollateralManager.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/collateralManager.ts
+      entities:
+        - Token
+      abis:
+        - name: CollateralManager
+          file: ./abis/CollateralManager.json
+        - name: ERC20
+          file: ./external-abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./external-abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./external-abis/ERC20NameBytes.json
+      eventHandlers:
+        - event: CollateralAdded(indexed address,address,uint24,uint24,uint256)
+          handler: handleCollateralAdded
 
   {{#referralContracts}}
   - kind: ethereum/contract
