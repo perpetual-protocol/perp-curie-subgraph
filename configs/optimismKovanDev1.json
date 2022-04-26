@@ -102,28 +102,28 @@
     },
     "externalContracts": {
         "DefaultProxyAdmin": "0x337520f7882038B1a4687900813355412F27b9eC",
+        "TestUSDT": "0xF38d03C1da6df7dD7499Cd3D33fdf7232D356Ec4",
+        "TestWBTC": "0xA10771e455fAb204a73137E6B74261A88B8E2e46",
         "USDC": "0xa5f4f208Fffe2B8F92693EC848e65D11f792deF6",
-        "USDT": "0xF38d03C1da6df7dD7499Cd3D33fdf7232D356Ec4",
         "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
-        "WBTC": "0xA10771e455fAb204a73137E6B74261A88B8E2e46",
         "WETH9": "0x4200000000000000000000000000000000000006"
     },
     "network": "optimism-kovan",
     "pools": [
-        {
-            "address": "0x4dF553DFf2D047C37EeF7680C0d619513c58Dd0B",
-            "baseAddress": "0x1F7732F00b4440eb28C42C8ad3eca5Ff8493bFa1",
-            "baseSymbol": "vETH",
-            "quoteAddress": "0xb1026Cad9eAD429Fc68594b136Ec5C427Cb38df5",
-            "quoteSymbol": "vUSD"
-        },
         {
             "address": "0x73dDe203af6c57d2Edd4dDAe1163F115fC63535c",
             "baseAddress": "0x92C7355496c688803a5bE19FfC4F836cC8a65106",
             "baseSymbol": "vBTC",
             "quoteAddress": "0xb1026Cad9eAD429Fc68594b136Ec5C427Cb38df5",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0x4dF553DFf2D047C37EeF7680C0d619513c58Dd0B",
+            "baseAddress": "0x1F7732F00b4440eb28C42C8ad3eca5Ff8493bFa1",
+            "baseSymbol": "vETH",
+            "quoteAddress": "0xb1026Cad9eAD429Fc68594b136Ec5C427Cb38df5",
+            "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#3b7ecf7ad735b4093e6b0cc8060f80c97558d280"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cbff670005d92e13704585d10e36d8477b5d4b7b"
 }

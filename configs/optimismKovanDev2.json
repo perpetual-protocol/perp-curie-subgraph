@@ -1,5 +1,28 @@
 {
     "chainId": 69,
+    "collaterals": [
+        {
+            "address": "0xe1c1c3055A61A3f565823EFd36EfbEaF7467c8E3",
+            "decimals": 6,
+            "name": "Test Tether",
+            "priceFeedAddress": "0x2b178568f07FA045Fc73b4F65Cb640Fc98B7416a",
+            "symbol": "TestUSDT"
+        },
+        {
+            "address": "0x9be419Cb789fd089F6DCF4b2d8cd5E5a30864eaA",
+            "decimals": 8,
+            "name": "Test Wrapped BTC",
+            "priceFeedAddress": "0x8a796eea6B299Eb632F63fa1BBCb2D98D076F181",
+            "symbol": "TestWBTC"
+        },
+        {
+            "address": "0x4200000000000000000000000000000000000006",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "priceFeedAddress": "0x990947f96753D99D1418b9734317Ded8e7817a1c",
+            "symbol": "WETH"
+        }
+    ],
     "contracts": {
         "AccountBalance": {
             "address": "0xc53F01f4C8bb91D861856B72642E74EF074BD272",
@@ -20,6 +43,11 @@
             "address": "0xD750084d81411DDcF96B3F027358c89aC809e575",
             "createdBlockNumber": 2075239,
             "name": "contracts/ClearingHouseConfig.sol:ClearingHouseConfig"
+        },
+        "CollateralManager": {
+            "address": "0x304d9bd2D8e99A7ed5CBf41519AE6C80bEF10236",
+            "createdBlockNumber": 2168055,
+            "name": "contracts/CollateralManager.sol:CollateralManager"
         },
         "ETHUSDChainlinkPriceFeed": {
             "address": "0x990947f96753D99D1418b9734317Ded8e7817a1c",
@@ -69,25 +97,28 @@
     },
     "externalContracts": {
         "DefaultProxyAdmin": "0x76Fd2BbA0428ff9e90C11cEdC215eD6af9D2C667",
+        "TestUSDT": "0xe1c1c3055A61A3f565823EFd36EfbEaF7467c8E3",
+        "TestWBTC": "0x9be419Cb789fd089F6DCF4b2d8cd5E5a30864eaA",
         "USDC": "0x57829D1Da346f1B8B117C7370874346BDCA80DD5",
-        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+        "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "WETH9": "0x4200000000000000000000000000000000000006"
     },
     "network": "optimism-kovan",
     "pools": [
-        {
-            "address": "0xD09461eF4193f6521DD18Bc75b9309a0772E58db",
-            "baseAddress": "0xCCcdac62F0E193551724d10dD55b6Bc7F3058DF0",
-            "baseSymbol": "vETH",
-            "quoteAddress": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
-            "quoteSymbol": "vUSD"
-        },
         {
             "address": "0xde50B370Be734e141f0d5824c0dFB45eA2F5f010",
             "baseAddress": "0x34a0D6e94317895170684Ec73959fa146AdEF7d8",
             "baseSymbol": "vBTC",
             "quoteAddress": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
             "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0xD09461eF4193f6521DD18Bc75b9309a0772E58db",
+            "baseAddress": "0xCCcdac62F0E193551724d10dD55b6Bc7F3058DF0",
+            "baseSymbol": "vETH",
+            "quoteAddress": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
+            "quoteSymbol": "vUSD"
         }
     ],
-    "version": "1.1.0"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#c5f3467226065ec47d516bb9e1483c3c49ac32ef"
 }
