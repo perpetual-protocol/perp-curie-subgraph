@@ -15,14 +15,19 @@ type Protocol @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
-    "total value locked"
-    totalValueLocked: BigDecimal!
-    "bad debt"
-    badDebt: BigDecimal!
+    "total settlement token"
+    totalSettlementTokenBalance: BigDecimal!
+    "total non settlement tokens"
+    totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
     "block number"
     blockNumber: BigInt!
     "block timestamp"
     timestamp: BigInt!
+
+    "DEPRECATED: total settlement token in the protocol"
+    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
+    "DEPRECATED: bad debt"
+    badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 }
 
 type Market @entity {
@@ -40,6 +45,10 @@ type Market @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
+    "provided liquidity base amount"
+    baseAmount: BigDecimal!
+    "provided liquidity quote amount"
+    quoteAmount: BigDecimal!
 
     "block number the pool was added to ClearingHouse"
     blockNumberAdded: BigInt!
@@ -54,6 +63,42 @@ type Market @entity {
     positions: [Position!]! @derivedFrom(field: "marketRef")
     "open orders"
     openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
+}
+
+type Token @entity {
+    "format: <token address>"
+    id: ID!
+    "token name"
+    name: String!
+    "token symbol"
+    symbol: String!
+    "token decimals"
+    decimals: BigInt!
+
+    "total amount deposited"
+    totalDeposited: BigDecimal!
+}
+
+type TraderTokenBalance @entity {
+    "format: <trader address>-<token address>"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    token: Token!
+    "foreign key to Trader"
+    trader: Trader!
+}
+
+type ProtocolTokenBalance @entity {
+    "format: <token address>"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    token: Token!
+    "foreign key to Protocol"
+    protocol: Protocol!
 }
 
 # Vault
@@ -89,6 +134,34 @@ type Withdrawn @entity {
     collateralToken: Bytes!
     "amount"
     amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type CollateralLiquidated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "collateralToken address"
+    collateralToken: Bytes!
+    "liquidator address"
+    liquidator: Bytes!
+    "amount of collateral token liquidated"
+    collateral: BigDecimal!
+    "repaidSettlementWithoutInsuranceFundFee"
+    repaidSettlementWithoutInsuranceFundFee: BigDecimal!
+    "insuranceFund fee"
+    insuranceFundFee: BigDecimal!
+    "discount ratio"
+    discountRatio: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -215,8 +288,10 @@ type FundingPaymentSettled @entity {
 type Trader @entity {
     "format: trader address"
     id: ID!
-    "total deposited collateral + cumulative total pnl"
-    collateral: BigDecimal!
+    "total deposited settlement collateral + cumulative total pnl"
+    settlementTokenBalance: BigDecimal!
+    "total deposited non-settlement collateral"
+    nonSettlementTokenBalances: [TraderTokenBalance!] @derivedFrom(field: "trader")
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"
@@ -231,8 +306,6 @@ type Trader @entity {
     makerFee: BigDecimal!
     "cumulative total pnl = realizedPnl (fee included) - fundingPayment - liquidationFee + makerFee"
     totalPnl: BigDecimal!
-    "cumulative bad debt"
-    badDebt: BigDecimal!
 
     "last updated block number"
     blockNumber: BigInt!
@@ -249,6 +322,11 @@ type Trader @entity {
     refereeCode: ReferralCode
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
+
+    "DEPRECATED: total deposited settlement token + cumulative total pnl"
+    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
+    "DEPRECATED: cumulative bad debt"
+    badDebt: BigDecimal!
 }
 
 type TraderMarket @entity {
@@ -467,25 +545,6 @@ type PnlRealized @entity {
     timestamp: BigInt!
 }
 
-# No such contract event, this is artificial for monitoring only
-type BadDebtHappened @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "amount"
-    amount: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
 # Trader Historical Data
 
 type TraderDayData @entity {
@@ -552,4 +611,23 @@ type ReferralCode @entity {
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
+}
+
+# No such contract event, this is artificial for monitoring only
+type BadDebtHappened @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "amount"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
