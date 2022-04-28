@@ -18,7 +18,7 @@ import { Network } from "../constants"
 import { hardFixedDataMap as hardFixedDataMapOP } from "../hard-fixed-data/optimism"
 import { hardFixedDataMap as hardFixedDataMapOPKovan } from "../hard-fixed-data/optimism-kovan"
 import { HardFixedDataMap } from "../hard-fixed-data/types"
-import { abs, BD_ZERO, BI_ZERO, fromSqrtPriceX96, fromWei } from "../utils/numbers"
+import { abs, BD_ZERO, BI_ZERO, DUST_POSITION_SIZE, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
     getBlockNumberLogIndex,
     getOrCreateMaker,
@@ -79,7 +79,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
-    traderMarket.takerPositionSize = traderMarket.takerPositionSize.plus(positionClosed.closedPositionSize)
+    traderMarket.takerPositionSize = BD_ZERO
     traderMarket.openNotional = BD_ZERO
     traderMarket.entryPrice = BD_ZERO
     traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
@@ -90,7 +90,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     position.blockNumber = event.block.number
     position.timestamp = event.block.timestamp
     // NOTE: position size does not consider maker position
-    position.positionSize = position.positionSize.plus(positionClosed.closedPositionSize)
+    position.positionSize = BD_ZERO
     position.openNotional = BD_ZERO
     position.realizedPnl = position.realizedPnl.plus(positionClosed.realizedPnl)
     position.entryPrice = BD_ZERO
@@ -168,7 +168,10 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderMarket.timestamp = event.block.timestamp
     traderMarket.takerPositionSize = traderMarket.takerPositionSize.plus(positionChanged.exchangedPositionSize)
     traderMarket.openNotional = positionChanged.openNotional
-    if (traderMarket.takerPositionSize.equals(BD_ZERO)) {
+    // NOTE: according to contract, a position size < 10 wei cannot be closed or liquidated so we set it to 0
+    if (abs(traderMarket.takerPositionSize).lt(DUST_POSITION_SIZE)) {
+        traderMarket.takerPositionSize = BD_ZERO
+        traderMarket.openNotional = BD_ZERO
         traderMarket.entryPrice = BD_ZERO
     } else {
         traderMarket.entryPrice = abs(traderMarket.openNotional.div(traderMarket.takerPositionSize))
@@ -184,12 +187,15 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
     position.openNotional = positionChanged.openNotional
-    position.realizedPnl = position.realizedPnl.plus(positionChanged.realizedPnl)
-    if (position.positionSize.equals(BD_ZERO)) {
+    // NOTE: according to contract, a position size < 10 wei cannot be closed or liquidated so we set it to 0
+    if (abs(position.positionSize).lt(DUST_POSITION_SIZE)) {
+        position.positionSize = BD_ZERO
+        position.openNotional = BD_ZERO
         position.entryPrice = BD_ZERO
     } else {
         position.entryPrice = abs(position.openNotional.div(position.positionSize))
     }
+    position.realizedPnl = position.realizedPnl.plus(positionChanged.realizedPnl)
     position.tradingVolume = position.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     position.tradingFee = position.tradingFee.plus(positionChanged.fee)
 
