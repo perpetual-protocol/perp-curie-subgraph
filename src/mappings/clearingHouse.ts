@@ -32,7 +32,6 @@ import {
     getReferralCodeDayData,
     getReferralCodeTraderDayData,
     getTraderDayData,
-    saveToPositionHistory,
 } from "../utils/stores"
 
 const map = new Map<string, HardFixedDataMap>()
@@ -218,7 +217,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderMarket.save()
     position.save()
     traderDayData.save()
-    saveToPositionHistory(position, event)
 }
 
 export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {

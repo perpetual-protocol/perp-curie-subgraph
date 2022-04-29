@@ -4,7 +4,6 @@ import {
     Market,
     OpenOrder,
     Position,
-    PositionHistory,
     Protocol,
     ProtocolTokenBalance,
     ReferralCode,
@@ -252,23 +251,6 @@ export function getOrCreateProtocolTokenBalance(tokenAddr: Address): ProtocolTok
         tokenBalance.save()
     }
     return tokenBalance
-}
-
-export function saveToPositionHistory(position: Position, event: ethereum.Event): void {
-    const positionHistoryId = position.id + "-" + `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`
-    const positionHistory = new PositionHistory(positionHistoryId)
-    positionHistory.trader = position.trader
-    positionHistory.baseToken = position.baseToken
-    positionHistory.positionSize = position.positionSize
-    positionHistory.openNotional = position.openNotional
-    positionHistory.entryPrice = position.entryPrice
-    positionHistory.realizedPnl = position.realizedPnl
-    positionHistory.fundingPayment = position.fundingPayment
-    positionHistory.tradingFee = position.tradingFee
-    positionHistory.liquidationFee = position.liquidationFee
-    positionHistory.blockNumber = position.blockNumber
-    positionHistory.timestamp = position.timestamp
-    positionHistory.save()
 }
 
 export function getTraderDayData(event: ethereum.Event, trader: Address): TraderDayData {

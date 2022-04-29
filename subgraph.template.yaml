@@ -103,7 +103,6 @@ dataSources:
         - Market
         - Trader
         - Position
-        - PositionHistory
         - PositionLiquidated
         - LiquidityChanged
         - Maker
