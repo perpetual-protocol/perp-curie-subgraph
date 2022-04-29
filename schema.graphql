@@ -402,21 +402,6 @@ type Position @entity {
     marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
-type PositionHistory @entity {
-    "format: <position id>-<tx hash>-<tx log index>"
-    id: ID!
-    trader: Bytes!
-    baseToken: Bytes!
-    positionSize: BigDecimal!
-    openNotional: BigDecimal!
-    entryPrice: BigDecimal!
-    realizedPnl: BigDecimal!
-    fundingPayment: BigDecimal!
-    tradingFee: BigDecimal!
-    liquidationFee: BigDecimal!
-    blockNumber: BigInt!
-    timestamp: BigInt!
-}
 
 # ClearingHouse
 
