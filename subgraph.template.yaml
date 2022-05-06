@@ -179,6 +179,27 @@ dataSources:
         - event: CollateralAdded(indexed address,address,uint24,uint24,uint256)
           handler: handleCollateralAdded
 
+  - kind: ethereum/contract
+    name: LimitOrderBook
+    network: {{ network }}
+    source:
+      abi: LimitOrderBook
+      address: "{{ contracts.LimitOrderBook.address }}"
+      startBlock: {{ contracts.LimitOrderBook.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/accountBalance.ts
+      entities:
+        - LimitOrderFilled
+      abis:
+        - name: LimitOrderBook
+          file: ./abis/LimitOrderBook.json
+      eventHandlers:
+        - event: LimitOrderFilled(indexed address,indexed address,bytes32,address,uint256)
+          handler: handleLimitOrderFilled
+
   {{#referralContracts}}
   - kind: ethereum/contract
     name: Referrer

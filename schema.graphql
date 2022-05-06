@@ -616,3 +616,29 @@ type BadDebtHappened @entity {
     "block timestamp"
     timestamp: BigInt!
 }
+
+# LimitOrderBook
+
+type LimitOrderFilled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "hash of the filled limit order"
+    orderHash: Bytes!
+    "address of keeper"
+    keeper: Bytes!
+    "fee reward to keeper"
+    keeperFee: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
