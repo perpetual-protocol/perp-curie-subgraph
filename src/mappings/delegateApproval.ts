@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
     DelegationApproved as DelegationApprovedEvent,
     DelegationRevoked as DelegationRevokedEvent,
@@ -16,7 +17,7 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     delegationApproved.txHash = event.transaction.hash
     delegationApproved.trader = event.params.trader
     delegationApproved.delegate = event.params.delegate
-    delegationApproved.action = event.params.action
+    delegationApproved.action = BigInt.fromI32(event.params.action)
 
     // upsert protocol
     const protocol = getOrCreateProtocol()
@@ -39,7 +40,7 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
     delegationRevoked.txHash = event.transaction.hash
     delegationRevoked.trader = event.params.trader
     delegationRevoked.delegate = event.params.delegate
-    delegationRevoked.action = event.params.action
+    delegationRevoked.action = BigInt.fromI32(event.params.action)
 
     // upsert protocol
     const protocol = getOrCreateProtocol()
