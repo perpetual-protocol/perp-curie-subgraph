@@ -39,6 +39,12 @@ jobs:
         run: |
           aws eks --region $AWS_REGION update-kubeconfig --name $AWS_EKS_CLUSTER
 
+      # https://github.com/aws/aws-cli/issues/6920
+      - name: Fix invalid apiVersion client.authentication.k8s.io/v1alpha1
+        uses: azure/setup-kubectl@v2.0
+        with:
+          version: "v1.23.6"
+
       - name: Deploy to Self-hosted Graph Node
         run: |
           kubectl port-forward service/graph-node 8020:8020 &
