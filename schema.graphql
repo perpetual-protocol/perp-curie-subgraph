@@ -642,3 +642,23 @@ type LimitOrderFilled @entity {
     "block timestamp"
     timestamp: BigInt!
 }
+
+type LimitOrderCancelled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "hash of the cancelled limit order"
+    orderHash: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}

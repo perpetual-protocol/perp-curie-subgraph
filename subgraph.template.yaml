@@ -184,21 +184,24 @@ dataSources:
     network: {{ network }}
     source:
       abi: LimitOrderBook
-      address: "{{ contracts.LimitOrderBook.address }}"
-      startBlock: {{ contracts.LimitOrderBook.createdBlockNumber }}
+      address: "{{ periphery.contracts.LimitOrderBook.address }}"
+      startBlock: {{ periphery.contracts.LimitOrderBook.createdBlockNumber }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/accountBalance.ts
+      file: ./src/mappings/limitOrderBook.ts
       entities:
         - LimitOrderFilled
+        - LimitOrderCancelled
       abis:
         - name: LimitOrderBook
           file: ./abis/LimitOrderBook.json
       eventHandlers:
         - event: LimitOrderFilled(indexed address,indexed address,bytes32,address,uint256)
           handler: handleLimitOrderFilled
+        - event: LimitOrderCancelled(indexed address,indexed address,bytes32)
+          handler: handleLimitOrderCancelled
 
   {{#referralContracts}}
   - kind: ethereum/contract

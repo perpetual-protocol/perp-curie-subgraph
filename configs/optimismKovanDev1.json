@@ -49,6 +49,11 @@
             "createdBlockNumber": 2010136,
             "name": "contracts/CollateralManager.sol:CollateralManager"
         },
+        "DelegateApproval": {
+            "address": "0x2c548F0C9f6277CB24e399F99B5501Cd591C8760",
+            "createdBlockNumber": 2347052,
+            "name": "contracts/DelegateApproval.sol:DelegateApproval"
+        },
         "ETHUSDChainlinkPriceFeed": {
             "address": "0x316f5C02cd93eED44ed930dBd39E64487c0A1c5c",
             "createdBlockNumber": 1593703,
@@ -125,5 +130,41 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cbff670005d92e13704585d10e36d8477b5d4b7b"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#65ed9cdc7a9e1987371b39a6298381e7c32a4b32",
+    "periphery": {
+        "chainId": 69,
+        "contracts": {
+            "LimitOrderBook": {
+                "address": "0x770de85bDF68EF75624fD15Ac929c2CC13BE70B4",
+                "createdBlockNumber": 2597852,
+                "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
+            },
+            "LimitOrderFeeVault": {
+                "address": "0x0b9B7374344ab086E27716e101e3D248C8ea9Fe3",
+                "createdBlockNumber": 2597842,
+                "name": "contracts/limitOrder/LimitOrderFeeVault.sol:LimitOrderFeeVault"
+            },
+            "Multicall2": {
+                "address": "0x2ee1b1E6372682F4F1c5752b96f8EA65a0E7C35E",
+                "createdBlockNumber": 2012291,
+                "name": "contracts/lens/Multicall2.sol:Multicall2"
+            },
+            "PerpPortal": {
+                "address": "0x91FD667056605C22e5998636868290281Ca57470",
+                "createdBlockNumber": 2375678,
+                "name": "contracts/lens/PerpPortal.sol:PerpPortal"
+            },
+            "Quoter": {
+                "address": "0x284f0EfA5dFfbb988801Cc36ED9aebF620e90f87",
+                "createdBlockNumber": 2375675,
+                "name": "contracts/lens/Quoter.sol:Quoter"
+            }
+        },
+        "externalContracts": {
+            "DefaultProxyAdmin": "0xc4E7A63cF97Dd808C2341Ed1a98Aa67584Ff6709",
+            "PERP": "0xf21A49631C0519e82e9b1A3907AE22111D17Fd51"
+        },
+        "network": "optimism-kovan",
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#3006cf597b897a9426a1f7394a43b98cdc8d51f3"
+    }
 }
