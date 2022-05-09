@@ -203,6 +203,30 @@ dataSources:
         - event: LimitOrderCancelled(indexed address,indexed address,bytes32)
           handler: handleLimitOrderCancelled
 
+  - kind: ethereum/contract
+    name: DelegateApproval
+    network: {{ network }}
+    source:
+      abi: DelegateApproval
+      address: "{{ contracts.DelegateApproval.address }}"
+      startBlock: {{ contracts.DelegateApproval.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/delegateApproval.ts
+      entities:
+        - DelegationApproved
+        - DelegationRevoked
+      abis:
+        - name: DelegateApproval
+          file: ./abis/DelegateApproval.json
+      eventHandlers:
+        - event: DelegationApproved(indexed address,address,uint8)
+          handler: handleDelegationApproved
+        - event: DelegationRevoked(indexed address,address,uint8)
+          handler: handleDelegationRevoked
+
   {{#referralContracts}}
   - kind: ethereum/contract
     name: Referrer

@@ -662,3 +662,43 @@ type LimitOrderCancelled @entity {
     "block timestamp"
     timestamp: BigInt!
 }
+
+type DelegationApproved @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "action: clearingHouse open position"
+    action: BigInt!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type DelegationRevoked @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "action: clearingHouse open position"
+    action: BigInt!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
