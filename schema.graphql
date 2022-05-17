@@ -672,8 +672,8 @@ type DelegationApproved @entity {
     trader: Bytes!
     "delegate address"
     delegate: Bytes!
-    "action: clearingHouse open position"
-    action: BigInt!
+    "approved actions"
+    actions: BigInt!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -692,8 +692,8 @@ type DelegationRevoked @entity {
     trader: Bytes!
     "delegate address"
     delegate: Bytes!
-    "action: clearingHouse open position"
-    action: BigInt!
+    "revoked actions"
+    actions: BigInt!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!

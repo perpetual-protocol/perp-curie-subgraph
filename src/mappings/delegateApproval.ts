@@ -17,7 +17,7 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     delegationApproved.txHash = event.transaction.hash
     delegationApproved.trader = event.params.trader
     delegationApproved.delegate = event.params.delegate
-    delegationApproved.action = BigInt.fromI32(event.params.action)
+    delegationApproved.actions = BigInt.fromI32(event.params.actions)
 
     // upsert protocol
     const protocol = getOrCreateProtocol()
@@ -40,7 +40,7 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
     delegationRevoked.txHash = event.transaction.hash
     delegationRevoked.trader = event.params.trader
     delegationRevoked.delegate = event.params.delegate
-    delegationRevoked.action = BigInt.fromI32(event.params.action)
+    delegationRevoked.actions = BigInt.fromI32(event.params.actions)
 
     // upsert protocol
     const protocol = getOrCreateProtocol()
