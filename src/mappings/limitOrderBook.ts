@@ -14,7 +14,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     limitOrderFilled.baseToken = event.params.baseToken
     limitOrderFilled.orderHash = event.params.orderHash
     limitOrderFilled.keeper = event.params.keeper
-    limitOrderFilled.keeperFee = fromWei(event.params.keeperFee)
+    limitOrderFilled.keeperReward = fromWei(event.params.keeperReward)
 
     // upsert protocol
     const protocol = getOrCreateProtocol()

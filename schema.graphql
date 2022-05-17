@@ -632,8 +632,8 @@ type LimitOrderFilled @entity {
     orderHash: Bytes!
     "address of keeper"
     keeper: Bytes!
-    "fee reward to keeper"
-    keeperFee: BigDecimal!
+    "reward to keeper"
+    keeperReward: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
