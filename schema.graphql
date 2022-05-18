@@ -195,7 +195,7 @@ type PositionChanged @entity {
 
     "position size after this tx"
     positionSizeAfter: BigDecimal!
-    "swapped price of this tx = abs(exchangedPositionNotionalWithFee / exchangedPositionSize)"
+    "swapped price of this tx = abs(exchangedPositionNotional / exchangedPositionSize)"
     swappedPrice: BigDecimal!
     "average entry price after this tx = abs(position.openNotional / position.positionSize)"
     entryPriceAfter: BigDecimal!
