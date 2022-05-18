@@ -76,7 +76,9 @@ function replaceReferralCodeFromReferee(
     newRefCode.save()
 
     const newRefCodeDayData = getReferralCodeDayData(event, newRefCode.id)
-    newRefCodeDayData.newReferees.push(event.params.addr.toHexString())
+    const newReferees = newRefCodeDayData.newReferees
+    newReferees.push(event.params.addr.toHexString())
+    newRefCodeDayData.newReferees = newReferees
     newRefCodeDayData.save()
 }
 
