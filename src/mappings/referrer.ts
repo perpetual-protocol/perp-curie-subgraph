@@ -28,18 +28,16 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
         return
     }
 
-    enum REFEREE_ACTION {
-        REMOVE_CODE = 1,
-        REPLACE_CODE = 2,
-    }
+    const ACTION_REMOVE_CODE = 1
+    const ACTION_REPLACE_CODE = 2
 
     const trader = getOrCreateTrader(event.params.addr)
 
     switch (event.params.action) {
-        case REFEREE_ACTION.REMOVE_CODE:
+        case ACTION_REMOVE_CODE:
             removeReferralCodeFromReferee(trader, oldRefCode)
             break
-        case REFEREE_ACTION.REPLACE_CODE:
+        case ACTION_REPLACE_CODE:
             if (!event.params.newReferralCode || event.params.oldReferralCode == event.params.newReferralCode) {
                 return
             }
@@ -54,7 +52,7 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
     }
 }
 
-function removeReferralCodeFromReferee(trader: Trader, refCode: ReferralCode) {
+function removeReferralCodeFromReferee(trader: Trader, refCode: ReferralCode): void {
     trader.refereeCode = null
     trader.save()
 
@@ -67,7 +65,7 @@ function replaceReferralCodeFromReferee(
     trader: Trader,
     oldRefCode: ReferralCode,
     newRefCode: ReferralCode,
-) {
+): void {
     trader.refereeCode = newRefCode.id
     trader.save()
 
