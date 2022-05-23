@@ -198,9 +198,9 @@ dataSources:
         - name: LimitOrderBook
           file: ./abis/LimitOrderBook.json
       eventHandlers:
-        - event: LimitOrderFilled(indexed address,indexed address,bytes32,address,uint256)
+        - event: LimitOrderFilled(indexed address,indexed address,bytes32,address,uint256,int256,int256,uint256)
           handler: handleLimitOrderFilled
-        - event: LimitOrderCancelled(indexed address,indexed address,bytes32)
+        - event: LimitOrderCancelled(indexed address,indexed address,bytes32,int256,int256)
           handler: handleLimitOrderCancelled
 
   - kind: ethereum/contract
