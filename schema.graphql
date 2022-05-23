@@ -1,5 +1,3 @@
-# MarketRegistry
-
 type Protocol @entity {
     "hardcoded as 'perpetual-protocol'"
     id: ID!
@@ -30,6 +28,8 @@ type Protocol @entity {
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 }
 
+# MarketRegistry
+
 type Market @entity {
     "format: baseToken address"
     id: ID!
@@ -39,7 +39,7 @@ type Market @entity {
     quoteToken: Bytes!
     "pool address"
     pool: Bytes!
-    "fee ratio: 500 (0.05%), 3000 (0.3%), 10000 (1%)"
+    "trading fee ratio in uint24: 1000 == 0.1%"
     feeRatio: BigInt!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
@@ -402,7 +402,6 @@ type Position @entity {
     marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
-
 # ClearingHouse
 
 type PositionLiquidated @entity {
@@ -431,7 +430,6 @@ type PositionLiquidated @entity {
     timestamp: BigInt!
 }
 
-# TODO: Do we still need this?
 type Maker @entity {
     "format: maker address"
     id: ID!
@@ -530,72 +528,46 @@ type PnlRealized @entity {
     timestamp: BigInt!
 }
 
-# Trader Historical Data
+# DelegateApproval
 
-type TraderDayData @entity {
-    "format: <trader id>-<day id>"
+type DelegationApproved @entity {
+    "format: <tx hash>-<tx log index>"
     id: ID!
-    trader: Trader!
-    "timestamp"
-    date: BigInt!
-    "trading volume aggregated per day for trader"
-    tradingVolume: BigDecimal!
-    "trading fee aggregated per day for trader"
-    fee: BigInt!
-    "total pnl aggregated per day for trader"
-    realizedPnl: BigInt!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "approved actions"
+    actions: BigInt!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
 
-# For tracking day trade metrics for referral codes on a per trader basis
-type ReferralCodeTraderDayData @entity {
-    "format: <referal code>-<day id>-<trader>"
+type DelegationRevoked @entity {
+    "format: <tx hash>-<tx log index>"
     id: ID!
-    "relationship to trader"
-    trader: Trader!
-    "relationship to referral day data"
-    referralCodeDayData: ReferralCodeDayData!
-    "trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "fees in notional value"
-    fees: BigDecimal!
-}
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "revoked actions"
+    actions: BigInt!
 
-type ReferralCodeDayData @entity {
-    "format: <referal code>-<day id>"
-    id: ID!
-    referralCode: ReferralCode!
-    "timestamp"
-    date: BigInt!
-    "total trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "total fees paid during day"
-    fees: BigDecimal!
-    "trading volume and fees grouped by trader"
-    traderData: [ReferralCodeTraderDayData!]! @derivedFrom(field: "referralCodeDayData")
-    "a list of new referees added today"
-    newReferees: [Trader!]!
-    "a list of referees which have traded on the day"
-    activeReferees: [Trader!]!
-}
-
-type ReferralCode @entity {
-    id: ID!
-    "referrer/partner address"
-    referrer: Trader!
-    "list of registered referees"
-    referees: [Trader!]! @derivedFrom(field: "refereeCode")
-    "date created at"
-    createdAt: BigInt!
-    "day data link"
-    dayData: [ReferralCodeDayData!] @derivedFrom(field: "referralCode")
-    "if user is vip tier"
-    vipTier: String
-    "how long user has been vip since"
-    vipSince: BigInt
-    "whether or not the referral code exists in the referral contract"
-    registeredOnChain: Boolean
-    "total number of registered referees"
-    numReferees: BigInt!
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
 
 # LimitOrderBook
@@ -658,42 +630,72 @@ type LimitOrderCancelled @entity {
     timestamp: BigInt!
 }
 
-type DelegationApproved @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "delegate address"
-    delegate: Bytes!
-    "approved actions"
-    actions: BigInt!
+# Trader Historical Data
 
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
+type TraderDayData @entity {
+    "format: <trader id>-<day id>"
+    id: ID!
+    trader: Trader!
+    "timestamp"
+    date: BigInt!
+    "trading volume aggregated per day for trader"
+    tradingVolume: BigDecimal!
+    "trading fee aggregated per day for trader"
+    fee: BigInt!
+    "total pnl aggregated per day for trader"
+    realizedPnl: BigInt!
 }
 
-type DelegationRevoked @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "delegate address"
-    delegate: Bytes!
-    "revoked actions"
-    actions: BigInt!
+# Referral
 
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
+# For tracking day trade metrics for referral codes on a per trader basis
+type ReferralCodeTraderDayData @entity {
+    "format: <referal code>-<day id>-<trader>"
+    id: ID!
+    "relationship to trader"
+    trader: Trader!
+    "relationship to referral day data"
+    referralCodeDayData: ReferralCodeDayData!
+    "trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "fees in notional value"
+    fees: BigDecimal!
+}
+
+type ReferralCodeDayData @entity {
+    "format: <referal code>-<day id>"
+    id: ID!
+    referralCode: ReferralCode!
+    "timestamp"
+    date: BigInt!
+    "total trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "total fees paid during day"
+    fees: BigDecimal!
+    "trading volume and fees grouped by trader"
+    traderData: [ReferralCodeTraderDayData!]! @derivedFrom(field: "referralCodeDayData")
+    "a list of new referees added today"
+    newReferees: [Trader!]!
+    "a list of referees which have traded on the day"
+    activeReferees: [Trader!]!
+}
+
+type ReferralCode @entity {
+    id: ID!
+    "referrer/partner address"
+    referrer: Trader!
+    "list of registered referees"
+    referees: [Trader!]! @derivedFrom(field: "refereeCode")
+    "date created at"
+    createdAt: BigInt!
+    "day data link"
+    dayData: [ReferralCodeDayData!] @derivedFrom(field: "referralCode")
+    "if user is vip tier"
+    vipTier: String
+    "how long user has been vip since"
+    vipSince: BigInt
+    "whether or not the referral code exists in the referral contract"
+    registeredOnChain: Boolean
+    "total number of registered referees"
+    numReferees: BigInt!
 }
