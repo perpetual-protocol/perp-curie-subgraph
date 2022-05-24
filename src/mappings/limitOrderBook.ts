@@ -23,7 +23,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     limitOrderFilled.exchangedPositionSize = fromWei(event.params.exchangedPositionSize)
     limitOrderFilled.exchangedPositionNotional = fromWei(event.params.exchangedPositionNotional)
     limitOrderFilled.fee = fromWei(event.params.fee)
-    limitOrderFilled.fillPrice = abs(
+    limitOrderFilled.filledPrice = abs(
         limitOrderFilled.exchangedPositionNotional.div(limitOrderFilled.exchangedPositionSize),
     )
 

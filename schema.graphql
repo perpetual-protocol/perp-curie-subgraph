@@ -594,7 +594,7 @@ type LimitOrderFilled @entity {
     "trading fee"
     fee: BigDecimal!
     "fill price"
-    fillPrice: BigDecimal!
+    filledPrice: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
