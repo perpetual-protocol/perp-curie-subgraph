@@ -154,6 +154,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
     market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
     market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
+    market.openInterest = abs(market.baseAmount)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)

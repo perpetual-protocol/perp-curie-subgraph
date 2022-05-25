@@ -25,7 +25,10 @@ type Protocol @entity {
     timestamp: BigInt!
 
     "DEPRECATED: total settlement token in the protocol"
-    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
+    totalValueLocked: BigDecimal!
+        @deprecated(
+            reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead"
+        )
     "DEPRECATED: bad debt"
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 }
@@ -63,6 +66,9 @@ type Market @entity {
     positions: [Position!]! @derivedFrom(field: "marketRef")
     "open orders"
     openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
+
+    "open interest base amount"
+    openInterest: BigDecimal!
 }
 
 type Token @entity {
@@ -324,7 +330,8 @@ type Trader @entity {
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
 
     "DEPRECATED: total deposited settlement token + cumulative total pnl"
-    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
+    collateral: BigDecimal!
+        @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
     "DEPRECATED: cumulative bad debt"
     badDebt: BigDecimal!
 }
@@ -401,7 +408,6 @@ type Position @entity {
     "deprecated: foreign key to Market"
     marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
-
 
 # ClearingHouse
 
