@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -154,7 +154,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
     market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
     market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
-    market.openInterest = abs(market.baseAmount)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
@@ -186,6 +185,31 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
     position.blockNumber = event.block.number
     position.timestamp = event.block.timestamp
+
+    // update open interest based on position change
+
+    // here we only calculate taker's position size change (fee = 0 means it's maker)
+    // and add position change*2, that means we calculate maker's impermanent position in advance
+    // For example, if:
+    // 1. a maker provide 3vBTC and 3000vUSD liquidity => openInterest will be 0
+    // 2. a taker short 2vBTC => openInterest will be 2*2=4 vBTC
+    // 3. maker remove his liquidity, resulting in a long 2vBTC position
+    //   => openInterest will still be 4 vBTC, because we already calculate this in step 2
+    if (!event.params.fee.isZero()) {
+        // taker
+        const afterPositionSize = abs(position.positionSize.plus(positionChanged.exchangedPositionSize))
+        const beforePositionSize = abs(position.positionSize)
+
+        const diff = afterPositionSize.minus(beforePositionSize)
+        if (afterPositionSize < beforePositionSize) {
+            // reduce
+            market.openInterest = market.openInterest.minus(diff.times(BigDecimal.fromString("2")))
+        } else {
+            // add
+            market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
+        }
+    }
+
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
     position.openNotional = positionChanged.openNotional
