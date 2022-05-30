@@ -4,7 +4,6 @@ import {
     OnUncappedPartnerAssigned,
     OnUncappedPartnerRemoved,
 } from "../../generated/Referrer/Referrer"
-import { ReferralCode, Trader } from "../../generated/schema"
 import { createReferralCode, getOrCreateTrader, getReferralCode, getReferralCodeDayData } from "../utils/stores"
 
 import { BI_ONE } from "../utils/numbers"
@@ -19,7 +18,60 @@ export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
 }
 
 export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void {
-    if (!event.params.oldReferralCode) {
+    // according to the contract code https://github.com/perpetual-protocol/perp-referral-contracts/blob/95e28123d65974da1b2fdad154e54761b21b50dc/contracts/PerpetualProtocolReferrer.sol#L74
+    // event.params.oldReferralCode is non-empty
+
+    const ACTION_ADD = 0
+    const ACTION_REMOVE = 1
+    const ACTION_UPDATE = 2
+
+    switch (event.params.action) {
+        case ACTION_ADD:
+            handleRefCodeAdd(event)
+            break
+        case ACTION_REMOVE:
+            handleRefCodeRemove(event)
+            break
+        case ACTION_UPDATE:
+            handleRefCodeUpdate(event)
+            break
+    }
+}
+
+function handleRefCodeAdd(event: OnReferralCodeUpserted) {
+    if (!event.params.newReferralCode) {
+        return
+    }
+
+    const newRefCode = getReferralCode(event.params.newReferralCode)
+    if (!newRefCode) {
+        return
+    }
+
+    newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
+    newRefCode.save()
+
+    const trader = getOrCreateTrader(event.params.addr)
+    trader.refereeCode = event.params.newReferralCode
+    trader.save()
+}
+
+function handleRefCodeRemove(event: OnReferralCodeUpserted): void {
+    const oldRefCode = getReferralCode(event.params.oldReferralCode)
+    if (!oldRefCode) {
+        return
+    }
+
+    oldRefCode.numReferees = oldRefCode.numReferees.minus(BI_ONE)
+    oldRefCode.save()
+
+    const trader = getOrCreateTrader(event.params.addr)
+    trader.refereeCode = null
+    trader.save()
+}
+
+function handleRefCodeUpdate(event: OnReferralCodeUpserted): void {
+    if (!event.params.newReferralCode || event.params.newReferralCode == event.params.oldReferralCode) {
         return
     }
 
@@ -28,52 +80,20 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
         return
     }
 
-    const ACTION_REMOVE_CODE = 1
-    const ACTION_REPLACE_CODE = 2
-
-    const trader = getOrCreateTrader(event.params.addr)
-
-    switch (event.params.action) {
-        case ACTION_REMOVE_CODE:
-            removeReferralCodeFromReferee(trader, oldRefCode)
-            break
-        case ACTION_REPLACE_CODE:
-            if (!event.params.newReferralCode || event.params.oldReferralCode == event.params.newReferralCode) {
-                return
-            }
-
-            const newRefCode = getReferralCode(event.params.newReferralCode)
-            if (!newRefCode) {
-                return
-            }
-
-            replaceReferralCodeFromReferee(event, trader, oldRefCode, newRefCode)
-            break
+    const newRefCode = getReferralCode(event.params.newReferralCode)
+    if (!newRefCode) {
+        return
     }
-}
-
-function removeReferralCodeFromReferee(trader: Trader, refCode: ReferralCode): void {
-    trader.refereeCode = null
-    trader.save()
-
-    refCode.numReferees = refCode.numReferees.minus(BI_ONE)
-    refCode.save()
-}
-
-function replaceReferralCodeFromReferee(
-    event: OnReferralCodeUpserted,
-    trader: Trader,
-    oldRefCode: ReferralCode,
-    newRefCode: ReferralCode,
-): void {
-    trader.refereeCode = newRefCode.id
-    trader.save()
 
     oldRefCode.numReferees = oldRefCode.numReferees.minus(BI_ONE)
     oldRefCode.save()
 
     newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
     newRefCode.save()
+
+    const trader = getOrCreateTrader(event.params.addr)
+    trader.refereeCode = newRefCode.id
+    trader.save()
 
     const newRefCodeDayData = getReferralCodeDayData(event, newRefCode.id)
     const newReferees = newRefCodeDayData.newReferees
