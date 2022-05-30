@@ -210,6 +210,11 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
         }
     }
 
+    // alternative open interest test
+    market.openInterest2 = market.openInterest2
+        .minus(abs(position.positionSize))
+        .plus(abs(position.positionSize.plus(positionChanged.exchangedPositionSize)))
+
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
     position.openNotional = positionChanged.openNotional
