@@ -39,7 +39,7 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
     }
 }
 
-function handleRefCodeAdd(event: OnReferralCodeUpserted) {
+function handleRefCodeAdd(event: OnReferralCodeUpserted): void {
     if (!event.params.newReferralCode) {
         return
     }
@@ -87,7 +87,7 @@ function handleRefCodeUpdate(event: OnReferralCodeUpserted): void {
     updateNewRefCode(newRefCode, event)
 }
 
-function updateNewRefCode(newRefCode: ReferralCode, event: OnReferralCodeUpserted) {
+function updateNewRefCode(newRefCode: ReferralCode, event: OnReferralCodeUpserted): void {
     newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
     newRefCode.save()
 
