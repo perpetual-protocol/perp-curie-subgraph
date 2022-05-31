@@ -1,4 +1,6 @@
+import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
+import { ChainId, Network, Version } from "../constants"
 import {
     Maker,
     Market,
@@ -15,9 +17,7 @@ import {
     TraderMarket,
     TraderTokenBalance,
 } from "../../generated/schema"
-import { ChainId, Network, Version } from "../constants"
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/token"
-import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     return event.block.number.times(BigInt.fromI32(1000)).plus(event.logIndex)
@@ -285,22 +285,8 @@ export function createReferralCode(referralCode: string, referrer: Address, crea
     return _referralCode!
 }
 
-export function createBlankReferralCode(referralCode: string): ReferralCode {
-    let _referralCode = new ReferralCode(referralCode)
-    _referralCode.referrer = ADDRESS_ZERO
-    _referralCode.createdAt = BI_ZERO
-    _referralCode.registeredOnChain = false
-    _referralCode.numReferees = BI_ONE
-    _referralCode.save()
-    return _referralCode
-}
-
-export function getReferralCode(referralCode: string): ReferralCode {
-    let _referralCode = ReferralCode.load(referralCode)
-    if (!_referralCode) {
-        _referralCode = createBlankReferralCode(referralCode)
-    }
-    return _referralCode!
+export function getReferralCode(referralCode: string): ReferralCode | null {
+    return ReferralCode.load(referralCode)
 }
 
 export function getReferralCodeDayData(event: ethereum.Event, referralCode: string): ReferralCodeDayData {

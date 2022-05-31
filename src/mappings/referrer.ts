@@ -4,8 +4,10 @@ import {
     OnUncappedPartnerAssigned,
     OnUncappedPartnerRemoved,
 } from "../../generated/Referrer/Referrer"
-import { BI_ONE } from "../utils/numbers"
 import { createReferralCode, getOrCreateTrader, getReferralCode, getReferralCodeDayData } from "../utils/stores"
+
+import { BI_ONE } from "../utils/numbers"
+import { ReferralCode } from "../../generated/schema"
 
 export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
     let trader = getOrCreateTrader(event.params.createdFor)
@@ -17,52 +19,87 @@ export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
 }
 
 export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void {
-    let existingReferralCode = getReferralCode(event.params.oldReferralCode)
-    let trader = getOrCreateTrader(event.params.addr)
-    // Only proceed any action, if the referee has a code attached
-    if (existingReferralCode) {
-        // Referee removes code
-        if (event.params.action == 1) {
-            // trader no longer has a referee code
-            trader.refereeCode = null
-            trader.save()
+    // according to the contract code https://github.com/perpetual-protocol/perp-referral-contracts/blob/95e28123d65974da1b2fdad154e54761b21b50dc/contracts/PerpetualProtocolReferrer.sol#L74
+    // event.params.oldReferralCode is non-empty
 
-            // update referee count for code
-            existingReferralCode.numReferees = existingReferralCode.numReferees.minus(BI_ONE)
-            existingReferralCode.save()
-            return
-        }
+    const ACTION_ADD = 0
+    const ACTION_REMOVE = 1
+    const ACTION_UPDATE = 2
 
-        // add and update should only be possible if newReferralCode contains a value
-        if (event.params.newReferralCode != "") {
-            let newReferralCode = getReferralCode(event.params.newReferralCode)
-            let newReferralCodeDayData = getReferralCodeDayData(event, newReferralCode.id)
-            if (event.params.action == 2) {
-                // nothing changes here
-                if (event.params.oldReferralCode == event.params.newReferralCode) return
-            }
-
-            // uptick new referee daydata when an update or new referee is added
-            let newReferralReferees = newReferralCodeDayData.newReferees
-            newReferralReferees.push(event.params.addr.toHexString())
-            newReferralCodeDayData.newReferees = newReferralReferees
-            newReferralCodeDayData.save()
-
-            // update the referee code for the trader (sender)
-            trader.refereeCode = newReferralCode.id
-            trader.save()
-
-            // update referee count for old code, if it exists
-            if (existingReferralCode) {
-                existingReferralCode.numReferees = existingReferralCode.numReferees.minus(BI_ONE)
-                existingReferralCode.save()
-            }
-
-            // update referee count for new code
-            newReferralCode.numReferees = newReferralCode.numReferees.plus(BI_ONE)
-            newReferralCode.save()
-        }
+    switch (event.params.action) {
+        case ACTION_ADD:
+            handleRefCodeAdd(event)
+            break
+        case ACTION_REMOVE:
+            handleRefCodeRemove(event)
+            break
+        case ACTION_UPDATE:
+            handleRefCodeUpdate(event)
+            break
     }
+}
+
+function handleRefCodeAdd(event: OnReferralCodeUpserted) {
+    if (!event.params.newReferralCode) {
+        return
+    }
+
+    const newRefCode = getReferralCode(event.params.newReferralCode)
+    if (!newRefCode) {
+        return
+    }
+
+    updateNewRefCode(newRefCode, event)
+}
+
+function handleRefCodeRemove(event: OnReferralCodeUpserted): void {
+    const oldRefCode = getReferralCode(event.params.oldReferralCode)
+    if (!oldRefCode) {
+        return
+    }
+
+    oldRefCode.numReferees = oldRefCode.numReferees.minus(BI_ONE)
+    oldRefCode.save()
+
+    const trader = getOrCreateTrader(event.params.addr)
+    trader.refereeCode = null
+    trader.save()
+}
+
+function handleRefCodeUpdate(event: OnReferralCodeUpserted): void {
+    if (!event.params.newReferralCode || event.params.newReferralCode == event.params.oldReferralCode) {
+        return
+    }
+
+    const oldRefCode = getReferralCode(event.params.oldReferralCode)
+    if (!oldRefCode) {
+        return
+    }
+
+    const newRefCode = getReferralCode(event.params.newReferralCode)
+    if (!newRefCode) {
+        return
+    }
+
+    oldRefCode.numReferees = oldRefCode.numReferees.minus(BI_ONE)
+    oldRefCode.save()
+
+    updateNewRefCode(newRefCode, event)
+}
+
+function updateNewRefCode(newRefCode: ReferralCode, event: OnReferralCodeUpserted) {
+    newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
+    newRefCode.save()
+
+    const trader = getOrCreateTrader(event.params.addr)
+    trader.refereeCode = newRefCode.id
+    trader.save()
+
+    const newRefCodeDayData = getReferralCodeDayData(event, newRefCode.id)
+    const newReferees = newRefCodeDayData.newReferees
+    newReferees.push(event.params.addr.toHexString())
+    newRefCodeDayData.newReferees = newReferees
+    newRefCodeDayData.save()
 }
 
 export function handleUncappedPartnerUpserted(event: OnUncappedPartnerAssigned): void {
