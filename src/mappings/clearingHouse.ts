@@ -1,4 +1,4 @@
-import { BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -191,7 +191,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     // update open interest based on position change
 
     const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
-    market.traderOpenInterest = market.traderOpenInterest.plus(diff)
+    market.takerOpenInterest = market.takerOpenInterest.plus(diff)
 
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
@@ -296,6 +296,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     maker.timestamp = event.block.timestamp
     maker.collectedFee = maker.collectedFee.plus(liquidityChanged.quoteFee)
 
+    // upsert market
+    const market = getOrCreateMarket(event.params.baseToken)
+    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
+    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
+
     // upsert Trader
     const trader = getOrCreateTrader(event.params.maker)
     trader.blockNumber = event.block.number
@@ -323,6 +328,9 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
             const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
             position.positionSize = fixedDataMap.get("takerPositionSize")
             position.openNotional = fixedDataMap.get("openNotional")
+
+            const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+            market.takerOpenInterest = market.takerOpenInterest.plus(diff)
         }
     }
 
@@ -342,16 +350,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
         openOrder.collectedFeeInThisLifecycle = openOrder.collectedFeeInThisLifecycle.plus(liquidityChanged.quoteFee)
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
-
-    // upsert market
-    const market = getOrCreateMarket(event.params.baseToken)
-    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
-    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
-
-    const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
-    if (diff.gt(BigDecimal.zero())) {
-        market.traderOpenInterest = market.traderOpenInterest.plus(diff)
-    }
 
     // commit changes
     liquidityChanged.save()
