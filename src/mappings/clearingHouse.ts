@@ -190,14 +190,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
 
     // update open interest based on position change
 
-    // Here we only calculate taker's position size change (fee = 0 means it's maker)
-    // And add position change*2, that means we calculate maker's impermanent position in advance
-    // Which means when a maker removes liquidity, the corresponding taker position (fee = 0) is already included. So we should ignore this case.
-    if (!event.params.fee.isZero()) {
-        // taker
-        const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
-        market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
-    }
+    const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+    market.traderOpenInterest = market.traderOpenInterest.plus(diff)
 
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
@@ -356,7 +350,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
 
     const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
     if (diff.gt(BigDecimal.zero())) {
-        market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
+        market.traderOpenInterest = market.traderOpenInterest.plus(diff)
     }
 
     // commit changes
