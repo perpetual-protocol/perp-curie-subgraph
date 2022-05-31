@@ -167,6 +167,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
+
+    const beforePositionSize = traderMarket.takerPositionSize
     traderMarket.takerPositionSize = traderMarket.takerPositionSize.plus(positionChanged.exchangedPositionSize)
     traderMarket.openNotional = positionChanged.openNotional
     // NOTE: according to contract, a position size < 10 wei cannot be closed or liquidated so we set it to 0
@@ -188,32 +190,14 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
 
     // update open interest based on position change
 
-    // here we only calculate taker's position size change (fee = 0 means it's maker)
-    // and add position change*2, that means we calculate maker's impermanent position in advance
-    // For example, if:
-    // 1. a maker provide 3vBTC and 3000vUSD liquidity => openInterest will be 0
-    // 2. a taker short 2vBTC => openInterest will be 2*2=4 vBTC
-    // 3. maker remove his liquidity, resulting in a long 2vBTC position
-    //   => openInterest will still be 4 vBTC, because we already calculate this in step 2
+    // Here we only calculate taker's position size change (fee = 0 means it's maker)
+    // And add position change*2, that means we calculate maker's impermanent position in advance
+    // Which means when a maker removes liquidity, the corresponding taker position (fee = 0) is already included. So we should ignore this case.
     if (!event.params.fee.isZero()) {
         // taker
-        const afterPositionSize = abs(position.positionSize.plus(positionChanged.exchangedPositionSize))
-        const beforePositionSize = abs(position.positionSize)
-
-        const diff = afterPositionSize.minus(beforePositionSize)
-        if (afterPositionSize < beforePositionSize) {
-            // reduce
-            market.openInterest = market.openInterest.minus(diff.times(BigDecimal.fromString("2")))
-        } else {
-            // add
-            market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
-        }
+        const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+        market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
     }
-
-    // alternative open interest test
-    market.openInterest2 = market.openInterest2
-        .minus(abs(position.positionSize))
-        .plus(abs(position.positionSize.plus(positionChanged.exchangedPositionSize)))
 
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
@@ -326,6 +310,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
 
     // upsert TraderMarket
     const traderMarket = getOrCreateTraderMarket(event.params.maker, event.params.baseToken)
+    const beforePositionSize = traderMarket.takerPositionSize
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
@@ -368,6 +353,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     const market = getOrCreateMarket(event.params.baseToken)
     market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
     market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
+
+    const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+    if (diff.gt(BigDecimal.zero())) {
+        market.openInterest = market.openInterest.plus(diff.times(BigDecimal.fromString("2")))
+    }
 
     // commit changes
     liquidityChanged.save()
