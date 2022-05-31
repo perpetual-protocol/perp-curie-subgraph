@@ -167,6 +167,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
+
+    const beforePositionSize = traderMarket.takerPositionSize
     traderMarket.takerPositionSize = traderMarket.takerPositionSize.plus(positionChanged.exchangedPositionSize)
     traderMarket.openNotional = positionChanged.openNotional
     // NOTE: according to contract, a position size < 10 wei cannot be closed or liquidated so we set it to 0
@@ -185,6 +187,12 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
     position.blockNumber = event.block.number
     position.timestamp = event.block.timestamp
+
+    // update open interest based on position change
+
+    const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+    market.takerOpenInterest = market.takerOpenInterest.plus(diff)
+
     // NOTE: position size does not consider maker position
     position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
     position.openNotional = positionChanged.openNotional
@@ -288,6 +296,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     maker.timestamp = event.block.timestamp
     maker.collectedFee = maker.collectedFee.plus(liquidityChanged.quoteFee)
 
+    // upsert market
+    const market = getOrCreateMarket(event.params.baseToken)
+    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
+    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
+
     // upsert Trader
     const trader = getOrCreateTrader(event.params.maker)
     trader.blockNumber = event.block.number
@@ -296,6 +309,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
 
     // upsert TraderMarket
     const traderMarket = getOrCreateTraderMarket(event.params.maker, event.params.baseToken)
+    const beforePositionSize = traderMarket.takerPositionSize
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
@@ -314,6 +328,9 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
             const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
             position.positionSize = fixedDataMap.get("takerPositionSize")
             position.openNotional = fixedDataMap.get("openNotional")
+
+            const diff = abs(traderMarket.takerPositionSize).minus(abs(beforePositionSize))
+            market.takerOpenInterest = market.takerOpenInterest.plus(diff)
         }
     }
 
@@ -333,11 +350,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
         openOrder.collectedFeeInThisLifecycle = openOrder.collectedFeeInThisLifecycle.plus(liquidityChanged.quoteFee)
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
-
-    // upsert market
-    const market = getOrCreateMarket(event.params.baseToken)
-    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
-    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
     // commit changes
     liquidityChanged.save()

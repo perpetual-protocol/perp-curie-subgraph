@@ -63,6 +63,9 @@ type Market @entity {
     positions: [Position!]! @derivedFrom(field: "marketRef")
     "open orders"
     openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
+
+    "trader open interest"
+    takerOpenInterest: BigDecimal!
 }
 
 type Token @entity {
