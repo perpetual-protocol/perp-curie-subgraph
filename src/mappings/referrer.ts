@@ -7,6 +7,7 @@ import {
 import { createReferralCode, getOrCreateTrader, getReferralCode, getReferralCodeDayData } from "../utils/stores"
 
 import { BI_ONE } from "../utils/numbers"
+import { ReferralCode } from "../../generated/schema"
 
 export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
     let trader = getOrCreateTrader(event.params.createdFor)
@@ -48,12 +49,7 @@ function handleRefCodeAdd(event: OnReferralCodeUpserted) {
         return
     }
 
-    newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
-    newRefCode.save()
-
-    const trader = getOrCreateTrader(event.params.addr)
-    trader.refereeCode = event.params.newReferralCode
-    trader.save()
+    updateNewRefCode(newRefCode, event)
 }
 
 function handleRefCodeRemove(event: OnReferralCodeUpserted): void {
@@ -88,6 +84,10 @@ function handleRefCodeUpdate(event: OnReferralCodeUpserted): void {
     oldRefCode.numReferees = oldRefCode.numReferees.minus(BI_ONE)
     oldRefCode.save()
 
+    updateNewRefCode(newRefCode, event)
+}
+
+function updateNewRefCode(newRefCode: ReferralCode, event: OnReferralCodeUpserted) {
     newRefCode.numReferees = newRefCode.numReferees.plus(BI_ONE)
     newRefCode.save()
 
