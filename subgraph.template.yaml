@@ -240,7 +240,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/limitOrderRewardVault.ts
       entities:
-        - LimitOrderFilled
+        - Disbursed
       abis:
         - name: LimitOrderRewardVault
           file: ./abis/LimitOrderRewardVault.json

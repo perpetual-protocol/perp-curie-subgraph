@@ -593,10 +593,6 @@ type LimitOrderFilled @entity {
     exchangedPositionNotional: BigDecimal!
     "trading fee"
     fee: BigDecimal!
-    "address of rewardToken"
-    rewardToken: Bytes!
-    "amount of keeper reward"
-    rewardAmount: BigDecimal!
     "fill price"
     filledPrice: BigDecimal!
 
@@ -627,6 +623,30 @@ type LimitOrderCancelled @entity {
     positionNotional: BigDecimal!
     "limit price"
     limitPrice: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# LimitOrderRewardVault
+
+type Disbursed @entity {
+    "format: <orderHash>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "hash of the filled limit order"
+    orderHash: Bytes!
+    "address of keeper"
+    keeper: Bytes!
+    "address of rewardToken"
+    token: Bytes!
+    "amount of keeper reward"
+    amount: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!

@@ -1,14 +1,20 @@
 import { Disbursed as DisbursedEvent } from "../../generated/LimitOrderRewardVault/LimitOrderRewardVault"
-import { LimitOrderFilled } from "../../generated/schema"
+import { Disbursed } from "../../generated/schema"
 import { fromWei } from "../utils/numbers"
+import { getBlockNumberLogIndex } from "../utils/stores"
 
 export function handleDisbursed(event: DisbursedEvent): void {
-    // insert LimitOrderFilled
-    const limitOrderFilled = new LimitOrderFilled(`${event.params.orderHash.toHexString()}}`)
-    limitOrderFilled.keeper = event.params.keeper
-    limitOrderFilled.rewardToken = event.params.token
-    limitOrderFilled.rewardAmount = fromWei(event.params.amount)
+    // insert Disbursed
+    const disbursed = new Disbursed(`${event.params.orderHash.toHexString()}}`)
+    disbursed.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    disbursed.blockNumber = event.block.number
+    disbursed.timestamp = event.block.timestamp
+    disbursed.txHash = event.transaction.hash
+    disbursed.orderHash = event.params.orderHash
+    disbursed.keeper = event.params.keeper
+    disbursed.token = event.params.token
+    disbursed.amount = fromWei(event.params.amount)
 
     // commit changes
-    limitOrderFilled.save()
+    disbursed.save()
 }
