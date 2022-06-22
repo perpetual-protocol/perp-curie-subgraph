@@ -20,6 +20,8 @@ import { hardFixedDataMap as hardFixedDataMapOPKovan } from "../hard-fixed-data/
 import { HardFixedDataMap } from "../hard-fixed-data/types"
 import { abs, BD_ZERO, BI_ZERO, DUST_POSITION_SIZE, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
+    findLiquidityChangedFromPositionChangedAndSaveTradeType,
+    findPositionChangedAndSaveTradeType,
     getBlockNumberLogIndex,
     getOrCreateMaker,
     getOrCreateMarket,
@@ -204,6 +206,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
 
     positionChanged.positionSizeAfter = position.positionSize
     positionChanged.entryPriceAfter = position.entryPrice
+    positionChanged.tradeType = BigInt.fromI32(0)
 
     // update trader day data
     const traderDayData = getTraderDayData(event, event.params.trader)
@@ -219,6 +222,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderMarket.save()
     position.save()
     traderDayData.save()
+
+    findLiquidityChangedFromPositionChangedAndSaveTradeType(event)
 }
 
 export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
@@ -260,6 +265,8 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     position.save()
     trader.save()
     traderMarket.save()
+
+    findPositionChangedAndSaveTradeType(event, "-3", "liquidate")
 }
 
 export function handleLiquidityChanged(event: LiquidityChangedEvent): void {

@@ -1,11 +1,11 @@
-import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
-import { ChainId, Network, Version } from "../constants"
 import {
+    LiquidityChanged,
     Maker,
     Market,
     OpenOrder,
     Position,
+    PositionChanged,
     Protocol,
     ProtocolTokenBalance,
     ReferralCode,
@@ -17,7 +17,9 @@ import {
     TraderMarket,
     TraderTokenBalance,
 } from "../../generated/schema"
+import { ChainId, Network, tradeTypeMap, Version } from "../constants"
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/token"
+import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     return event.block.number.times(BigInt.fromI32(1000)).plus(event.logIndex)
@@ -334,4 +336,43 @@ export function removeAddressFromList(addresses: string[], addressToRemove: stri
         addresses.splice(spliceIndex, 1)
     }
     return addresses
+}
+
+export function findPositionChangedAndSaveTradeType(
+    event: ethereum.Event,
+    logIndexOffset: string,
+    tradeType: string,
+): void {
+    const positionChangedLogIndex = event.logIndex.plus(BigInt.fromString(logIndexOffset))
+    const positionChanged = PositionChanged.load(
+        `${event.transaction.hash.toHexString()}-${positionChangedLogIndex.toString()}`,
+    )
+    if (positionChanged) {
+        let tradeTypeValue = tradeTypeMap.get(tradeType)
+        if (!tradeTypeValue) {
+            tradeTypeValue = BigInt.fromI32(-1)
+        }
+        positionChanged.tradeType = tradeTypeValue
+        positionChanged.save()
+    }
+}
+
+export function findLiquidityChangedFromPositionChangedAndSaveTradeType(positionChangedEvent: ethereum.Event): void {
+    const liquidityChangedLogIndex = positionChangedEvent.logIndex.plus(BigInt.fromString("-1"))
+    const liquidityChanged = LiquidityChanged.load(
+        `${positionChangedEvent.transaction.hash.toHexString()}-${liquidityChangedLogIndex.toString()}`,
+    )
+    if (liquidityChanged) {
+        const positionChanged = PositionChanged.load(
+            `${positionChangedEvent.transaction.hash.toHexString()}-${positionChangedEvent.logIndex.toString()}`,
+        )
+        if (positionChanged) {
+            let tradeTypeValue = tradeTypeMap.get("changeLiquidity")
+            if (!tradeTypeValue) {
+                tradeTypeValue = BigInt.fromI32(-1)
+            }
+            positionChanged.tradeType = tradeTypeValue
+            positionChanged.save()
+        }
+    }
 }

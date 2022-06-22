@@ -5,7 +5,7 @@ import {
 } from "../../generated/LimitOrderBook/LimitOrderBook"
 import { LimitOrderCancelled, LimitOrderFilled } from "../../generated/schema"
 import { abs, fromWei } from "../utils/numbers"
-import { getBlockNumberLogIndex } from "../utils/stores"
+import { findPositionChangedAndSaveTradeType, getBlockNumberLogIndex } from "../utils/stores"
 
 export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     // insert LimitOrderFilled
@@ -28,6 +28,14 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
 
     // commit changes
     limitOrderFilled.save()
+
+    if (limitOrderFilled.orderType.equals(BigInt.fromI32(1))) {
+        findPositionChangedAndSaveTradeType(event, "-3", "fillLimitOrder-stopLossLimit")
+    } else if (limitOrderFilled.orderType.equals(BigInt.fromI32(2))) {
+        findPositionChangedAndSaveTradeType(event, "-3", "fillLimitOrder-takeProfitLimit")
+    } else {
+        findPositionChangedAndSaveTradeType(event, "-3", "fillLimitOrder-limit")
+    }
 }
 
 export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void {
