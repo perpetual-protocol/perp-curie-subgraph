@@ -301,21 +301,23 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
+
     // hard fix: since some position changed events are missing when cancelExcessOrder()
     // we need to update the position size and open notional for missing events
     const txHash = event.transaction.hash.toHexString()
     const baseToken = event.params.baseToken.toHexString()
-    if (hardFixedDataMap.has(txHash)) {
+    if (hardFixedDataMap && hardFixedDataMap.has(txHash)) {
         const baseTokenMap = hardFixedDataMap.get(txHash)
-        if (baseTokenMap.has(baseToken)) {
+        if (baseTokenMap && baseTokenMap.has(baseToken)) {
             const fixedDataMap = baseTokenMap.get(baseToken)
+            if (fixedDataMap) {
+                traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")!
+                traderMarket.openNotional = fixedDataMap.get("openNotional")!
 
-            traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")
-            traderMarket.openNotional = fixedDataMap.get("openNotional")
-
-            const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
-            position.positionSize = fixedDataMap.get("takerPositionSize")
-            position.openNotional = fixedDataMap.get("openNotional")
+                const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
+                position.positionSize = fixedDataMap.get("takerPositionSize")!
+                position.openNotional = fixedDataMap.get("openNotional")!
+            }
         }
     }
 
