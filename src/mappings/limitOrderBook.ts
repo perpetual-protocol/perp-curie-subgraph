@@ -18,6 +18,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     limitOrderFilled.baseToken = event.params.baseToken
     limitOrderFilled.orderHash = event.params.orderHash
     limitOrderFilled.orderType = BigInt.fromI32(event.params.orderType)
+    limitOrderFilled.keeper = event.params.keeper
     limitOrderFilled.exchangedPositionSize = fromWei(event.params.exchangedPositionSize)
     limitOrderFilled.exchangedPositionNotional = fromWei(event.params.exchangedPositionNotional)
     limitOrderFilled.fee = fromWei(event.params.fee)
