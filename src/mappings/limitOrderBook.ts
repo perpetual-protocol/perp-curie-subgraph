@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
     LimitOrderCancelled as LimitOrderCancelledEvent,
     LimitOrderFilled as LimitOrderFilledEvent,
@@ -8,9 +9,7 @@ import { getBlockNumberLogIndex } from "../utils/stores"
 
 export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     // insert LimitOrderFilled
-    const limitOrderFilled = new LimitOrderFilled(
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
-    )
+    const limitOrderFilled = new LimitOrderFilled(`${event.params.orderHash.toHexString()}}`)
     limitOrderFilled.blockNumberLogIndex = getBlockNumberLogIndex(event)
     limitOrderFilled.blockNumber = event.block.number
     limitOrderFilled.timestamp = event.block.timestamp
@@ -18,8 +17,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     limitOrderFilled.trader = event.params.trader
     limitOrderFilled.baseToken = event.params.baseToken
     limitOrderFilled.orderHash = event.params.orderHash
-    limitOrderFilled.keeper = event.params.keeper
-    limitOrderFilled.keeperReward = fromWei(event.params.keeperReward)
+    limitOrderFilled.orderType = BigInt.fromI32(event.params.orderType)
     limitOrderFilled.exchangedPositionSize = fromWei(event.params.exchangedPositionSize)
     limitOrderFilled.exchangedPositionNotional = fromWei(event.params.exchangedPositionNotional)
     limitOrderFilled.fee = fromWei(event.params.fee)
@@ -33,9 +31,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
 
 export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void {
     // insert LimitOrderCancelled
-    const limitOrderCancelled = new LimitOrderCancelled(
-        `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
-    )
+    const limitOrderCancelled = new LimitOrderCancelled(`${event.params.orderHash.toHexString()}}`)
     limitOrderCancelled.blockNumberLogIndex = getBlockNumberLogIndex(event)
     limitOrderCancelled.blockNumber = event.block.number
     limitOrderCancelled.timestamp = event.block.timestamp
@@ -43,6 +39,7 @@ export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void
     limitOrderCancelled.trader = event.params.trader
     limitOrderCancelled.baseToken = event.params.baseToken
     limitOrderCancelled.orderHash = event.params.orderHash
+    limitOrderCancelled.orderType = BigInt.fromI32(event.params.orderType)
     limitOrderCancelled.positionSize = fromWei(event.params.positionSize)
     limitOrderCancelled.positionNotional = fromWei(event.params.positionNotional)
     limitOrderCancelled.limitPrice = abs(limitOrderCancelled.positionNotional.div(limitOrderCancelled.positionSize))

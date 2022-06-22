@@ -583,16 +583,20 @@ type LimitOrderFilled @entity {
     baseToken: Bytes!
     "hash of the filled limit order"
     orderHash: Bytes!
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    orderType: BigInt!
     "address of keeper"
     keeper: Bytes!
-    "reward to keeper"
-    keeperReward: BigDecimal!
     "exchanged position size: + is long and - is short"
     exchangedPositionSize: BigDecimal!
     "exchanged position notional: - is long and + is short"
     exchangedPositionNotional: BigDecimal!
     "trading fee"
     fee: BigDecimal!
+    "address of rewardToken"
+    rewardToken: Bytes!
+    "amount of keeper reward"
+    rewardAmount: BigDecimal!
     "fill price"
     filledPrice: BigDecimal!
 
@@ -615,6 +619,8 @@ type LimitOrderCancelled @entity {
     baseToken: Bytes!
     "hash of the cancelled limit order"
     orderHash: Bytes!
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    orderType: BigInt!
     "position size: + is long and - is short"
     positionSize: BigDecimal!
     "position notional: - is long and + is short"

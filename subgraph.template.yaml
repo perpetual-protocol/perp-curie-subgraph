@@ -180,30 +180,6 @@ dataSources:
           handler: handleCollateralAdded
 
   - kind: ethereum/contract
-    name: LimitOrderBook
-    network: {{ network }}
-    source:
-      abi: LimitOrderBook
-      address: "{{ periphery.contracts.LimitOrderBook.address }}"
-      startBlock: {{ periphery.contracts.LimitOrderBook.createdBlockNumber }}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/limitOrderBook.ts
-      entities:
-        - LimitOrderFilled
-        - LimitOrderCancelled
-      abis:
-        - name: LimitOrderBook
-          file: ./abis/LimitOrderBook.json
-      eventHandlers:
-        - event: LimitOrderFilled(indexed address,indexed address,bytes32,address,uint256,int256,int256,uint256)
-          handler: handleLimitOrderFilled
-        - event: LimitOrderCancelled(indexed address,indexed address,bytes32,int256,int256)
-          handler: handleLimitOrderCancelled
-
-  - kind: ethereum/contract
     name: DelegateApproval
     network: {{ network }}
     source:
@@ -226,6 +202,51 @@ dataSources:
           handler: handleDelegationApproved
         - event: DelegationRevoked(indexed address,address,uint8)
           handler: handleDelegationRevoked
+
+  - kind: ethereum/contract
+    name: LimitOrderBook
+    network: {{ network }}
+    source:
+      abi: LimitOrderBook
+      address: "{{ periphery.contracts.LimitOrderBook.address }}"
+      startBlock: {{ periphery.contracts.LimitOrderBook.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/limitOrderBook.ts
+      entities:
+        - LimitOrderFilled
+        - LimitOrderCancelled
+      abis:
+        - name: LimitOrderBook
+          file: ./abis/LimitOrderBook.json
+      eventHandlers:
+        - event: LimitOrderFilled(indexed address,indexed address,bytes32,uint8,address,int256,int256,uint256)
+          handler: handleLimitOrderFilled
+        - event: LimitOrderCancelled(indexed address,indexed address,bytes32,uint8,int256,int256)
+          handler: handleLimitOrderCancelled
+
+  - kind: ethereum/contract
+    name: LimitOrderRewardVault
+    network: {{ network }}
+    source:
+      abi: LimitOrderRewardVault
+      address: "{{ periphery.contracts.LimitOrderRewardVault.address }}"
+      startBlock: {{ periphery.contracts.LimitOrderRewardVault.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/limitOrderRewardVault.ts
+      entities:
+        - LimitOrderFilled
+      abis:
+        - name: LimitOrderRewardVault
+          file: ./abis/LimitOrderRewardVault.json
+      eventHandlers:
+        - event: Disbursed(bytes32,address,address,uint256)
+          handler: handleDisbursed
 
   {{#referralContracts}}
   - kind: ethereum/contract

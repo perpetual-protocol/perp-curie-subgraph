@@ -12,6 +12,7 @@ async function writeFile(abiName: string, artifact: Artifact) {
 
 async function main(): Promise<void> {
     const env = process.argv[2]
+
     // core
     const abiNames = [
         "AccountBalance",
@@ -21,7 +22,7 @@ async function main(): Promise<void> {
         "OrderBook",
         "Vault",
         "CollateralManager",
-        "DelegateApproval"
+        "DelegateApproval",
     ]
     let artifact
     for (const abiName of abiNames) {
@@ -37,15 +38,17 @@ async function main(): Promise<void> {
     }
 
     // periphery
-    const limitOrderBookAbiName = 'LimitOrderBook'
-    try {
-        artifact = await import(
-            `@perp/curie-deployments/${env}/periphery/artifacts/contracts/limitOrder/${limitOrderBookAbiName}.sol/${limitOrderBookAbiName}.json`
+    const peripheryAbiNames = ["LimitOrderBook", "LimitOrderRewardVault"]
+    for (const abiName of peripheryAbiNames) {
+        try {
+            artifact = await import(
+                `@perp/curie-deployments/${env}/periphery/artifacts/contracts/limitOrder/${abiName}.sol/${abiName}.json`
             )
-    } catch (error) {
-        console.warn(`ABI of contract ${limitOrderBookAbiName} not found in ${env}`)
+        } catch (error) {
+            console.warn(`ABI of contract ${abiName} not found in ${env}`)
+        }
+        await writeFile(abiName, artifact)
     }
-    await writeFile(limitOrderBookAbiName, artifact)
 }
 
 if (require.main === module) {
