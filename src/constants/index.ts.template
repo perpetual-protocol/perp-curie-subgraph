@@ -11,3 +11,15 @@ export const baseTokenSymbolMap = new TypedMap<Address, string>()
 {{ #pools }}
 baseTokenSymbolMap.set(Address.fromString("{{ baseAddress }}"), "{{ baseSymbol }}")
 {{ /pools }}
+
+export const collateralMap = new Map<string, Map<string, string>>()
+
+{{ #collaterals }}
+export const {{ symbol }} = new Map<string, string>()
+{{ symbol }}.set("id", "{{ address }}")
+{{ symbol }}.set("name", "{{ name }}")
+{{ symbol }}.set("symbol", "{{ symbol }}")
+{{ symbol }}.set("decimals", "{{ decimals }}")
+collateralMap.set("{{ address }}", {{ symbol }})
+
+{{ /collaterals }}
