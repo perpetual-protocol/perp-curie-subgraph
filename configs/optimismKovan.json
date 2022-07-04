@@ -5,58 +5,70 @@
             "address": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
             "decimals": 6,
             "name": "Test Tether",
-            "priceFeedAddress": "0x56AC02B2d4751819dA542D1F2E2CbFf53CBdE73d",
+            "priceFeedAddress": "0x1E655f9414Ff57A50F776c5443446aaE32bFA663",
             "symbol": "TestUSDT"
         },
         {
             "address": "0xf69460072321ed663Ad8E69Bc15771A57D18522d",
             "decimals": 8,
             "name": "Test Wrapped BTC",
-            "priceFeedAddress": "0x5e92237D2F114094958A6d98403A50739A0Fe495",
+            "priceFeedAddress": "0xc5BC98D65F6BC6176594Ef2c067A58F9bD4a9B38",
             "symbol": "TestWBTC"
         },
         {
             "address": "0x4200000000000000000000000000000000000006",
             "decimals": 18,
             "name": "Wrapped Ether",
-            "priceFeedAddress": "0xfAb3Bc6674a38cA766083838E0eba7bB3Ef96177",
+            "priceFeedAddress": "0xc84F6420943C6a5bB8480C246f7b381b3892C368",
             "symbol": "WETH"
+        },
+        {
+            "address": "0xb5F9effD9eBa127BE2aF4b12C62b2d2942D39032",
+            "decimals": 18,
+            "name": "Frax",
+            "priceFeedAddress": "0x1E655f9414Ff57A50F776c5443446aaE32bFA663",
+            "symbol": "FRAX"
         }
     ],
     "contracts": {
-        "AAVEUSDChainlinkPriceFeed": {
-            "address": "0xd7A3F41b355Cb5C27eF0425Cc84b4c88180770A9",
-            "createdBlockNumber": 2052690,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "AAVEUSDChainlinkPriceFeedV2": {
+            "address": "0xE3c498d623386B3d44D144fa92CcaeA2AA76726B",
+            "createdBlockNumber": 3993703,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "APEUSDChainlinkPriceFeed": {
-            "address": "0x43832e6B389172E48984ad4d400aC2C437Ba3b5C",
-            "createdBlockNumber": 2150405,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "APEUSDChainlinkPriceFeedV2": {
+            "address": "0x6fe9E2d9755bcB760CcFc42D71cF710d1085791a",
+            "createdBlockNumber": 3993716,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "AVAXUSDBandPriceFeed": {
-            "address": "0xC79e27575dD214c266039EEb5B1E2A7b6310c409",
-            "createdBlockNumber": 748089,
-            "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
+        "AVAXUSDChainlinkPriceFeedV2": {
+            "address": "0xDCfCDbf06222ce8De03eFAf8D90663A95Ff34f6C",
+            "createdBlockNumber": 3993724,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "AccountBalance": {
             "address": "0x594ADf28b465612DB033C1aEF4bd19972343934D",
             "createdBlockNumber": 748053,
             "name": "contracts/AccountBalance.sol:AccountBalance"
         },
-        "BTC2USDChainlinkPriceFeed": {
-            "address": "0xFbE9268A3542838f48C135A3813eBAA19bF17C83",
-            "createdBlockNumber": 1753496,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "BTC2USDChainlinkPriceFeedV2": {
+            "address": "0x8921Fb782F4261f05C6c709f99471a8C8d944F70",
+            "createdBlockNumber": 3993735,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "BTCUSDChainlinkPriceFeed": {
-            "address": "0x5e92237D2F114094958A6d98403A50739A0Fe495",
-            "createdBlockNumber": 748093,
+            "address": "0xc5BC98D65F6BC6176594Ef2c067A58F9bD4a9B38",
+            "createdBlockNumber": 4025826,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
+        "BTCUSDChainlinkPriceFeedV2": {
+            "address": "0x85aE5bcd213C6ED5D9C82F82C3D0bd549f09038e",
+            "createdBlockNumber": 3993739,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+        },
         "CRVUSDBandPriceFeed": {
-            "address": "0x0d449155ebaDDa68861621F40D2C35667703DB7a",
-            "createdBlockNumber": 996323,
+            "address": "0x540686aCAE220754f308a737E3B7f385EC303d2d",
+            "createdBlockNumber": 4026054,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
         "ClearingHouse": {
@@ -74,20 +86,35 @@
             "createdBlockNumber": 2185077,
             "name": "contracts/CollateralManager.sol:CollateralManager"
         },
-        "DAIUSDChainlinkPriceFeed": {
-            "address": "0x8E5D6cFfD43438758eCdc953DFF887699C94ad8d",
-            "createdBlockNumber": 1413149,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "DAIUSDChainlinkPriceFeedV2": {
+            "address": "0x3c0527C55997dDf5c8a9f18D871f1FadCDf13fCd",
+            "createdBlockNumber": 3993742,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "ETH2USDChainlinkPriceFeed": {
-            "address": "0x68a2C673D1D0E3153A38746BEeEc77b0103d9439",
-            "createdBlockNumber": 1572368,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "DelegateApproval": {
+            "address": "0x8A6A9144039807410aA90D28181A1CD1d00AEeF0",
+            "createdBlockNumber": 4548742,
+            "name": "contracts/DelegateApproval.sol:DelegateApproval"
+        },
+        "ETH2USDChainlinkPriceFeedV2": {
+            "address": "0x037Cd98B9E628e46b6E95aA71D68260229b5b0D8",
+            "createdBlockNumber": 3993747,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+        },
+        "ETH3USDChainlinkPriceFeedV2": {
+            "address": "0x3da3ddD8a7F1035A1406836B98C024c4BA59Bc9c",
+            "createdBlockNumber": 3993756,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "ETHUSDChainlinkPriceFeed": {
-            "address": "0xfAb3Bc6674a38cA766083838E0eba7bB3Ef96177",
-            "createdBlockNumber": 748123,
+            "address": "0xc84F6420943C6a5bB8480C246f7b381b3892C368",
+            "createdBlockNumber": 4025830,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "ETHUSDChainlinkPriceFeedV2": {
+            "address": "0x5fc7c8c9f32F8AAb33Deed359f7b74da1A2c58b7",
+            "createdBlockNumber": 3993761,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "Exchange": {
             "address": "0x2477b99767b81C4b8abFe7056B4c7632aaB38463",
@@ -99,25 +126,25 @@
             "createdBlockNumber": 748033,
             "name": "contracts/InsuranceFund.sol:InsuranceFund"
         },
-        "LINK2USDChainlinkPriceFeed": {
-            "address": "0xBb2973C92304D4227fE94b07a4F9b68B75bd48B0",
-            "createdBlockNumber": 1753649,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "LINK2USDChainlinkPriceFeedV2": {
+            "address": "0x53557fe3277110852cbd0F407210497972194CAF",
+            "createdBlockNumber": 3993766,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "LINKUSDChainlinkPriceFeed": {
-            "address": "0x6AB251f9BFbdD258B33F42A77AA5fb448E11579e",
-            "createdBlockNumber": 1171658,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "LINKUSDChainlinkPriceFeedV2": {
+            "address": "0x1D121eaa8ea65b9fBd0e47F0B15b27EC15F4Eb0e",
+            "createdBlockNumber": 3993773,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "LUNAUSDBandPriceFeed": {
             "address": "0x0A8F729970dbA727B053C75ba75974391427c874",
             "createdBlockNumber": 748166,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
-        "MATICUSDChainlinkPriceFeed": {
-            "address": "0xc91b1f0b1E1be79aDEC85FC760B5aFE05F4146E6",
-            "createdBlockNumber": 1911862,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "MATICUSDChainlinkPriceFeedV2": {
+            "address": "0x91A4e6c63909Dc037E1c936C0ff6a8FEa37861Cd",
+            "createdBlockNumber": 3993775,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "MarketRegistry": {
             "address": "0x51705d391e0d01fA684366407704De0856E4dBaB",
@@ -130,8 +157,8 @@
             "name": "contracts/OrderBook.sol:OrderBook"
         },
         "PERPUSDBandPriceFeed": {
-            "address": "0xa49d8b6a77fC30f2EF6f45Fe0b112F7767785626",
-            "createdBlockNumber": 1683467,
+            "address": "0x1E3dd64966DB76E0E1C4cC4461b079be0d431e2a",
+            "createdBlockNumber": 4026057,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
         "QuoteToken": {
@@ -140,39 +167,44 @@
             "name": "contracts/QuoteToken.sol:QuoteToken"
         },
         "SANDUSDBandPriceFeed": {
-            "address": "0xf58886396934a664e68EBFe3F07e1e9005BBF012",
-            "createdBlockNumber": 1125784,
+            "address": "0x7DD07C07831f65F65C1799A039678D86889c04e9",
+            "createdBlockNumber": 4026064,
             "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
         },
-        "SOLUSDBandPriceFeed": {
-            "address": "0xfF32ccca4Ef609F4291d83C111Fa1Ad910ECEf8E",
-            "createdBlockNumber": 748169,
-            "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
+        "SOLUSDChainlinkPriceFeedV2": {
+            "address": "0xECF90e11c0ba575F6eA320C52ad286826b00184E",
+            "createdBlockNumber": 3993781,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "TSLAUSDChainlinkPriceFeed": {
-            "address": "0xA403647E30c4E0A0B8Fe7E311a629F7173f3Fe32",
-            "createdBlockNumber": 1385607,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "TSLAUSDChainlinkPriceFeedV2": {
+            "address": "0xCcd5777D3f3ff3B4b1e3E86303DA4f1339fa73Cd",
+            "createdBlockNumber": 3993784,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
-        "USDCUSDChainlinkPriceFeed": {
-            "address": "0xcfe7347B08C1F19af170d276cD97fC6a6e3b9180",
-            "createdBlockNumber": 1325645,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "USDCUSDChainlinkPriceFeedV2": {
+            "address": "0xDA593BD9Ad202f657c7cFa19F16a1383d7f48579",
+            "createdBlockNumber": 3993789,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "USDTUSDChainlinkPriceFeed": {
-            "address": "0x56AC02B2d4751819dA542D1F2E2CbFf53CBdE73d",
-            "createdBlockNumber": 1237965,
+            "address": "0x1E655f9414Ff57A50F776c5443446aaE32bFA663",
+            "createdBlockNumber": 4025832,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "USDTUSDChainlinkPriceFeedV2": {
+            "address": "0xB772f4FbdA2D0482A94F126272eEA507BEB04e18",
+            "createdBlockNumber": 3993795,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "Vault": {
             "address": "0xB0ff090d04c268ABb26450ba749f0497EFA9Bb7C",
             "createdBlockNumber": 748061,
             "name": "contracts/Vault.sol:Vault"
         },
-        "sDEFIUSDChainlinkPriceFeed": {
-            "address": "0xb4759e0afb8Ee0f4A257e5B818154312E84A91bC",
-            "createdBlockNumber": 1212443,
-            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        "sDEFIUSDChainlinkPriceFeedV2": {
+            "address": "0xE767c78820619bc2A0519e7796538CdDFFeb5C69",
+            "createdBlockNumber": 3993801,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "vAAVE": {
             "address": "0x12fDcfc1f29a4D82230Db49444De7Ae896c33C9a",
@@ -217,6 +249,11 @@
         "vETH2": {
             "address": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
             "createdBlockNumber": 1573019,
+            "name": "contracts/BaseToken.sol:BaseToken"
+        },
+        "vETH3": {
+            "address": "0x79EC2700A8Be67321f730252472d7fb09f287F9c",
+            "createdBlockNumber": 2718099,
             "name": "contracts/BaseToken.sol:BaseToken"
         },
         "vLINK": {
@@ -277,7 +314,9 @@
     },
     "externalContracts": {
         "DefaultProxyAdmin": "0x1C0D9fe8f0A73e753bcF690d68E030918043088f",
+        "FRAX": "0xb5F9effD9eBa127BE2aF4b12C62b2d2942D39032",
         "TestUSDT": "0xf3FFf265aD60Ab9e187d7846fBF172f272DAD107",
+        "TestUST": "0x40Aa4Ed1147C63F93b5BfD016904088BeE6AE1D8",
         "TestWBTC": "0xf69460072321ed663Ad8E69Bc15771A57D18522d",
         "USDC": "0x3e22e37Cb472c872B5dE121134cFD1B57Ef06560",
         "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
@@ -338,6 +377,13 @@
             "address": "0x62483DDAB027976404AE000E766c824b29AaD091",
             "baseAddress": "0x099FaDE6D13401c4f9742db09ae827E434FB4C30",
             "baseSymbol": "vETH2",
+            "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
+            "quoteSymbol": "vUSD"
+        },
+        {
+            "address": "0xBE6282B9F37219F3054C25722e48eFFd654DAA98",
+            "baseAddress": "0x79EC2700A8Be67321f730252472d7fb09f287F9c",
+            "baseSymbol": "vETH3",
             "quoteAddress": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
             "quoteSymbol": "vUSD"
         },
@@ -426,5 +472,41 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cbff670005d92e13704585d10e36d8477b5d4b7b"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aa8ac0266631b8d93edc73fd0fd42a0db813bdea",
+    "periphery": {
+        "chainId": 69,
+        "contracts": {
+            "LimitOrderBook": {
+                "address": "0x0D8C6A2e695F7e51C3561b8ef346f6D555175BeC",
+                "createdBlockNumber": 3051333,
+                "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
+            },
+            "LimitOrderRewardVault": {
+                "address": "0x9d2c256A74482399b8B8a69E50AbF7db94F2Ad0F",
+                "createdBlockNumber": 3051313,
+                "name": "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault"
+            },
+            "Multicall2": {
+                "address": "0x2ee1b1E6372682F4F1c5752b96f8EA65a0E7C35E",
+                "createdBlockNumber": 2012291,
+                "name": "contracts/lens/Multicall2.sol:Multicall2"
+            },
+            "PerpPortal": {
+                "address": "0x52D7C281aa98E7E2D8a66969B0D9e8dd15bB9d9c",
+                "createdBlockNumber": 3793056,
+                "name": "contracts/lens/PerpPortal.sol:PerpPortal"
+            },
+            "Quoter": {
+                "address": "0x030821f447EA5b2Bdf62B5A700c78f7BAa24Ec67",
+                "createdBlockNumber": 3793055,
+                "name": "contracts/lens/Quoter.sol:Quoter"
+            }
+        },
+        "externalContracts": {
+            "DefaultProxyAdmin": "0xc4E7A63cF97Dd808C2341Ed1a98Aa67584Ff6709",
+            "PERP": "0x77F6B7f15711C25520D791Fe4A9C781eE7e9093B"
+        },
+        "network": "optimism-kovan",
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#6d1219aadabc373b7e8b580a1ebbc86fed4a3bde"
+    }
 }

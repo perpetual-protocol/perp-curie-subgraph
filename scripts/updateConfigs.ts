@@ -22,7 +22,7 @@ async function main(): Promise<void> {
             periphery: {
                 metadata: MetadataOptimismKovanDev1Periphery,
                 version: DependenciesOptimismKovanDev1Periphery["@perp/curie-periphery-contract"],
-            }
+            },
         },
         {
             name: "optimismKovanDev2",
@@ -35,6 +35,10 @@ async function main(): Promise<void> {
             network: "optimism-kovan",
             metadata: MetadataOptimismKovan,
             version: DependenciesOptimismKovan["@perp/curie-contract"],
+            periphery: {
+                metadata: MetadataOptimismKovanDev1Periphery,
+                version: DependenciesOptimismKovanDev1Periphery["@perp/curie-periphery-contract"],
+            },
         },
         {
             name: "optimism",
@@ -61,7 +65,7 @@ async function main(): Promise<void> {
                     ...stage.periphery.metadata,
                     version: stage.periphery.version,
                 },
-            })
+            }),
         }
         const configJson = JSON.stringify(config, null, 4)
         await fs.promises.writeFile(`configs/${stage.name}.json`, configJson, "utf8")
