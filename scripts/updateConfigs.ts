@@ -9,6 +9,12 @@ import MetadataOptimism from "@perp/curie-deployments/optimism/core/metadata.jso
 
 import DependenciesOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/dependencies.json"
 import MetadataOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/metadata.json"
+import DependenciesOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/dependencies.json"
+import MetadataOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/metadata.json"
+import DependenciesOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/dependencies.json"
+import MetadataOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/metadata.json"
+import DependenciesOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/dependencies.json"
+import MetadataOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/metadata.json"
 
 import fs from "fs"
 
@@ -29,6 +35,10 @@ async function main(): Promise<void> {
             network: "optimism-kovan",
             metadata: MetadataOptimismKovanDev2,
             version: DependenciesOptimismKovanDev2["@perp/curie-contract"],
+            periphery: {
+                metadata: MetadataOptimismKovanDev2Periphery,
+                version: DependenciesOptimismKovanDev2Periphery["@perp/curie-periphery-contract"],
+            },
         },
         {
             name: "optimismKovan",
@@ -36,8 +46,8 @@ async function main(): Promise<void> {
             metadata: MetadataOptimismKovan,
             version: DependenciesOptimismKovan["@perp/curie-contract"],
             periphery: {
-                metadata: MetadataOptimismKovanDev1Periphery,
-                version: DependenciesOptimismKovanDev1Periphery["@perp/curie-periphery-contract"],
+                metadata: MetadataOptimismKovanPeriphery,
+                version: DependenciesOptimismKovanPeriphery["@perp/curie-periphery-contract"],
             },
         },
         {
@@ -50,6 +60,10 @@ async function main(): Promise<void> {
                 },
             },
             version: DependenciesOptimism["@perp/curie-contract"],
+            periphery: {
+                metadata: MetadataOptimismPeriphery,
+                version: DependenciesOptimismPeriphery["@perp/curie-periphery-contract"],
+            },
         },
     ]
 

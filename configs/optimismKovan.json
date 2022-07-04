@@ -477,34 +477,34 @@
         "chainId": 69,
         "contracts": {
             "LimitOrderBook": {
-                "address": "0x0D8C6A2e695F7e51C3561b8ef346f6D555175BeC",
-                "createdBlockNumber": 3051333,
+                "address": "0xC37d173d88CEfe237739f29EE4120D253F52fBA4",
+                "createdBlockNumber": 4550482,
                 "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
             },
             "LimitOrderRewardVault": {
-                "address": "0x9d2c256A74482399b8B8a69E50AbF7db94F2Ad0F",
-                "createdBlockNumber": 3051313,
+                "address": "0x8ebd810717dBcca3cF8848A054B0789944bE864C",
+                "createdBlockNumber": 4550473,
                 "name": "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault"
             },
             "Multicall2": {
-                "address": "0x2ee1b1E6372682F4F1c5752b96f8EA65a0E7C35E",
-                "createdBlockNumber": 2012291,
+                "address": "0x39004a0e1debF818993dE2F3aaAc108016617B82",
+                "createdBlockNumber": 151938,
                 "name": "contracts/lens/Multicall2.sol:Multicall2"
             },
             "PerpPortal": {
-                "address": "0x52D7C281aa98E7E2D8a66969B0D9e8dd15bB9d9c",
-                "createdBlockNumber": 3793056,
+                "address": "0xd51935dC3e2122A8C5903Ac658c33a8C265357fe",
+                "createdBlockNumber": 767668,
                 "name": "contracts/lens/PerpPortal.sol:PerpPortal"
             },
             "Quoter": {
-                "address": "0x030821f447EA5b2Bdf62B5A700c78f7BAa24Ec67",
-                "createdBlockNumber": 3793055,
+                "address": "0x02d6ccFa774f3e6F28925eB8bC65A70fD4A30F57",
+                "createdBlockNumber": 1184999,
                 "name": "contracts/lens/Quoter.sol:Quoter"
             }
         },
         "externalContracts": {
-            "DefaultProxyAdmin": "0xc4E7A63cF97Dd808C2341Ed1a98Aa67584Ff6709",
-            "PERP": "0x77F6B7f15711C25520D791Fe4A9C781eE7e9093B"
+            "DefaultProxyAdmin": "0x5A99561F672C80Ae057d4c3Af3564343d2a6b193",
+            "PERP": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
         },
         "network": "optimism-kovan",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#6d1219aadabc373b7e8b580a1ebbc86fed4a3bde"
