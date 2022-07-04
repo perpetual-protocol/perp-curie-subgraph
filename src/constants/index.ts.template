@@ -13,11 +13,11 @@ baseTokenSymbolMap.set(Address.fromString("{{ baseAddress }}"), "{{ baseSymbol }
 
 export const collateralMap = new TypedMap<Address, TypedMap<string, string>>()
 
-export const usdc = new TypedMap<string, string>()
-usdc.set("name", "USD Coin")
-usdc.set("symbol", "USDC")
-usdc.set("decimals", "6")
-collateralMap.set(Address.fromString("{{ externalContracts.USDC }}"), usdc)
+export const USDC = new TypedMap<string, string>()
+USDC.set("name", "USD Coin")
+USDC.set("symbol", "USDC")
+USDC.set("decimals", "6")
+collateralMap.set(Address.fromString("{{ externalContracts.USDC }}"), USDC)
 
 {{ #collaterals }}
 export const {{ symbol }} = new TypedMap<string, string>()
