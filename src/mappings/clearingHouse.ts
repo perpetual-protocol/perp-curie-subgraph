@@ -133,7 +133,9 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
         positionChanged.swappedPrice = BD_ZERO
     } else {
         // see https://www.figma.com/file/xuue5qGH4RalX7uAbbzgP3?embed_host=notion&kind=&node-id=0%3A1&viewer=1
-        // swappedPrice does not include fee
+        // swappedPrice is already considering fee:
+        // when long, fee is deducted first, then swap
+        // when short, swap first, then fee is deducted
         positionChanged.swappedPrice = abs(
             positionChanged.exchangedPositionNotional.div(positionChanged.exchangedPositionSize),
         )
