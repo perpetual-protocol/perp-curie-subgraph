@@ -49,12 +49,6 @@ dataSources:
       abis:
         - name: Vault
           file: ./abis/Vault.json
-        - name: ERC20
-          file: ./external-abis/ERC20.json
-        - name: ERC20SymbolBytes
-          file: ./external-abis/ERC20SymbolBytes.json
-        - name: ERC20NameBytes
-          file: ./external-abis/ERC20NameBytes.json
       eventHandlers:
         - event: Deposited(indexed address,indexed address,uint256)
           handler: handleDeposited
