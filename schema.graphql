@@ -203,6 +203,8 @@ type PositionChanged @entity {
     marketPriceAfter: BigDecimal!
     "from function signature"
     fromFunctionSignature: Bytes!
+    "trade type: see tradeTypeMap in constants"
+    tradeType: BigInt!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!

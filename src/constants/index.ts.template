@@ -1,4 +1,4 @@
-import { Address, TypedMap } from "@graphprotocol/graph-ts"
+import { Address, BigInt, TypedMap } from "@graphprotocol/graph-ts"
 
 export const Network = "{{ network }}"
 export const ChainId = "{{ chainId }}"
@@ -27,3 +27,11 @@ export const {{ symbol }} = new TypedMap<string, string>()
 collateralMap.set(Address.fromString("{{ address }}"), {{ symbol }})
 
 {{ /collaterals }}
+
+export const tradeTypeMap = new TypedMap<string, BigInt>()
+tradeTypeMap.set("openPosition", BigInt.fromI32(0))
+tradeTypeMap.set("liquidate", BigInt.fromI32(1))
+tradeTypeMap.set("changeLiquidity", BigInt.fromI32(2))
+tradeTypeMap.set("fillLimitOrder-limit", BigInt.fromI32(3))
+tradeTypeMap.set("fillLimitOrder-stopLossLimit", BigInt.fromI32(4))
+tradeTypeMap.set("fillLimitOrder-takeProfitLimit", BigInt.fromI32(5))
