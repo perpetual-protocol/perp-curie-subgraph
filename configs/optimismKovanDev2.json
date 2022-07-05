@@ -5,21 +5,21 @@
             "address": "0xe1c1c3055A61A3f565823EFd36EfbEaF7467c8E3",
             "decimals": 6,
             "name": "Test Tether",
-            "priceFeedAddress": "0x2b178568f07FA045Fc73b4F65Cb640Fc98B7416a",
+            "priceFeedAddress": "0xA20FC82DAB3418D80B8d58A3c1836E1d441dB4C7",
             "symbol": "TestUSDT"
         },
         {
             "address": "0x9be419Cb789fd089F6DCF4b2d8cd5E5a30864eaA",
             "decimals": 8,
             "name": "Test Wrapped BTC",
-            "priceFeedAddress": "0x8a796eea6B299Eb632F63fa1BBCb2D98D076F181",
+            "priceFeedAddress": "0xf42AA0148Bca6ADBD4456c932C79616890eF26ac",
             "symbol": "TestWBTC"
         },
         {
             "address": "0x4200000000000000000000000000000000000006",
             "decimals": 18,
             "name": "Wrapped Ether",
-            "priceFeedAddress": "0x990947f96753D99D1418b9734317Ded8e7817a1c",
+            "priceFeedAddress": "0xd6E0731F94c5128a363e582448F9b84de531b762",
             "symbol": "WETH"
         }
     ],
@@ -30,9 +30,14 @@
             "name": "contracts/AccountBalance.sol:AccountBalance"
         },
         "BTCUSDChainlinkPriceFeed": {
-            "address": "0x8a796eea6B299Eb632F63fa1BBCb2D98D076F181",
-            "createdBlockNumber": 2075436,
+            "address": "0xf42AA0148Bca6ADBD4456c932C79616890eF26ac",
+            "createdBlockNumber": 3439339,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "BTCUSDChainlinkPriceFeedV2": {
+            "address": "0x39fB11556917FDD5Cf486badaEB298e418D5D000",
+            "createdBlockNumber": 3439348,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "ClearingHouse": {
             "address": "0xF32c94C4EF038ca9Dc19c0D9faefed1B238732B6",
@@ -49,10 +54,20 @@
             "createdBlockNumber": 2168055,
             "name": "contracts/CollateralManager.sol:CollateralManager"
         },
+        "DelegateApproval": {
+            "address": "0x49bA93F86991F7936C900540AF2613F2a69261D7",
+            "createdBlockNumber": 3212626,
+            "name": "contracts/DelegateApproval.sol:DelegateApproval"
+        },
         "ETHUSDChainlinkPriceFeed": {
-            "address": "0x990947f96753D99D1418b9734317Ded8e7817a1c",
-            "createdBlockNumber": 2075435,
+            "address": "0xd6E0731F94c5128a363e582448F9b84de531b762",
+            "createdBlockNumber": 3439334,
             "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+        },
+        "ETHUSDChainlinkPriceFeedV2": {
+            "address": "0xBF1FD773233eb0fC9c0018b4eB9BF49c0aAD0067",
+            "createdBlockNumber": 3439345,
+            "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
         },
         "Exchange": {
             "address": "0xAAc9D54D4B4Be4CD236fbfd048A2C3A5D80419eD",
@@ -78,6 +93,11 @@
             "address": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
             "createdBlockNumber": 2075250,
             "name": "contracts/QuoteToken.sol:QuoteToken"
+        },
+        "USDTUSDChainlinkPriceFeed": {
+            "address": "0xA20FC82DAB3418D80B8d58A3c1836E1d441dB4C7",
+            "createdBlockNumber": 3439332,
+            "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
         },
         "Vault": {
             "address": "0xe2674AE498753DaAE023D510A5F5E788746525BF",
@@ -120,5 +140,28 @@
             "quoteSymbol": "vUSD"
         }
     ],
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#c5f3467226065ec47d516bb9e1483c3c49ac32ef"
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aad2c816edc4210be8d6179cd7346065dfb83593",
+    "periphery": {
+        "chainId": 69,
+        "contracts": {
+            "Multicall2": {
+                "address": "0xD3C65cC24CDf32F4A08bB397cb075bC04510E688",
+                "createdBlockNumber": 3902888,
+                "name": "contracts/lens/Multicall2.sol:Multicall2"
+            },
+            "PerpPortal": {
+                "address": "0xDd88ceE67879632D5a27DC8b41977700439F2Ba4",
+                "createdBlockNumber": 3902890,
+                "name": "contracts/lens/PerpPortal.sol:PerpPortal"
+            },
+            "Quoter": {
+                "address": "0xc1e0F9CBE05aa02Ac38a183d310c5aBD851E09F0",
+                "createdBlockNumber": 3902886,
+                "name": "contracts/lens/Quoter.sol:Quoter"
+            }
+        },
+        "externalContracts": {},
+        "network": "optimism-kovan",
+        "version": "1.3.5"
+    }
 }

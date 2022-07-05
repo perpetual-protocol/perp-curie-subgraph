@@ -1,5 +1,3 @@
-# MarketRegistry
-
 type Protocol @entity {
     "hardcoded as 'perpetual-protocol'"
     id: ID!
@@ -30,6 +28,8 @@ type Protocol @entity {
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 }
 
+# MarketRegistry
+
 type Market @entity {
     "format: baseToken address"
     id: ID!
@@ -39,7 +39,7 @@ type Market @entity {
     quoteToken: Bytes!
     "pool address"
     pool: Bytes!
-    "fee ratio: 500 (0.05%), 3000 (0.3%), 10000 (1%)"
+    "trading fee ratio in uint24: 1000 == 0.1%"
     feeRatio: BigInt!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
@@ -195,7 +195,7 @@ type PositionChanged @entity {
 
     "position size after this tx"
     positionSizeAfter: BigDecimal!
-    "swapped price of this tx = abs(exchangedPositionNotionalWithFee / exchangedPositionSize)"
+    "swapped price of this tx = abs(exchangedPositionNotional / exchangedPositionSize)"
     swappedPrice: BigDecimal!
     "average entry price after this tx = abs(position.openNotional / position.positionSize)"
     entryPriceAfter: BigDecimal!
@@ -402,7 +402,6 @@ type Position @entity {
     marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
-
 # ClearingHouse
 
 type PositionLiquidated @entity {
@@ -431,7 +430,6 @@ type PositionLiquidated @entity {
     timestamp: BigInt!
 }
 
-# TODO: Do we still need this?
 type Maker @entity {
     "format: maker address"
     id: ID!
@@ -530,6 +528,134 @@ type PnlRealized @entity {
     timestamp: BigInt!
 }
 
+# DelegateApproval
+
+type DelegationApproved @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "approved actions"
+    actions: BigInt!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type DelegationRevoked @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "delegate address"
+    delegate: Bytes!
+    "revoked actions"
+    actions: BigInt!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# LimitOrderBook
+
+type LimitOrderFilled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "hash of the filled limit order"
+    orderHash: Bytes!
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    orderType: BigInt!
+    "address of keeper"
+    keeper: Bytes!
+    "exchanged position size: + is long and - is short"
+    exchangedPositionSize: BigDecimal!
+    "exchanged position notional: - is long and + is short"
+    exchangedPositionNotional: BigDecimal!
+    "trading fee"
+    fee: BigDecimal!
+    "fill price"
+    filledPrice: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type LimitOrderCancelled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "hash of the cancelled limit order"
+    orderHash: Bytes!
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    orderType: BigInt!
+    "position size: + is long and - is short"
+    positionSize: BigDecimal!
+    "position notional: - is long and + is short"
+    positionNotional: BigDecimal!
+    "limit price"
+    limitPrice: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# LimitOrderRewardVault
+
+type Disbursed @entity {
+    "format: <orderHash>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "hash of the filled limit order"
+    orderHash: Bytes!
+    "address of keeper"
+    keeper: Bytes!
+    "address of rewardToken"
+    token: Bytes!
+    "amount of keeper reward"
+    amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 # Trader Historical Data
 
 type TraderDayData @entity {
@@ -545,6 +671,8 @@ type TraderDayData @entity {
     "total pnl aggregated per day for trader"
     realizedPnl: BigInt!
 }
+
+# Referral
 
 # For tracking day trade metrics for referral codes on a per trader basis
 type ReferralCodeTraderDayData @entity {
@@ -596,23 +724,4 @@ type ReferralCode @entity {
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
-}
-
-# No such contract event, this is artificial for monitoring only
-type BadDebtHappened @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "amount"
-    amount: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
 }
