@@ -72,6 +72,11 @@
             "createdBlockNumber": 6465083,
             "name": "contracts/CollateralManager.sol:CollateralManager"
         },
+        "DelegateApproval": {
+            "address": "0xfd7bB5F6844a43c5469c972640Eddfa99597a547",
+            "createdBlockNumber": 13868230,
+            "name": "contracts/DelegateApproval.sol:DelegateApproval"
+        },
         "ETHUSDChainlinkPriceFeed": {
             "address": "0x3C14107E6a11D453033FcCc96B619E889903fEA9",
             "createdBlockNumber": 12416173,
@@ -402,10 +407,20 @@
     "referralContracts": {
         "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106"
     },
-    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#8aa9bb093805917f403a81bdb7a93afed12a1526",
+    "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aa8ac0266631b8d93edc73fd0fd42a0db813bdea",
     "periphery": {
         "chainId": 10,
         "contracts": {
+            "LimitOrderBook": {
+                "address": "0x93B9DaC2d57AaD1966859E8d1b5cCF5b95de9af4",
+                "createdBlockNumber": 13870078,
+                "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
+            },
+            "LimitOrderRewardVault": {
+                "address": "0x41C8759533bDD05D73f8EE8b876cFE6600De288D",
+                "createdBlockNumber": 13870061,
+                "name": "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault"
+            },
             "Multicall2": {
                 "address": "0x7105b732F2F0D5A6f7bDB159F0074b8587E2425b",
                 "createdBlockNumber": 514515,
@@ -422,8 +437,11 @@
                 "name": "contracts/lens/Quoter.sol:Quoter"
             }
         },
-        "externalContracts": {},
+        "externalContracts": {
+            "DefaultProxyAdmin": "0x7566E94dF784680B5b1a29632EC6f7F65263Da69",
+            "PERP": "0x9e1028F5F1D5eDE59748FFceE5532509976840E0"
+        },
         "network": "optimism",
-        "version": "1.3.5"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#6d1219aadabc373b7e8b580a1ebbc86fed4a3bde"
     }
 }
