@@ -72,6 +72,10 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrer: "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
                 },
             },
+            graft: {
+                base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
+                block: 13868230, // DelegateApproval createdBlockNumber
+            },
         },
     ]
 

@@ -267,3 +267,11 @@ dataSources:
         - event: OnUncappedPartnerRemoved(address)
           handler: handleUncappedPartnerRemoved
   {{/referral}}
+
+{{#graft}}
+features:
+  - grafting
+graft:
+  base: {{ graft.base }}
+  block: {{ graft.block }}
+{{/graft}}
