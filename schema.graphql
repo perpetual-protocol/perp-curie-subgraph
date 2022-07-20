@@ -26,6 +26,11 @@ type Protocol @entity {
     totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
     "DEPRECATED: bad debt"
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
+
+    "threshold amount for Insurance Fund to distribute surplus"
+    insuranceFundFeeDistributionThreshold: BigDecimal!
+    "total amount of surplus Insurance Fund has distributed"
+    insuranceFundFeeDistributionTotalAmount: BigDecimal!
 }
 
 # MarketRegistry
@@ -724,4 +729,30 @@ type ReferralCode @entity {
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
+}
+
+type ThresholdChanged @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "block timestamp"
+    timestamp: BigInt!
+    "threshold amount"
+    threshold: BigDecimal!
+}
+
+type FeeDistributed @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "block timestamp"
+    timestamp: BigInt!
+    "surplus amount"
+    surplus: BigDecimal!
+    "usdc balance of insuranceFund"
+    insuranceFundWalletBalance: BigDecimal!
+    "usdc freeCollateral balance of insuranceFund"
+    insuranceFundFreeCollateral: BigDecimal!
+    "threshold amount"
+    threshold: BigDecimal!
+    "caller"
+    caller: Bytes!
 }
