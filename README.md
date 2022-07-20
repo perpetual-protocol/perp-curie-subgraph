@@ -48,6 +48,16 @@
     -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
     -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
 
+## Development
+
+### Assumptions
+
+- Currently we assume the settlement token decimals is 6 (i.e. USDC)
+### Checklist
+
+- `scripts/updateABIs.ts`
+  - when adding new contracts, remember to include the newly added contract names to `abiNames` so it would be pre-processed
+
 ## Deployment
 
 ```bash
