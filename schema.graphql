@@ -26,6 +26,9 @@ type Protocol @entity {
     totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
     "DEPRECATED: bad debt"
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
+
+    "total bad debt settled"
+    totalSettledBadDebt: BigDecimal!
 }
 
 # MarketRegistry
@@ -724,4 +727,13 @@ type ReferralCode @entity {
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
+}
+
+type BadDebtSettled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "trader"
+    trader: Bytes!
+    "bad debt amount"
+    amount: BigDecimal!
 }
