@@ -168,6 +168,31 @@ dataSources:
           handler: handleCollateralAdded
 
   - kind: ethereum/contract
+    name: InsuranceFund
+    network: {{ network }}
+    source:
+      abi: InsuranceFund
+      address: "{{ core.contracts.InsuranceFund.address }}"
+      startBlock: {{ core.contracts.InsuranceFund.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/InsuranceFund.ts
+      entities:
+        - Protocol
+        - FeeDistributed
+        - ThresholdChanged
+      abis:
+        - name: InsuranceFund
+          file: ./abis/InsuranceFund.json
+      eventHandlers:
+        - event: FeeDistributed(uint256,uint256,uin256,uin256)
+          handler: handleFeeDistributed
+        - event: ThresholdChanged(uint256)
+          handler: handleThresholdChanged
+
+  - kind: ethereum/contract
     name: DelegateApproval
     network: {{ network }}
     source:

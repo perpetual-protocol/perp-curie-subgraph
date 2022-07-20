@@ -39,6 +39,8 @@ export function getOrCreateProtocol(): Protocol {
         protocol.totalValueLocked = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
+        protocol.insuranceFundFeeDistributionThreshold = BD_ZERO
+        protocol.insuranceFundFeeDistributionTotalAmount = BD_ZERO
         protocol.save()
     }
     return protocol
