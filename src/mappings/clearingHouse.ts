@@ -237,6 +237,12 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     positionLiquidated.positionSizeAbs = fromWei(event.params.positionSize)
     positionLiquidated.liquidationFee = fromWei(event.params.liquidationFee)
 
+    // upsert Protocol
+    const protocol = getOrCreateProtocol()
+    protocol.liquidationFee = protocol.liquidationFee.plus(positionLiquidated.liquidationFee)
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // upsert Position
     const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
     position.blockNumber = event.block.number
@@ -257,6 +263,7 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
 
     // commit changes
     positionLiquidated.save()
+    protocol.save()
     position.save()
     trader.save()
     traderMarket.save()
