@@ -13,6 +13,8 @@ type Protocol @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
+    "cumulative liquidation fee"
+    liquidationFee: BigDecimal!
     "total settlement token"
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"

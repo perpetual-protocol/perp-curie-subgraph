@@ -34,6 +34,7 @@ export function getOrCreateProtocol(): Protocol {
         protocol.contractVersion = Version
         protocol.publicMarketCount = BI_ZERO
         protocol.tradingFee = BD_ZERO
+        protocol.liquidationFee = BD_ZERO
         protocol.tradingVolume = BD_ZERO
         protocol.totalSettlementTokenBalance = BD_ZERO
         protocol.totalValueLocked = BD_ZERO
