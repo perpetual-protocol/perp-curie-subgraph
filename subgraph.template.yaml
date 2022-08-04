@@ -162,6 +162,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/insuranceFund.ts
       entities:
+        - Protocol
         - Repaid
       abis:
         - name: InsuranceFund
