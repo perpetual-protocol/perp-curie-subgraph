@@ -23,7 +23,10 @@ type Protocol @entity {
     timestamp: BigInt!
 
     "DEPRECATED: total settlement token in the protocol"
-    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
+    totalValueLocked: BigDecimal!
+        @deprecated(
+            reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead"
+        )
     "DEPRECATED: bad debt"
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 
@@ -31,6 +34,11 @@ type Protocol @entity {
     insuranceFundFeeDistributionThreshold: BigDecimal!
     "total amount of surplus Insurance Fund has distributed"
     insuranceFundFeeDistributionTotalAmount: BigDecimal!
+
+    "total bad debt settled"
+    totalSettledBadDebt: BigDecimal!
+    "total repaid"
+    totalRepaid: BigDecimal!
 }
 
 # MarketRegistry
@@ -329,7 +337,8 @@ type Trader @entity {
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
 
     "DEPRECATED: total deposited settlement token + cumulative total pnl"
-    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
+    collateral: BigDecimal!
+        @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
     "DEPRECATED: cumulative bad debt"
     badDebt: BigDecimal!
 }
@@ -753,6 +762,28 @@ type FeeDistributed @entity {
     insuranceFundFreeCollateral: BigDecimal!
     "threshold amount"
     threshold: BigDecimal!
+    "caller"
+    caller: Bytes!
+}
+
+type BadDebtSettled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "trader"
+    trader: Bytes!
+    "bad debt amount"
+    amount: BigDecimal!
+    "caller"
+    caller: Bytes!
+}
+
+type Repaid @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "repaid amount"
+    repaidAmount: BigDecimal!
+    "insurance fund balance after repaid"
+    tokenBalanceAfterRepaid: BigDecimal!
     "caller"
     caller: Bytes!
 }
