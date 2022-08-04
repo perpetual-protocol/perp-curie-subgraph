@@ -150,6 +150,27 @@ dataSources:
           handler: handlePnlRealized
 
   - kind: ethereum/contract
+    name: InsuranceFund
+    network: {{ network }}
+    source:
+      abi: InsuranceFund
+      address: "{{ core.contracts.InsuranceFund.address }}"
+      startBlock: {{ core.contracts.InsuranceFund.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/insuranceFund.ts
+      entities:
+        - Repaid
+      abis:
+        - name: InsuranceFund
+          file: ./abis/InsuranceFund.json
+      eventHandlers:
+        - event: Repaid(uint256,uint256)
+          handler: handleRepaid
+
+  - kind: ethereum/contract
     name: CollateralManager
     network: {{ network }}
     source:

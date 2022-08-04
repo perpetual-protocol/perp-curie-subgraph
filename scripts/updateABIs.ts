@@ -23,6 +23,7 @@ async function main(): Promise<void> {
         "Vault",
         "CollateralManager",
         "DelegateApproval",
+        "InsuranceFund",
     ]
     let artifact
     for (const abiName of abiNames) {

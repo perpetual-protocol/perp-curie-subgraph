@@ -8,21 +8,21 @@
                 "address": "0xe1c1c3055A61A3f565823EFd36EfbEaF7467c8E3",
                 "decimals": 6,
                 "name": "Test Tether",
-                "priceFeedAddress": "0xA20FC82DAB3418D80B8d58A3c1836E1d441dB4C7",
+                "priceFeedAddress": "0x8cb4955e3EA9895db1a9ABA78876299d7f0AD1A7",
                 "symbol": "TestUSDT"
             },
             {
                 "address": "0x9be419Cb789fd089F6DCF4b2d8cd5E5a30864eaA",
                 "decimals": 8,
                 "name": "Test Wrapped BTC",
-                "priceFeedAddress": "0xf42AA0148Bca6ADBD4456c932C79616890eF26ac",
+                "priceFeedAddress": "0xe6Bc3bcbf4542596475010A2322359ecF1A48364",
                 "symbol": "TestWBTC"
             },
             {
                 "address": "0x4200000000000000000000000000000000000006",
                 "decimals": 18,
                 "name": "Wrapped Ether",
-                "priceFeedAddress": "0xd6E0731F94c5128a363e582448F9b84de531b762",
+                "priceFeedAddress": "0x29834B01f46E73b58d72A5f67A51318A60743C91",
                 "symbol": "WETH"
             }
         ],
@@ -33,13 +33,13 @@
                 "name": "contracts/AccountBalance.sol:AccountBalance"
             },
             "BTCUSDChainlinkPriceFeed": {
-                "address": "0xf42AA0148Bca6ADBD4456c932C79616890eF26ac",
-                "createdBlockNumber": 3439339,
+                "address": "0xe6Bc3bcbf4542596475010A2322359ecF1A48364",
+                "createdBlockNumber": 4818343,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
             "BTCUSDChainlinkPriceFeedV2": {
-                "address": "0x39fB11556917FDD5Cf486badaEB298e418D5D000",
-                "createdBlockNumber": 3439348,
+                "address": "0xad637b4fc7a099f3D1BA17e903D111379168d57F",
+                "createdBlockNumber": 4818346,
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
             },
             "ClearingHouse": {
@@ -63,13 +63,13 @@
                 "name": "contracts/DelegateApproval.sol:DelegateApproval"
             },
             "ETHUSDChainlinkPriceFeed": {
-                "address": "0xd6E0731F94c5128a363e582448F9b84de531b762",
-                "createdBlockNumber": 3439334,
+                "address": "0x29834B01f46E73b58d72A5f67A51318A60743C91",
+                "createdBlockNumber": 4818349,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
             "ETHUSDChainlinkPriceFeedV2": {
-                "address": "0xBF1FD773233eb0fC9c0018b4eB9BF49c0aAD0067",
-                "createdBlockNumber": 3439345,
+                "address": "0x55D8d57D7ED56eA5b57Ab37A58cD8b47860181E7",
+                "createdBlockNumber": 4818352,
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
             },
             "Exchange": {
@@ -98,8 +98,8 @@
                 "name": "contracts/QuoteToken.sol:QuoteToken"
             },
             "USDTUSDChainlinkPriceFeed": {
-                "address": "0xA20FC82DAB3418D80B8d58A3c1836E1d441dB4C7",
-                "createdBlockNumber": 3439332,
+                "address": "0x8cb4955e3EA9895db1a9ABA78876299d7f0AD1A7",
+                "createdBlockNumber": 4818360,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
             "Vault": {
@@ -143,7 +143,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aad2c816edc4210be8d6179cd7346065dfb83593"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#58127511f8db450fac0dbe5cfacb50589bb95935"
     },
     "periphery": {
         "chainId": 69,
@@ -162,10 +162,20 @@
                 "address": "0xc1e0F9CBE05aa02Ac38a183d310c5aBD851E09F0",
                 "createdBlockNumber": 3902886,
                 "name": "contracts/lens/Quoter.sol:Quoter"
+            },
+            "LimitOrderBook": {
+                "address": "0x0D8C6A2e695F7e51C3561b8ef346f6D555175BeC",
+                "createdBlockNumber": 3051333,
+                "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
+            },
+            "LimitOrderRewardVault": {
+                "address": "0x9d2c256A74482399b8B8a69E50AbF7db94F2Ad0F",
+                "createdBlockNumber": 3051313,
+                "name": "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault"
             }
         },
         "externalContracts": {},
         "network": "optimism-kovan",
-        "version": "1.3.5"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
     }
 }

@@ -29,6 +29,9 @@ type Protocol @entity {
 
     "total bad debt settled"
     totalSettledBadDebt: BigDecimal!
+
+    "total repaid"
+    totalRepaid: BigDecimal!
 }
 
 # MarketRegistry
@@ -736,4 +739,17 @@ type BadDebtSettled @entity {
     trader: Bytes!
     "bad debt amount"
     amount: BigDecimal!
+    "caller"
+    caller: Bytes!
+}
+
+type Repaid @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "repaid amount"
+    repaidAmount: BigDecimal!
+    "insurance fund balance after repaid"
+    tokenBalanceAfterRepaid: BigDecimal!
+    "caller"
+    caller: Bytes!
 }

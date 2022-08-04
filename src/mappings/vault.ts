@@ -1,12 +1,12 @@
 import { BigDecimal } from "@graphprotocol/graph-ts"
-import { CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
+import { BadDebtSettled, CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
 import {
     BadDebtSettled as BadDebtSettledEvent, CollateralLiquidated as CollateralLiquidatedEvent,
     Deposited as DepositedEvent,
     Withdrawn as WithdrawnEvent
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
-import { fromWei, RATIO_ONE } from "../utils/numbers"
+import { fromWei, RATIO_ONE, VAULT_DECIMALS } from "../utils/numbers"
 import {
     formatTraderId,
     getBlockNumberLogIndex,
@@ -179,15 +179,15 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     protocol.save()
 }
 
-export handleBadDebtSettled(event: BadDebtSettledEvent):void {
+export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
     const badDebtAmount = fromWei(event.params.amount, VAULT_DECIMALS)
-    
+
     // insert badDebtSettled
     const badDebtSettled = new BadDebtSettled(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
     badDebtSettled.trader = event.params.trader
     badDebtSettled.amount = badDebtAmount
     badDebtSettled.caller = event.transaction.from
-    
+
     // update protocol
     const protocol = getOrCreateProtocol()
     protocol.totalSettledBadDebt = protocol.totalSettledBadDebt.plus(badDebtAmount)

@@ -407,7 +407,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aa8ac0266631b8d93edc73fd0fd42a0db813bdea"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cf7284f1575a4e46011d62de5b3597da60c82846"
     },
     "periphery": {
         "chainId": 10,
@@ -443,7 +443,7 @@
             "PERP": "0x9e1028F5F1D5eDE59748FFceE5532509976840E0"
         },
         "network": "optimism",
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#6d1219aadabc373b7e8b580a1ebbc86fed4a3bde"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
     },
     "referral": {
         "contracts": {
