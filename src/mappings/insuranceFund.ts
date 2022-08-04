@@ -1,12 +1,11 @@
-import { FeeDistributed, ThresholdChanged } from "../../generated/schema"
+import { FeeDistributed, Repaid, ThresholdChanged } from "../../generated/schema"
 import {
     FeeDistributed as FeeDistributedEvent,
+    Repaid as RepaidEvent,
     ThresholdChanged as ThresholdChangedEvent,
 } from "../../generated/InsuranceFund/InsuranceFund"
 import { VAULT_DECIMALS, fromWei } from "../utils/numbers"
 
-import { Repaid } from "../../generated/schema"
-import { Repaid as RepaidEvent } from "../../generated/InsuranceFund/InsuranceFund"
 import { getOrCreateProtocol } from "../utils/stores"
 
 export function handleFeeDistributed(event: FeeDistributedEvent): void {

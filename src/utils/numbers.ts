@@ -7,7 +7,6 @@ export const DUST_POSITION_SIZE = fromWei(BigInt.fromI32(10))
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000"
 export const VAULT_DECIMALS = BigInt.fromI32(6)
 export const DEFAULT_DECIMALS = BigInt.fromI32(18)
-export const VAULT_DECIMALS = BigInt.fromI32(6)
 export const RATIO_ONE = BigDecimal.fromString("1000000")
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
