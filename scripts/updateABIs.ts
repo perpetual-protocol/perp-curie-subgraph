@@ -24,7 +24,6 @@ async function main(): Promise<void> {
         "CollateralManager",
         "InsuranceFund",
         "DelegateApproval",
-        "InsuranceFund",
     ]
     let artifact
     for (const abiName of abiNames) {
