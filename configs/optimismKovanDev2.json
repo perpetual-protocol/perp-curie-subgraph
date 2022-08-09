@@ -143,7 +143,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#8728740d446b992b5acd03aa3e809957e96e2e8b"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#597cfc3db787aa4e638ce1bfacccd06cad43c9f1"
     },
     "periphery": {
         "chainId": 69,
@@ -162,16 +162,6 @@
                 "address": "0xc1e0F9CBE05aa02Ac38a183d310c5aBD851E09F0",
                 "createdBlockNumber": 3902886,
                 "name": "contracts/lens/Quoter.sol:Quoter"
-            },
-            "LimitOrderBook": {
-                "address": "0x0D8C6A2e695F7e51C3561b8ef346f6D555175BeC",
-                "createdBlockNumber": 3051333,
-                "name": "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook"
-            },
-            "LimitOrderRewardVault": {
-                "address": "0x9d2c256A74482399b8B8a69E50AbF7db94F2Ad0F",
-                "createdBlockNumber": 3051313,
-                "name": "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault"
             }
         },
         "externalContracts": {},

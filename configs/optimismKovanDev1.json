@@ -160,7 +160,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#597cfc3db787aa4e638ce1bfacccd06cad43c9f1"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#6be9e1bfd5656b06e78a88f47c5d1ee8249f31c5"
     },
     "periphery": {
         "chainId": 69,
