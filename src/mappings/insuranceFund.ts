@@ -1,10 +1,10 @@
-import { FeeDistributed, Repaid, ThresholdChanged } from "../../generated/schema"
 import {
     FeeDistributed as FeeDistributedEvent,
     Repaid as RepaidEvent,
     ThresholdChanged as ThresholdChangedEvent,
 } from "../../generated/InsuranceFund/InsuranceFund"
-import { VAULT_DECIMALS, fromWei } from "../utils/numbers"
+import { FeeDistributed, Repaid, ThresholdChanged } from "../../generated/schema"
+import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
 
 import { getOrCreateProtocol } from "../utils/stores"
 
@@ -15,7 +15,7 @@ export function handleFeeDistributed(event: FeeDistributedEvent): void {
     const feeDistributed = new FeeDistributed(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
     feeDistributed.timestamp = event.block.timestamp
     feeDistributed.surplus = surplus
-    feeDistributed.insuranceFundWalletBalance = fromWei(event.params.insuranceFundWalletBalance, VAULT_DECIMALS)
+    feeDistributed.insuranceFundCapacity = fromWei(event.params.insuranceFundCapacity, VAULT_DECIMALS)
     feeDistributed.insuranceFundFreeCollateral = fromWei(event.params.insuranceFundFreeCollateral, VAULT_DECIMALS)
     feeDistributed.threshold = fromWei(event.params.threshold, VAULT_DECIMALS)
     feeDistributed.caller = event.transaction.from

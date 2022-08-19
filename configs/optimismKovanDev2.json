@@ -92,6 +92,11 @@
                 "createdBlockNumber": 2075280,
                 "name": "contracts/OrderBook.sol:OrderBook"
             },
+            "PriceFeedUpdater": {
+                "address": "0x0bEF30A73C0641A6a781B8fB49e3F38A3671B90E",
+                "createdBlockNumber": 5994849,
+                "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
+            },
             "QuoteToken": {
                 "address": "0xdBD16A50C2538B54C1E3344b757DDb1bD4cb013c",
                 "createdBlockNumber": 2075250,

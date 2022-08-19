@@ -756,8 +756,8 @@ type FeeDistributed @entity {
     timestamp: BigInt!
     "surplus amount"
     surplus: BigDecimal!
-    "usdc balance of insuranceFund"
-    insuranceFundWalletBalance: BigDecimal!
+    "capacity of insuranceFund"
+    insuranceFundCapacity: BigDecimal!
     "usdc freeCollateral balance of insuranceFund"
     insuranceFundFreeCollateral: BigDecimal!
     "threshold amount"
