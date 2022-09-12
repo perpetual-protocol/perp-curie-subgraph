@@ -678,10 +678,8 @@ type TraderDayData @entity {
 type ReferralCodeTraderDayData @entity {
     "format: <referal code>-<day id>-<trader>"
     id: ID!
-    "the tx from address"
+    "relationship to trader"
     trader: Trader!
-    "the trader whose position has changed"
-    positionChangedTrader: Trader!
     "relationship to referral day data"
     referralCodeDayData: ReferralCodeDayData!
     "trading volume in notional value"
