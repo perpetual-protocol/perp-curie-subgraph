@@ -417,7 +417,7 @@ export function handleReferralPositionChanged(event: ReferredPositionChanged): v
     // start from timestamp 1660435200 (2022-08-14T00:00:00.000Z)
     // trader is changed from tx sender to the one whose position has changed
     const traderAddr = event.block.timestamp.ge(BigInt.fromI32(1660435200))
-        ? Address.fromString(positionChangedEvent.trader.toString())
+        ? Address.fromBytes(positionChangedEvent.trader)
         : event.transaction.from
     const trader = getOrCreateTrader(traderAddr)
     // uptick trading vol and fees for the referral code day tracking for the trader
