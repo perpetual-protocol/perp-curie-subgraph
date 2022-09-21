@@ -1,15 +1,16 @@
 import { Address, TypedMap } from "@graphprotocol/graph-ts"
 
 export const Network = "{{ network }}"
-export const ChainId = "{{ chainId }}"
-export const Version = "{{ version }}"
-export const USDCAddress = Address.fromString("{{ externalContracts.USDC }}")
-export const QuoteTokenAddress = Address.fromString("{{ contracts.QuoteToken.address }}")
+export const ChainId = "{{ core.chainId }}"
+export const Version = "{{ &core.version }}"
+
+export const USDCAddress = Address.fromString("{{ core.externalContracts.USDC }}")
+export const QuoteTokenAddress = Address.fromString("{{ core.contracts.QuoteToken.address }}")
 
 export const baseTokenSymbolMap = new TypedMap<Address, string>()
-{{ #pools }}
+{{ #core.pools }}
 baseTokenSymbolMap.set(Address.fromString("{{ baseAddress }}"), "{{ baseSymbol }}")
-{{ /pools }}
+{{ /core.pools }}
 
 export const collateralMap = new TypedMap<Address, TypedMap<string, string>>()
 
@@ -17,13 +18,13 @@ export const USDC = new TypedMap<string, string>()
 USDC.set("name", "USD Coin")
 USDC.set("symbol", "USDC")
 USDC.set("decimals", "6")
-collateralMap.set(Address.fromString("{{ externalContracts.USDC }}"), USDC)
+collateralMap.set(Address.fromString("{{ core.externalContracts.USDC }}"), USDC)
 
-{{ #collaterals }}
+{{ #core.collaterals}}
 export const {{ symbol }} = new TypedMap<string, string>()
 {{ symbol }}.set("name", "{{ name }}")
 {{ symbol }}.set("symbol", "{{ symbol }}")
 {{ symbol }}.set("decimals", "{{ decimals }}")
 collateralMap.set(Address.fromString("{{ address }}"), {{ symbol }})
 
-{{ /collaterals }}
+{{ /core.collaterals}}
