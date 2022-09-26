@@ -55,6 +55,11 @@ async function main(): Promise<void> {
                 ...MetadataOptimismKovanPeriphery,
                 ...{ version: DependenciesOptimismKovanPeriphery["@perp/curie-periphery-contract"] },
             },
+            referral: {
+                contracts: {
+                    PerpetualProtocolReferrer: "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
+                },
+            },
         },
         {
             name: "optimism",
