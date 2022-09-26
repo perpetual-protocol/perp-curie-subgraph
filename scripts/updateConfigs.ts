@@ -58,7 +58,7 @@ async function main(): Promise<void> {
             referral: {
                 contracts: {
                     PerpetualProtocolReferrer: "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
-                    PerpetualProtocolReferrerStartBlock: 7648933,
+                    PerpetualProtocolReferrerStartBlock: 7648933, // PerpetualProtocolReferrer createdBlockNumber
                 },
             },
             graft: {
@@ -80,7 +80,7 @@ async function main(): Promise<void> {
             referral: {
                 contracts: {
                     PerpetualProtocolReferrer: "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
-                    PerpetualProtocolReferrerStartBlock: 513591,
+                    PerpetualProtocolReferrerStartBlock: 513591, // ClearingHouse createdBlockNumber
                 },
             },
             graft: {
