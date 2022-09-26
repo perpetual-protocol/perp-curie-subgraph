@@ -61,6 +61,10 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrerStartBlock: 7648933,
                 },
             },
+            graft: {
+                base: "QmUqf8YY7GczPYekJTpV6ZTiEvCFtepo5gmWDSch35Gonr",
+                block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
+            },
         },
         {
             name: "optimism",
