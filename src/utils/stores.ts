@@ -1,6 +1,4 @@
-import { ADDRESS_ZERO, BD_ZERO, BI_ONE, BI_ZERO } from "./numbers"
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
-import { ChainId, Network, Version } from "../constants"
 import {
     Maker,
     Market,
@@ -17,7 +15,9 @@ import {
     TraderMarket,
     TraderTokenBalance,
 } from "../../generated/schema"
+import { ChainId, Network, Version } from "../constants"
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/token"
+import { ADDRESS_ZERO, BD_ZERO, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     return event.block.number.times(BigInt.fromI32(1000)).plus(event.logIndex)
@@ -280,7 +280,7 @@ export function createReferralCode(referralCode: string, referrer: Address, crea
     _referralCode.referrer = _referrer.id
     _referralCode.createdAt = createdAt
     _referralCode.registeredOnChain = true
-    _referralCode.numReferees = BI_ONE
+    _referralCode.numReferees = BI_ZERO
     _referralCode.save()
     return _referralCode!
 }
