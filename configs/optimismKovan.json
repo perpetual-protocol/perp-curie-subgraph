@@ -515,7 +515,8 @@
     },
     "referral": {
         "contracts": {
-            "PerpetualProtocolReferrer": "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969"
+            "PerpetualProtocolReferrer": "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
+            "PerpetualProtocolReferrerStartBlock": 7648933
         }
     }
 }
