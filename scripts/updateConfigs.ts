@@ -62,7 +62,7 @@ async function main(): Promise<void> {
                 },
             },
             graft: {
-                base: "QmUqf8YY7GczPYekJTpV6ZTiEvCFtepo5gmWDSch35Gonr",
+                base: "QmewMWZVjytS1stFYSzPozvcZCNfWsYHxd9Pm21DMubZAf",
                 block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
             },
         },
