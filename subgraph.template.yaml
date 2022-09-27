@@ -268,7 +268,7 @@ dataSources:
     source:
       abi: Referrer
       address: "{{ referral.contracts.PerpetualProtocolReferrer }}"
-      startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
+      startBlock: {{ referral.contracts.PerpetualProtocolReferrerStartBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

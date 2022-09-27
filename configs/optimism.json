@@ -447,7 +447,8 @@
     },
     "referral": {
         "contracts": {
-            "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106"
+            "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
+            "PerpetualProtocolReferrerStartBlock": 513591
         }
     },
     "graft": {

@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -391,45 +391,51 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
 export function handleReferralPositionChanged(event: ReferredPositionChanged): void {
     // the referral event is called right after position changed, we assume the
     // log index for the position changed is the one prior
-    let positionChangedLogIndex = event.logIndex.minus(BigInt.fromI32(1))
+    const positionChangedLogIndex = event.logIndex.minus(BigInt.fromI32(1))
     // // the referral event shares the same tx as the positionChanged event
-    let positionChangedEvent = PositionChanged.load(
+    const positionChangedEvent = PositionChanged.load(
         event.transaction.hash.toHexString() + "-" + positionChangedLogIndex.toString(),
     )
-    let code = event.params.referralCode.toString()
-
-    if (positionChangedEvent !== null) {
-        let trader = getOrCreateTrader(event.transaction.from)
-        let referralCode = getReferralCode(code)
-        if (referralCode !== null) {
-            let referralCodeDayData = getReferralCodeDayData(event, referralCode.id)
-            let referralCodeTraderDayData = getReferralCodeTraderDayData(referralCodeDayData.id, trader.id)
-
-            // uptick trading vol and fees for the referral code day tracking
-            referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(
-                abs(positionChangedEvent.exchangedPositionNotional),
-            )
-            referralCodeDayData.fees = referralCodeDayData.fees.plus(positionChangedEvent.fee)
-
-            // uptick trading vol and fees for the referral code day tracking for the trader
-            referralCodeTraderDayData.tradingVolume = referralCodeTraderDayData.tradingVolume.plus(
-                abs(positionChangedEvent.exchangedPositionNotional),
-            )
-            referralCodeTraderDayData.fees = referralCodeTraderDayData.fees.plus(positionChangedEvent.fee)
-
-            // uptick active traders for the referral code
-            let activeTraders = referralCodeDayData.activeReferees
-            if (!activeTraders.includes(trader.id)) {
-                activeTraders.push(trader.id)
-                referralCodeDayData.activeReferees = activeTraders
-            }
-
-            // Add the referrer code to the position changed event itself
-            positionChangedEvent.referralCode = code
-
-            referralCodeDayData.save()
-            referralCodeTraderDayData.save()
-            positionChangedEvent.save()
-        }
+    if (positionChangedEvent === null) {
+        return
     }
+
+    const code = event.params.referralCode.toString()
+    const referralCode = getReferralCode(code)
+    if (referralCode === null) {
+        return
+    }
+
+    const tradingVolume = abs(positionChangedEvent.exchangedPositionNotional)
+    const tradingFee = positionChangedEvent.fee
+
+    // uptick trading vol and fees for the referral code day tracking
+    const referralCodeDayData = getReferralCodeDayData(event, referralCode.id)
+    referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(tradingVolume)
+    referralCodeDayData.fees = referralCodeDayData.fees.plus(tradingFee)
+
+    // start from timestamp 1660435200 (2022-08-14T00:00:00.000Z)
+    // trader is changed from tx sender to the one whose position has changed
+    const traderAddr = event.block.timestamp.ge(BigInt.fromI32(1660435200))
+        ? Address.fromBytes(positionChangedEvent.trader)
+        : event.transaction.from
+    const trader = getOrCreateTrader(traderAddr)
+    // uptick trading vol and fees for the referral code day tracking for the trader
+    const referralCodeTraderDayData = getReferralCodeTraderDayData(referralCodeDayData.id, trader.id)
+    referralCodeTraderDayData.tradingVolume = referralCodeTraderDayData.tradingVolume.plus(tradingVolume)
+    referralCodeTraderDayData.fees = referralCodeTraderDayData.fees.plus(tradingFee)
+
+    // uptick active traders for the referral code
+    const activeTraders = referralCodeDayData.activeReferees
+    if (!activeTraders.includes(trader.id)) {
+        activeTraders.push(trader.id)
+        referralCodeDayData.activeReferees = activeTraders
+    }
+
+    // Add the referrer code to the position changed event itself
+    positionChangedEvent.referralCode = code
+
+    referralCodeDayData.save()
+    referralCodeTraderDayData.save()
+    positionChangedEvent.save()
 }

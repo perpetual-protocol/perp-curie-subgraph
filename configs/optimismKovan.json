@@ -512,5 +512,15 @@
         },
         "network": "optimism-kovan",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
+    },
+    "referral": {
+        "contracts": {
+            "PerpetualProtocolReferrer": "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
+            "PerpetualProtocolReferrerStartBlock": 7648933
+        }
+    },
+    "graft": {
+        "base": "QmewMWZVjytS1stFYSzPozvcZCNfWsYHxd9Pm21DMubZAf",
+        "block": 7648933
     }
 }

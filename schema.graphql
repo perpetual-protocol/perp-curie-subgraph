@@ -684,7 +684,7 @@ type TraderDayData @entity {
 type ReferralCodeTraderDayData @entity {
     "format: <referal code>-<day id>-<trader>"
     id: ID!
-    "relationship to trader"
+    "relationship to trader. since 2022-08-14, for contract traders, this value is changed from the tx sender to contract. eoa traders have no change"
     trader: Trader!
     "relationship to referral day data"
     referralCodeDayData: ReferralCodeDayData!

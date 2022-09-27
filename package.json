@@ -38,7 +38,7 @@
     "license": "BSD 3-Clause License",
     "devDependencies": {
         "@graphprotocol/graph-cli": "0.23.2",
-        "@graphprotocol/graph-ts": "0.24.0",
+        "@graphprotocol/graph-ts": "0.27.0",
         "@perp/curie-deployments": "2022.8.4-1659593225682",
         "@types/node-fetch": "2.5.12",
         "@uniswap/v3-core": "1.0.0",
