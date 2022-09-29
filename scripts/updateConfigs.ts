@@ -78,7 +78,7 @@ async function main(): Promise<void> {
                 },
             },
             graft: {
-                base: "QmewMWZVjytS1stFYSzPozvcZCNfWsYHxd9Pm21DMubZAf",
+                base: "QmU8p3pJSUZSfdVoMYKnJ2sZopLsHWdupWcLsmEZ1v1BfG",
                 block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
             },
         },
