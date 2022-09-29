@@ -164,6 +164,11 @@
                 "createdBlockNumber": 4026057,
                 "name": "contracts/BandPriceFeed.sol:BandPriceFeed"
             },
+            "PriceFeedUpdater": {
+                "address": "0x7Bc62D60b8A74cfe21D3E0101e26Ee6105F88969",
+                "createdBlockNumber": 6181437,
+                "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
+            },
             "QuoteToken": {
                 "address": "0xbD21D227d989A1Ee1BC717F1658474c487A06993",
                 "createdBlockNumber": 748017,
@@ -475,7 +480,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#cf7284f1575a4e46011d62de5b3597da60c82846"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#162cc27f43b4f5ac7605a70b30a15ae433fa01f3"
     },
     "periphery": {
         "chainId": 69,
@@ -508,7 +513,8 @@
         },
         "externalContracts": {
             "DefaultProxyAdmin": "0x5A99561F672C80Ae057d4c3Af3564343d2a6b193",
-            "PERP": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
+            "PERP": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+            "PerpetualProtocolReferrer": "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969"
         },
         "network": "optimism-kovan",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
