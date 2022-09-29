@@ -28,10 +28,10 @@ type Protocol @entity {
     badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
 
     "total bad debt settled"
-    totalSettledBadDebt: BigDecimal!
+    totalSettledBadDebt: BigDecimal
 
     "total repaid"
-    totalRepaid: BigDecimal!
+    totalRepaid: BigDecimal
 }
 
 # MarketRegistry

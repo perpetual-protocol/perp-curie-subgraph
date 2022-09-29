@@ -16,7 +16,12 @@ export function handleRepaid(event: RepaidEvent): void {
 
     // update protocol
     const protocol = getOrCreateProtocol()
-    protocol.totalRepaid = protocol.totalRepaid.plus(repaidAmount)
+    // protocol.totalRepaid could be null due to backward compatibility
+    if (protocol.totalRepaid !== null) {
+        protocol.totalRepaid = protocol.totalRepaid!.plus(repaidAmount)
+    } else {
+        protocol.totalRepaid = repaidAmount
+    }
 
     // commit changes
     repaid.save()

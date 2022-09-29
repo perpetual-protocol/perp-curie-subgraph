@@ -190,7 +190,12 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
 
     // update protocol
     const protocol = getOrCreateProtocol()
-    protocol.totalSettledBadDebt = protocol.totalSettledBadDebt.plus(badDebtAmount)
+    // protocol.totalSettledBadDebt could be null due to backward compatibility
+    if (protocol.totalSettledBadDebt !== null) {
+        protocol.totalSettledBadDebt = protocol.totalSettledBadDebt!.plus(badDebtAmount)
+    } else {
+        protocol.totalSettledBadDebt = badDebtAmount
+    }
 
     // commit changes
     badDebtSettled.save()
