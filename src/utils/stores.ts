@@ -286,7 +286,7 @@ export function createReferralCode(referralCode: string, referrer: Address, crea
     _referralCode.save()
     return _referralCode!
 }
-o
+
 export function getReferralCode(referralCode: string): ReferralCode | null {
     return ReferralCode.load(referralCode)
 }
