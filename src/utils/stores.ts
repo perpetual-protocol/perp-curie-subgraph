@@ -39,6 +39,8 @@ export function getOrCreateProtocol(): Protocol {
         protocol.totalValueLocked = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
+        protocol.totalSettledBadDebt = BD_ZERO
+        protocol.totalRepaid = BD_ZERO
         protocol.save()
     }
     return protocol
@@ -284,7 +286,7 @@ export function createReferralCode(referralCode: string, referrer: Address, crea
     _referralCode.save()
     return _referralCode!
 }
-
+o
 export function getReferralCode(referralCode: string): ReferralCode | null {
     return ReferralCode.load(referralCode)
 }
