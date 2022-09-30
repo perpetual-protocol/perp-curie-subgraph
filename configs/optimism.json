@@ -472,6 +472,7 @@
     },
     "graft": {
         "base": "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
+        "baseForSelfHosted": "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs",
         "block": 13868230
     }
 }

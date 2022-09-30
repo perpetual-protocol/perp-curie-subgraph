@@ -77,8 +77,11 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrerStartBlock: 7648933, // PerpetualProtocolReferrer createdBlockNumber
                 },
             },
+            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
+            // so we might need to set different graft.base
             graft: {
                 base: "QmU8p3pJSUZSfdVoMYKnJ2sZopLsHWdupWcLsmEZ1v1BfG",
+                baseForSelfHosted: "QmU8p3pJSUZSfdVoMYKnJ2sZopLsHWdupWcLsmEZ1v1BfG",
                 block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
             },
         },
@@ -99,12 +102,11 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrerStartBlock: 513591, // ClearingHouse createdBlockNumber
                 },
             },
-            // TODO: The Graph and self-hosted graph node might need different graft.base
-            // since subgraph id exists in self-hosted graph node, might not exist in The Graph
-            // The Graph: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
-            // self-hosted: "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs"
+            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
+            // so we might need to set different graft.base
             graft: {
                 base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
+                baseForSelfHosted: "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs",
                 block: 13868230, // DelegateApproval createdBlockNumber
             },
         },
