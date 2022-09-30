@@ -46,6 +46,7 @@ dataSources:
         - Protocol
         - Trader
         - CollateralLiquidated
+        - BadDebtSettled
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -56,6 +57,8 @@ dataSources:
           handler: handleWithdrawn
         - event: CollateralLiquidated(indexed address,indexed address,indexed address,uint256,uint256,uint256,uint24)
           handler: handleCollateralLiquidated
+        - event: BadDebtSettled(indexed address,uint256)
+          handler: handleBadDebtSettled
 
   - kind: ethereum/contract
     name: Exchange
@@ -145,6 +148,28 @@ dataSources:
       eventHandlers:
         - event: PnlRealized(indexed address,int256)
           handler: handlePnlRealized
+
+  - kind: ethereum/contract
+    name: InsuranceFund
+    network: {{ network }}
+    source:
+      abi: InsuranceFund
+      address: "{{ core.contracts.InsuranceFund.address }}"
+      startBlock: {{ core.contracts.InsuranceFund.createdBlockNumber }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/insuranceFund.ts
+      entities:
+        - Protocol
+        - Repaid
+      abis:
+        - name: InsuranceFund
+          file: ./abis/InsuranceFund.json
+      eventHandlers:
+        - event: Repaid(uint256,uint256)
+          handler: handleRepaid
 
   - kind: ethereum/contract
     name: CollateralManager
@@ -243,7 +268,7 @@ dataSources:
     source:
       abi: Referrer
       address: "{{ referral.contracts.PerpetualProtocolReferrer }}"
-      startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
+      startBlock: {{ referral.contracts.PerpetualProtocolReferrerStartBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5

@@ -8,7 +8,7 @@
                 "address": "0xF38d03C1da6df7dD7499Cd3D33fdf7232D356Ec4",
                 "decimals": 6,
                 "name": "Test Tether",
-                "priceFeedAddress": "0xC73512750D57b701158fde412eCe811C2E64281D",
+                "priceFeedAddress": "0xD3807F9Cde3085AA23600F501A9B8A4D68a10d21",
                 "symbol": "TestUSDT"
             },
             {
@@ -103,8 +103,8 @@
                 "name": "contracts/QuoteToken.sol:QuoteToken"
             },
             "USDTUSDChainlinkPriceFeed": {
-                "address": "0xC73512750D57b701158fde412eCe811C2E64281D",
-                "createdBlockNumber": 3432851,
+                "address": "0xD3807F9Cde3085AA23600F501A9B8A4D68a10d21",
+                "createdBlockNumber": 4814031,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
             "Vault": {
@@ -160,7 +160,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#aa8ac0266631b8d93edc73fd0fd42a0db813bdea"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#f0051fd5b03ee5613d9526cc2978751077323f47"
     },
     "periphery": {
         "chainId": 69,
@@ -193,9 +193,9 @@
         },
         "externalContracts": {
             "DefaultProxyAdmin": "0xc4E7A63cF97Dd808C2341Ed1a98Aa67584Ff6709",
-            "PERP": "0x77F6B7f15711C25520D791Fe4A9C781eE7e9093B"
+            "PERP": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
         },
         "network": "optimism-kovan",
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#6d1219aadabc373b7e8b580a1ebbc86fed4a3bde"
+        "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
     }
 }

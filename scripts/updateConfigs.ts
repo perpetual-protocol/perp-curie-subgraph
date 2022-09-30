@@ -39,8 +39,24 @@ async function main(): Promise<void> {
                 ...MetadataOptimismKovanDev2,
                 ...{ version: DependenciesOptimismKovanDev2["@perp/curie-contract"] },
             },
+            // we use dev1 limitOrderBook info here, will replace it after deploy to dev2
             periphery: {
                 ...MetadataOptimismKovanDev2Periphery,
+                ...{
+                    contracts: {
+                        ...MetadataOptimismKovanDev2Periphery.contracts,
+                        LimitOrderBook: {
+                            address: "0x0D8C6A2e695F7e51C3561b8ef346f6D555175BeC",
+                            createdBlockNumber: 3051333,
+                            name: "contracts/limitOrder/LimitOrderBook.sol:LimitOrderBook",
+                        },
+                        LimitOrderRewardVault: {
+                            address: "0x9d2c256A74482399b8B8a69E50AbF7db94F2Ad0F",
+                            createdBlockNumber: 3051313,
+                            name: "contracts/limitOrder/LimitOrderRewardVault.sol:LimitOrderRewardVault",
+                        },
+                    },
+                },
                 ...{ version: DependenciesOptimismKovanDev2Periphery["@perp/curie-periphery-contract"] },
             },
         },
@@ -54,6 +70,16 @@ async function main(): Promise<void> {
             periphery: {
                 ...MetadataOptimismKovanPeriphery,
                 ...{ version: DependenciesOptimismKovanPeriphery["@perp/curie-periphery-contract"] },
+            },
+            referral: {
+                contracts: {
+                    PerpetualProtocolReferrer: "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
+                    PerpetualProtocolReferrerStartBlock: 7648933, // PerpetualProtocolReferrer createdBlockNumber
+                },
+            },
+            graft: {
+                base: "QmU8p3pJSUZSfdVoMYKnJ2sZopLsHWdupWcLsmEZ1v1BfG",
+                block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
             },
         },
         {
@@ -70,6 +96,7 @@ async function main(): Promise<void> {
             referral: {
                 contracts: {
                     PerpetualProtocolReferrer: "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
+                    PerpetualProtocolReferrerStartBlock: 513591, // ClearingHouse createdBlockNumber
                 },
             },
             graft: {
