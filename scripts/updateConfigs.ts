@@ -99,6 +99,10 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrerStartBlock: 513591, // ClearingHouse createdBlockNumber
                 },
             },
+            // TODO: The Graph and self-hosted graph node might need different graft.base
+            // since subgraph id exists in self-hosted graph node, might not exist in The Graph
+            // The Graph: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
+            // self-hosted: "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs"
             graft: {
                 base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
                 block: 13868230, // DelegateApproval createdBlockNumber
