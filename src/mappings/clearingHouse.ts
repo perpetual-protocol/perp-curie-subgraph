@@ -16,7 +16,6 @@ import {
 } from "../../generated/schema"
 import { Network } from "../constants"
 import { hardFixedDataMap as hardFixedDataMapOP } from "../hard-fixed-data/optimism"
-import { hardFixedDataMap as hardFixedDataMapOPKovan } from "../hard-fixed-data/optimism-kovan"
 import { HardFixedDataMap } from "../hard-fixed-data/types"
 import { abs, BD_ZERO, BI_ZERO, DUST_POSITION_SIZE, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
@@ -36,7 +35,6 @@ import {
 
 const map = new Map<string, HardFixedDataMap>()
 map.set("optimism", hardFixedDataMapOP)
-map.set("optimism-kovan", hardFixedDataMapOPKovan)
 const hardFixedDataMap = map.get(Network)
 
 export function handlePositionClosed(event: PositionClosedEvent): void {
