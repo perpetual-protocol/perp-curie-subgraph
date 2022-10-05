@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes, TypedMap } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -33,7 +33,8 @@ import {
     getTraderDayData,
 } from "../utils/stores"
 
-const map = new Map<string, HardFixedDataMap>()
+// NOTE: always use TypedMap instead of Map, Map.get() will throw an error if the key does not exist
+const map = new TypedMap<string, HardFixedDataMap>()
 map.set("optimism", hardFixedDataMapOP)
 const hardFixedDataMap = map.get(Network)
 
@@ -299,21 +300,24 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
+
     // hard fix: since some position changed events are missing when cancelExcessOrder()
     // we need to update the position size and open notional for missing events
-    const txHash = event.transaction.hash.toHexString()
-    const baseToken = event.params.baseToken.toHexString()
-    if (hardFixedDataMap.has(txHash)) {
-        const baseTokenMap = hardFixedDataMap.get(txHash)
-        if (baseTokenMap.has(baseToken)) {
-            const fixedDataMap = baseTokenMap.get(baseToken)
+    if (hardFixedDataMap) {
+        const txHash = event.transaction.hash.toHexString()
+        const baseToken = event.params.baseToken.toHexString()
+        const baseTokenMap = hardFixedDataMap!.get(txHash)
+        if (baseTokenMap) {
+            const fixedDataMap = baseTokenMap!.get(baseToken)
+            if (fixedDataMap) {
+                traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")!
+                traderMarket.openNotional = fixedDataMap.get("openNotional")!
 
-            traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")
-            traderMarket.openNotional = fixedDataMap.get("openNotional")
-
-            const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
-            position.positionSize = fixedDataMap.get("takerPositionSize")
-            position.openNotional = fixedDataMap.get("openNotional")
+                const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
+                position.positionSize = fixedDataMap.get("takerPositionSize")!
+                position.openNotional = fixedDataMap.get("openNotional")!
+                position.save()
+            }
         }
     }
 
