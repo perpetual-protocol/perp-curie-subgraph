@@ -1,4 +1,4 @@
-name: Deploy Staging (Optimism Kovan)
+name: Deploy Staging (Optimism Goerli)
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
       - name: Deploy to The Graph
         run: |
           npx graph auth --product hosted-service ${{ secrets.THE_GRAPH_ACCESS_TOKEN }}
-          npm run deploy-the-graph:optimism-kovan
+          npm run deploy-the-graph:optimism-goerli
 
       - name: Configure AWS Credentials - aws eks update-kubeconfig
         uses: aws-actions/configure-aws-credentials@v1
@@ -46,7 +46,7 @@ jobs:
       - name: Deploy to Self-hosted Graph Node
         run: |
           kubectl port-forward service/graph-node 8020:8020 &
-          npm run deploy-self-hosted:optimism-kovan
+          npm run deploy-self-hosted:optimism-goerli
 
   notify:
     needs: [deploy]
@@ -58,6 +58,6 @@ jobs:
         uses: Ilshidur/action-discord@master
         with:
           args: >-
-            **[staging]** Perp v2 Subgraph deployed (Optimism Kovan)
+            **[staging]** Perp v2 Subgraph deployed (Optimism Goerli)
             Commit: ${{ github.sha }}
             Branch: ${{ github.ref }}
