@@ -18,14 +18,6 @@
     - Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-goerli`
     - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
-- Optimism Kovan Dev 1
-    - Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-- Optimism Kovan Dev 2
-    - Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
 
 ### Self-hosted Graph Node
 
@@ -37,14 +29,6 @@
     - Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql`
     - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
-- Optimism Kovan Dev 1
-    - Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1/graphql`
-    - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-- Optimism Kovan Dev 2
-    - Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2/graphql`
-    - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
 
 ## Deployment
 
