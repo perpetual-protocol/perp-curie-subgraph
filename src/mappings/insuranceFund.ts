@@ -1,8 +1,8 @@
-import { VAULT_DECIMALS, fromWei } from "../utils/numbers"
+import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
 
-import { Repaid } from "../../generated/schema"
 import { Repaid as RepaidEvent } from "../../generated/InsuranceFund/InsuranceFund"
-import { getOrCreateProtocol } from "../utils/stores"
+import { Repaid } from "../../generated/schema"
+import { getBlockNumberLogIndex, getOrCreateProtocol } from "../utils/stores"
 
 export function handleRepaid(event: RepaidEvent): void {
     const repaidAmount = fromWei(event.params.repaidAmount, VAULT_DECIMALS)
@@ -13,6 +13,10 @@ export function handleRepaid(event: RepaidEvent): void {
     repaid.repaidAmount = repaidAmount
     repaid.tokenBalanceAfterRepaid = tokenBalanceAfterRepaid
     repaid.caller = event.transaction.from
+
+    repaid.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    repaid.blockNumber = event.block.number
+    repaid.timestamp = event.block.timestamp
 
     // update protocol
     const protocol = getOrCreateProtocol()

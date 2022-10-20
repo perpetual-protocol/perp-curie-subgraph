@@ -1,9 +1,10 @@
 import { BigDecimal } from "@graphprotocol/graph-ts"
 import { BadDebtSettled, CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
 import {
-    BadDebtSettled as BadDebtSettledEvent, CollateralLiquidated as CollateralLiquidatedEvent,
+    BadDebtSettled as BadDebtSettledEvent,
+    CollateralLiquidated as CollateralLiquidatedEvent,
     Deposited as DepositedEvent,
-    Withdrawn as WithdrawnEvent
+    Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
 import { fromWei, RATIO_ONE, VAULT_DECIMALS } from "../utils/numbers"
@@ -14,7 +15,7 @@ import {
     getOrCreateProtocolTokenBalance,
     getOrCreateToken,
     getOrCreateTrader,
-    getOrCreateTraderTokenBalance
+    getOrCreateTraderTokenBalance,
 } from "../utils/stores"
 
 export function handleDeposited(event: DepositedEvent): void {
@@ -187,6 +188,10 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
     badDebtSettled.trader = event.params.trader
     badDebtSettled.amount = badDebtAmount
     badDebtSettled.caller = event.transaction.from
+
+    badDebtSettled.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    badDebtSettled.blockNumber = event.block.number
+    badDebtSettled.timestamp = event.block.timestamp
 
     // update protocol
     const protocol = getOrCreateProtocol()

@@ -741,6 +741,13 @@ type BadDebtSettled @entity {
     amount: BigDecimal!
     "caller"
     caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
 
 type Repaid @entity {
@@ -752,4 +759,11 @@ type Repaid @entity {
     tokenBalanceAfterRepaid: BigDecimal!
     "caller"
     caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
