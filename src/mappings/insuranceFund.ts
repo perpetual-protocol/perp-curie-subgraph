@@ -1,8 +1,8 @@
-import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
-
+import { BigInt } from "@graphprotocol/graph-ts"
 import { Repaid as RepaidEvent } from "../../generated/InsuranceFund/InsuranceFund"
 import { Repaid } from "../../generated/schema"
-import { getBlockNumberLogIndex, getOrCreateProtocol } from "../utils/stores"
+import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
+import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleRepaid(event: RepaidEvent): void {
     const repaidAmount = fromWei(event.params.repaidAmount, VAULT_DECIMALS)
@@ -27,7 +27,13 @@ export function handleRepaid(event: RepaidEvent): void {
         protocol.totalRepaid = repaidAmount
     }
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "Repaid"
+
     // commit changes
     repaid.save()
     protocol.save()
+    protocolEventInfo.save()
 }
