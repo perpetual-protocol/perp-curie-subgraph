@@ -767,3 +767,12 @@ type Repaid @entity {
     "block timestamp"
     timestamp: BigInt!
 }
+
+type ProtocolEventInfo @entity {
+    "hardcoded as 'protocol-event-info'"
+    id: ID!
+    "total count of all events"
+    totalEventCount: BigInt!
+    "last process event name"
+    lastProcessedEventName: String!
+}
