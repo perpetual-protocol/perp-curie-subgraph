@@ -1,7 +1,13 @@
+import { BigInt } from "@graphprotocol/graph-ts"
 import { PnlRealized as PnlRealizedEvent } from "../../generated/AccountBalance/AccountBalance"
 import { PnlRealized } from "../../generated/schema"
 import { fromWei } from "../utils/numbers"
-import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateTrader } from "../utils/stores"
+import {
+    getBlockNumberLogIndex,
+    getOrCreateProtocol,
+    getOrCreateProtocolEventInfo,
+    getOrCreateTrader,
+} from "../utils/stores"
 
 export function handlePnlRealized(event: PnlRealizedEvent): void {
     // insert PnlRealized
@@ -26,8 +32,14 @@ export function handlePnlRealized(event: PnlRealizedEvent): void {
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PnlRealized"
+
     // commit changes
     pnlRealized.save()
     trader.save()
     protocol.save()
+    protocolEventInfo.save()
 }

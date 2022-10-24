@@ -4,10 +4,17 @@ import {
     OnUncappedPartnerAssigned,
     OnUncappedPartnerRemoved,
 } from "../../generated/Referrer/Referrer"
-import { createReferralCode, getOrCreateTrader, getReferralCode, getReferralCodeDayData } from "../utils/stores"
+import {
+    createReferralCode,
+    getOrCreateProtocolEventInfo,
+    getOrCreateTrader,
+    getReferralCode,
+    getReferralCodeDayData,
+} from "../utils/stores"
 
-import { BI_ONE } from "../utils/numbers"
+import { BigInt } from "@graphprotocol/graph-ts"
 import { ReferralCode } from "../../generated/schema"
+import { BI_ONE } from "../utils/numbers"
 
 export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
     let trader = getOrCreateTrader(event.params.createdFor)
@@ -15,7 +22,15 @@ export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
     // createdFor represents the referrer
     createReferralCode(event.params.referralCode, event.params.createdFor, event.params.timestamp)
     trader.referrerCode = event.params.referralCode
+
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnReferralCodeCreated"
+
+    // commit changes
     trader.save()
+    protocolEventInfo.save()
 }
 
 export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void {
@@ -37,6 +52,14 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
             handleRefCodeUpdate(event)
             break
     }
+
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnReferralCodeUpserted"
+
+    // commit changes
+    protocolEventInfo.save()
 }
 
 function handleRefCodeAdd(event: OnReferralCodeUpserted): void {
@@ -116,6 +139,14 @@ export function handleUncappedPartnerUpserted(event: OnUncappedPartnerAssigned):
             referralCode.save()
         }
     }
+
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerAssigned"
+
+    // commit changes
+    protocolEventInfo.save()
 }
 
 export function handleUncappedPartnerRemoved(event: OnUncappedPartnerRemoved): void {
@@ -131,4 +162,12 @@ export function handleUncappedPartnerRemoved(event: OnUncappedPartnerRemoved): v
             referralCode.save()
         }
     }
+
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerRemoved"
+
+    // commit changes
+    protocolEventInfo.save()
 }

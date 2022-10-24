@@ -1,8 +1,8 @@
-import { VAULT_DECIMALS, fromWei } from "../utils/numbers"
-
-import { Repaid } from "../../generated/schema"
+import { BigInt } from "@graphprotocol/graph-ts"
 import { Repaid as RepaidEvent } from "../../generated/InsuranceFund/InsuranceFund"
-import { getOrCreateProtocol } from "../utils/stores"
+import { Repaid } from "../../generated/schema"
+import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
+import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleRepaid(event: RepaidEvent): void {
     const repaidAmount = fromWei(event.params.repaidAmount, VAULT_DECIMALS)
@@ -14,6 +14,10 @@ export function handleRepaid(event: RepaidEvent): void {
     repaid.tokenBalanceAfterRepaid = tokenBalanceAfterRepaid
     repaid.caller = event.transaction.from
 
+    repaid.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    repaid.blockNumber = event.block.number
+    repaid.timestamp = event.block.timestamp
+
     // update protocol
     const protocol = getOrCreateProtocol()
     // protocol.totalRepaid could be null due to backward compatibility
@@ -23,7 +27,13 @@ export function handleRepaid(event: RepaidEvent): void {
         protocol.totalRepaid = repaidAmount
     }
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "Repaid"
+
     // commit changes
     repaid.save()
     protocol.save()
+    protocolEventInfo.save()
 }
