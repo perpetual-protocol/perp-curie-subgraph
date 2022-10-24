@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { Address, BigInt, Bytes, TypedMap } from "@graphprotocol/graph-ts"
 import {
     FundingPaymentSettled as FundingPaymentSettledEvent,
     LiquidityChanged as LiquidityChangedEvent,
@@ -16,7 +16,6 @@ import {
 } from "../../generated/schema"
 import { Network } from "../constants"
 import { hardFixedDataMap as hardFixedDataMapOP } from "../hard-fixed-data/optimism"
-import { hardFixedDataMap as hardFixedDataMapOPKovan } from "../hard-fixed-data/optimism-kovan"
 import { HardFixedDataMap } from "../hard-fixed-data/types"
 import { abs, BD_ZERO, BI_ZERO, DUST_POSITION_SIZE, fromSqrtPriceX96, fromWei } from "../utils/numbers"
 import {
@@ -26,6 +25,7 @@ import {
     getOrCreateOpenOrder,
     getOrCreatePosition,
     getOrCreateProtocol,
+    getOrCreateProtocolEventInfo,
     getOrCreateTrader,
     getOrCreateTraderMarket,
     getReferralCode,
@@ -34,9 +34,9 @@ import {
     getTraderDayData,
 } from "../utils/stores"
 
-const map = new Map<string, HardFixedDataMap>()
+// NOTE: always use TypedMap instead of Map, Map.get() will throw an error if the key does not exist
+const map = new TypedMap<string, HardFixedDataMap>()
 map.set("optimism", hardFixedDataMapOP)
-map.set("optimism-kovan", hardFixedDataMapOPKovan)
 const hardFixedDataMap = map.get(Network)
 
 export function handlePositionClosed(event: PositionClosedEvent): void {
@@ -100,9 +100,15 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionClosed"
+
     // commit changes
     positionClosed.save()
     protocol.save()
+    protocolEventInfo.save()
     market.save()
     trader.save()
     traderMarket.save()
@@ -211,9 +217,15 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderDayData.fee = traderDayData.fee.plus(event.params.fee)
     traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionChanged"
+
     // commit changes
     positionChanged.save()
     protocol.save()
+    protocolEventInfo.save()
     market.save()
     trader.save()
     traderMarket.save()
@@ -255,11 +267,17 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     traderMarket.timestamp = event.block.timestamp
     traderMarket.liquidationFee = traderMarket.liquidationFee.plus(positionLiquidated.liquidationFee)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionLiquidated"
+
     // commit changes
     positionLiquidated.save()
     position.save()
     trader.save()
     traderMarket.save()
+    protocolEventInfo.save()
 }
 
 export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
@@ -301,21 +319,24 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.blockNumber = event.block.number
     traderMarket.timestamp = event.block.timestamp
     traderMarket.makerFee = traderMarket.makerFee.plus(liquidityChanged.quoteFee)
+
     // hard fix: since some position changed events are missing when cancelExcessOrder()
     // we need to update the position size and open notional for missing events
-    const txHash = event.transaction.hash.toHexString()
-    const baseToken = event.params.baseToken.toHexString()
-    if (hardFixedDataMap.has(txHash)) {
-        const baseTokenMap = hardFixedDataMap.get(txHash)
-        if (baseTokenMap.has(baseToken)) {
-            const fixedDataMap = baseTokenMap.get(baseToken)
+    if (hardFixedDataMap) {
+        const txHash = event.transaction.hash.toHexString()
+        const baseToken = event.params.baseToken.toHexString()
+        const baseTokenMap = hardFixedDataMap!.get(txHash)
+        if (baseTokenMap) {
+            const fixedDataMap = baseTokenMap!.get(baseToken)
+            if (fixedDataMap) {
+                traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")!
+                traderMarket.openNotional = fixedDataMap.get("openNotional")!
 
-            traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")
-            traderMarket.openNotional = fixedDataMap.get("openNotional")
-
-            const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
-            position.positionSize = fixedDataMap.get("takerPositionSize")
-            position.openNotional = fixedDataMap.get("openNotional")
+                const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
+                position.positionSize = fixedDataMap.get("takerPositionSize")!
+                position.openNotional = fixedDataMap.get("openNotional")!
+                position.save()
+            }
         }
     }
 
@@ -341,6 +362,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
     market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "LiquidityChanged"
+
     // commit changes
     liquidityChanged.save()
     maker.save()
@@ -348,6 +374,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.save()
     openOrder.save()
     market.save()
+    protocolEventInfo.save()
 }
 
 export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): void {
@@ -381,11 +408,17 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     traderMarket.timestamp = event.block.timestamp
     traderMarket.fundingPayment = traderMarket.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "FundingPaymentSettled"
+
     // commit changes
     fundingPaymentSettled.save()
     position.save()
     trader.save()
     traderMarket.save()
+    protocolEventInfo.save()
 }
 
 export function handleReferralPositionChanged(event: ReferredPositionChanged): void {
@@ -435,7 +468,13 @@ export function handleReferralPositionChanged(event: ReferredPositionChanged): v
     // Add the referrer code to the position changed event itself
     positionChangedEvent.referralCode = code
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "ReferralPositionChanged"
+
     referralCodeDayData.save()
     referralCodeTraderDayData.save()
     positionChangedEvent.save()
+    protocolEventInfo.save()
 }

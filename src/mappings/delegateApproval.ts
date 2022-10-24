@@ -4,7 +4,7 @@ import {
     DelegationRevoked as DelegationRevokedEvent,
 } from "../../generated/DelegateApproval/DelegateApproval"
 import { DelegationApproved, DelegationRevoked } from "../../generated/schema"
-import { getBlockNumberLogIndex, getOrCreateProtocol } from "../utils/stores"
+import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     // insert delegationApproved
@@ -24,9 +24,15 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "DelegationApproved"
+
     // commit changes
     delegationApproved.save()
     protocol.save()
+    protocolEventInfo.save()
 }
 
 export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
@@ -47,7 +53,13 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "DelegationRevoked"
+
     // commit changes
     delegationRevoked.save()
     protocol.save()
+    protocolEventInfo.save()
 }

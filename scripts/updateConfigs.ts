@@ -1,18 +1,18 @@
+import DependenciesOptimismGoerli from "@perp/curie-deployments/optimism-goerli/core/dependencies.json"
+import MetadataOptimismGoerli from "@perp/curie-deployments/optimism-goerli/core/metadata.json"
 import DependenciesOptimismKovanDev1 from "@perp/curie-deployments/optimism-kovan-dev1/core/dependencies.json"
 import MetadataOptimismKovanDev1 from "@perp/curie-deployments/optimism-kovan-dev1/core/metadata.json"
 import DependenciesOptimismKovanDev2 from "@perp/curie-deployments/optimism-kovan-dev2/core/dependencies.json"
 import MetadataOptimismKovanDev2 from "@perp/curie-deployments/optimism-kovan-dev2/core/metadata.json"
-import DependenciesOptimismKovan from "@perp/curie-deployments/optimism-kovan/core/dependencies.json"
-import MetadataOptimismKovan from "@perp/curie-deployments/optimism-kovan/core/metadata.json"
 import DependenciesOptimism from "@perp/curie-deployments/optimism/core/dependencies.json"
 import MetadataOptimism from "@perp/curie-deployments/optimism/core/metadata.json"
 
+import DependenciesOptimismGoerliPeriphery from "@perp/curie-deployments/optimism-goerli/periphery/dependencies.json"
+import MetadataOptimismGoerliPeriphery from "@perp/curie-deployments/optimism-goerli/periphery/metadata.json"
 import DependenciesOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/dependencies.json"
 import MetadataOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/metadata.json"
 import DependenciesOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/dependencies.json"
 import MetadataOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/metadata.json"
-import DependenciesOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/dependencies.json"
-import MetadataOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/metadata.json"
 import DependenciesOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/dependencies.json"
 import MetadataOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/metadata.json"
 
@@ -61,26 +61,22 @@ async function main(): Promise<void> {
             },
         },
         {
-            name: "optimismKovan",
-            network: "optimism-kovan",
+            name: "optimismGoerli",
+            network: "optimism-goerli",
             core: {
-                ...MetadataOptimismKovan,
-                ...{ version: DependenciesOptimismKovan["@perp/curie-contract"] },
+                ...MetadataOptimismGoerli,
+                ...{ version: DependenciesOptimismGoerli["@perp/curie-contract"] },
             },
             periphery: {
-                ...MetadataOptimismKovanPeriphery,
-                ...{ version: DependenciesOptimismKovanPeriphery["@perp/curie-periphery-contract"] },
+                ...MetadataOptimismGoerliPeriphery,
+                ...{ version: DependenciesOptimismGoerliPeriphery["@perp/curie-periphery-contract"] },
             },
-            referral: {
-                contracts: {
-                    PerpetualProtocolReferrer: "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
-                    PerpetualProtocolReferrerStartBlock: 7648933, // PerpetualProtocolReferrer createdBlockNumber
-                },
-            },
-            graft: {
-                base: "QmU8p3pJSUZSfdVoMYKnJ2sZopLsHWdupWcLsmEZ1v1BfG",
-                block: 7648933, // PerpetualProtocolReferrer createdBlockNumber
-            },
+            // referral: {
+            //     contracts: {
+            //         PerpetualProtocolReferrer: "0x5613A1522Ee8CFC38a036d51e8Dc7a5273301969",
+            //         PerpetualProtocolReferrerStartBlock: 7648933, // PerpetualProtocolReferrer createdBlockNumber
+            //     },
+            // },
         },
         {
             name: "optimism",
@@ -99,10 +95,13 @@ async function main(): Promise<void> {
                     PerpetualProtocolReferrerStartBlock: 513591, // ClearingHouse createdBlockNumber
                 },
             },
-            graft: {
-                base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
-                block: 13868230, // DelegateApproval createdBlockNumber
-            },
+            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
+            // so we might need to set different graft.base
+            // graft: {
+            //     base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
+            //     baseForSelfHosted: "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs",
+            //     block: 13868230, // DelegateApproval createdBlockNumber
+            // },
         },
     ]
 
