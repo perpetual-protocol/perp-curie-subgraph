@@ -1,9 +1,10 @@
-import { BigDecimal } from "@graphprotocol/graph-ts"
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts"
 import { BadDebtSettled, CollateralLiquidated, Deposited, Trader, Withdrawn } from "../../generated/schema"
 import {
-    BadDebtSettled as BadDebtSettledEvent, CollateralLiquidated as CollateralLiquidatedEvent,
+    BadDebtSettled as BadDebtSettledEvent,
+    CollateralLiquidated as CollateralLiquidatedEvent,
     Deposited as DepositedEvent,
-    Withdrawn as WithdrawnEvent
+    Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
 import { USDCAddress } from "../constants"
 import { fromWei, RATIO_ONE, VAULT_DECIMALS } from "../utils/numbers"
@@ -11,10 +12,11 @@ import {
     formatTraderId,
     getBlockNumberLogIndex,
     getOrCreateProtocol,
+    getOrCreateProtocolEventInfo,
     getOrCreateProtocolTokenBalance,
     getOrCreateToken,
     getOrCreateTrader,
-    getOrCreateTraderTokenBalance
+    getOrCreateTraderTokenBalance,
 } from "../utils/stores"
 
 export function handleDeposited(event: DepositedEvent): void {
@@ -61,11 +63,17 @@ export function handleDeposited(event: DepositedEvent): void {
         protocolNonSettlementTokenBalance.save()
     }
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "Deposited"
+
     // commit changes
     token.save()
     deposited.save()
     trader.save()
     protocol.save()
+    protocolEventInfo.save()
 }
 
 export function handleWithdrawn(event: WithdrawnEvent): void {
@@ -112,11 +120,17 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
         protocolNonSettlementTokenBalance.save()
     }
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "Withdrawn"
+
     // commit changes
     token.save()
     withdrawn.save()
     trader.save()
     protocol.save()
+    protocolEventInfo.save()
 }
 
 export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): void {
@@ -170,6 +184,11 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
         .plus(repaidSettlementWithoutInsuranceFundFee)
         .plus(insuranceFundFee)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "CollateralLiquidated"
+
     collateralToken.save()
     settlementToken.save()
     collateralLiquidated.save()
@@ -177,6 +196,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     trader.save()
     protocolNonSettlementTokenBalance.save()
     protocol.save()
+    protocolEventInfo.save()
 }
 
 export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
@@ -188,6 +208,10 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
     badDebtSettled.amount = badDebtAmount
     badDebtSettled.caller = event.transaction.from
 
+    badDebtSettled.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    badDebtSettled.blockNumber = event.block.number
+    badDebtSettled.timestamp = event.block.timestamp
+
     // update protocol
     const protocol = getOrCreateProtocol()
     // protocol.totalSettledBadDebt could be null due to backward compatibility
@@ -197,7 +221,13 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
         protocol.totalSettledBadDebt = badDebtAmount
     }
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "BadDebtSettled"
+
     // commit changes
     badDebtSettled.save()
     protocol.save()
+    protocolEventInfo.save()
 }

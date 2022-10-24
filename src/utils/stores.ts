@@ -5,6 +5,7 @@ import {
     OpenOrder,
     Position,
     Protocol,
+    ProtocolEventInfo,
     ProtocolTokenBalance,
     ReferralCode,
     ReferralCodeDayData,
@@ -24,6 +25,7 @@ export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
 }
 
 const protocolId = "perpetual-protocol"
+const protocolEventInfoId = "protocol-event-info"
 
 export function getOrCreateProtocol(): Protocol {
     let protocol = Protocol.load(protocolId)
@@ -44,6 +46,17 @@ export function getOrCreateProtocol(): Protocol {
         protocol.save()
     }
     return protocol
+}
+
+export function getOrCreateProtocolEventInfo(): ProtocolEventInfo {
+    let protocolEventInfo = ProtocolEventInfo.load(protocolEventInfoId)
+    if (!protocolEventInfo) {
+        protocolEventInfo = new ProtocolEventInfo(protocolEventInfoId)
+        protocolEventInfo.totalEventCount = BI_ZERO
+        protocolEventInfo.lastProcessedEventName = ""
+        protocolEventInfo.save()
+    }
+    return protocolEventInfo
 }
 
 export function formatMarketId(baseToken: Address): string {

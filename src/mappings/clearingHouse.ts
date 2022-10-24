@@ -25,6 +25,7 @@ import {
     getOrCreateOpenOrder,
     getOrCreatePosition,
     getOrCreateProtocol,
+    getOrCreateProtocolEventInfo,
     getOrCreateTrader,
     getOrCreateTraderMarket,
     getReferralCode,
@@ -99,9 +100,15 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionClosed"
+
     // commit changes
     positionClosed.save()
     protocol.save()
+    protocolEventInfo.save()
     market.save()
     trader.save()
     traderMarket.save()
@@ -210,9 +217,15 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderDayData.fee = traderDayData.fee.plus(event.params.fee)
     traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionChanged"
+
     // commit changes
     positionChanged.save()
     protocol.save()
+    protocolEventInfo.save()
     market.save()
     trader.save()
     traderMarket.save()
@@ -254,11 +267,17 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     traderMarket.timestamp = event.block.timestamp
     traderMarket.liquidationFee = traderMarket.liquidationFee.plus(positionLiquidated.liquidationFee)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionLiquidated"
+
     // commit changes
     positionLiquidated.save()
     position.save()
     trader.save()
     traderMarket.save()
+    protocolEventInfo.save()
 }
 
 export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
@@ -343,6 +362,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
     market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "LiquidityChanged"
+
     // commit changes
     liquidityChanged.save()
     maker.save()
@@ -350,6 +374,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.save()
     openOrder.save()
     market.save()
+    protocolEventInfo.save()
 }
 
 export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): void {
@@ -383,11 +408,17 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     traderMarket.timestamp = event.block.timestamp
     traderMarket.fundingPayment = traderMarket.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "FundingPaymentSettled"
+
     // commit changes
     fundingPaymentSettled.save()
     position.save()
     trader.save()
     traderMarket.save()
+    protocolEventInfo.save()
 }
 
 export function handleReferralPositionChanged(event: ReferredPositionChanged): void {
@@ -437,7 +468,13 @@ export function handleReferralPositionChanged(event: ReferredPositionChanged): v
     // Add the referrer code to the position changed event itself
     positionChangedEvent.referralCode = code
 
+    // upsert protocolEventInfo info
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "ReferralPositionChanged"
+
     referralCodeDayData.save()
     referralCodeTraderDayData.save()
     positionChangedEvent.save()
+    protocolEventInfo.save()
 }
