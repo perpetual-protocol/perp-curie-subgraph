@@ -16,20 +16,14 @@ type Protocol @entity {
     "total settlement token"
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
-    totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
+    totalNonSettlementTokenBalances: [ProtocolCollateralTokenBalance!] @derivedFrom(field: "protocol")
     "block number"
     blockNumber: BigInt!
     "block timestamp"
     timestamp: BigInt!
 
-    "DEPRECATED: total settlement token in the protocol"
-    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
-    "DEPRECATED: bad debt"
-    badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
-
     "total bad debt settled"
     totalSettledBadDebt: BigDecimal
-
     "total repaid"
     totalRepaid: BigDecimal
 }
@@ -73,47 +67,6 @@ type Market @entity {
     blockNumber: BigInt!
     "last updated block timestamp"
     timestamp: BigInt!
-
-    "positions"
-    positions: [Position!]! @derivedFrom(field: "marketRef")
-    "open orders"
-    openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
-}
-
-type Token @entity {
-    "format: <token address>"
-    id: ID!
-    "token name"
-    name: String!
-    "token symbol"
-    symbol: String!
-    "token decimals"
-    decimals: BigInt!
-
-    "total amount deposited"
-    totalDeposited: BigDecimal!
-}
-
-type TraderTokenBalance @entity {
-    "format: <trader address>-<token address>"
-    id: ID!
-    "amount"
-    amount: BigDecimal!
-
-    token: Token!
-    "foreign key to Trader"
-    trader: Trader!
-}
-
-type ProtocolTokenBalance @entity {
-    "format: <token address>"
-    id: ID!
-    "amount"
-    amount: BigDecimal!
-
-    token: Token!
-    "foreign key to Protocol"
-    protocol: Protocol!
 }
 
 # Vault
@@ -202,6 +155,26 @@ type BadDebtSettled @entity {
     blockNumber: BigInt!
     "block timestamp"
     timestamp: BigInt!
+}
+
+type TraderCollateralTokenBalance @entity {
+    "format: traderAddress-collateralTokenAddress"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    "foreign key to Trader"
+    trader: Trader!
+}
+
+type ProtocolCollateralTokenBalance @entity {
+    "format: collateralTokenAddress"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+
+    "foreign key to Protocol"
+    protocol: Protocol!
 }
 
 # InsuranceFund
@@ -372,7 +345,7 @@ type Trader @entity {
     "total deposited settlement collateral + cumulative total pnl"
     settlementTokenBalance: BigDecimal!
     "total deposited non-settlement collateral"
-    nonSettlementTokenBalances: [TraderTokenBalance!] @derivedFrom(field: "trader")
+    nonSettlementTokenBalances: [TraderCollateralTokenBalance!] @derivedFrom(field: "trader")
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"
@@ -393,21 +366,12 @@ type Trader @entity {
     "last updated block timestamp"
     timestamp: BigInt!
 
-    "positions"
-    positions: [Position!]! @derivedFrom(field: "traderRef")
-
-    dayData: [TraderDayData!] @derivedFrom(field: "trader")
     "the referral code the trader owns and provides to other traders"
     referrerCode: ReferralCode
-    "the referral code the trader has registered to themselve"
+    "the referral code the trader has registered to themselves"
     refereeCode: ReferralCode
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
-
-    "DEPRECATED: total deposited settlement token + cumulative total pnl"
-    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
-    "DEPRECATED: cumulative bad debt"
-    badDebt: BigDecimal!
 }
 
 type TraderMarket @entity {
@@ -446,41 +410,6 @@ type TraderMarket @entity {
     traderRef: Trader!
     "foreign key to Market"
     marketRef: Market!
-}
-
-type Position @entity {
-    "deprecated: format: <trader address>-<baseToken address>"
-    id: ID! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: trader address"
-    trader: Bytes! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: baseToken address"
-    baseToken: Bytes! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: current position size"
-    positionSize: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: average open notional of the current position"
-    openNotional: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: average entry price of the current position = abs(openNotional / positionSize)"
-    entryPrice: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative trading volume"
-    tradingVolume: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative realize pnl"
-    realizedPnl: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative funding payment: - is received and + is sent"
-    fundingPayment: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative trading fee"
-    tradingFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative liquidation fee"
-    liquidationFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-
-    "deprecated: last updated block number"
-    blockNumber: BigInt! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: last updated block timestamp"
-    timestamp: BigInt! @deprecated(reason: "Use TraderMarket instead.")
-
-    "deprecated: foreign key to Trader"
-    traderRef: Trader! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: foreign key to Market"
-    marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
 type LiquidityChanged @entity {
@@ -557,8 +486,6 @@ type OpenOrder @entity {
 
     "foreign key to Maker"
     makerRef: Maker!
-    "foreign key to Market"
-    marketRef: Market!
 }
 
 # AccountBalance
@@ -709,55 +636,7 @@ type Disbursed @entity {
     timestamp: BigInt!
 }
 
-# Trader Historical Data
-
-type TraderDayData @entity {
-    "format: <trader id>-<day id>"
-    id: ID!
-    trader: Trader!
-    "timestamp"
-    date: BigInt!
-    "trading volume aggregated per day for trader"
-    tradingVolume: BigDecimal!
-    "trading fee aggregated per day for trader"
-    fee: BigInt!
-    "total pnl aggregated per day for trader"
-    realizedPnl: BigInt!
-}
-
 # Referral
-
-# For tracking day trade metrics for referral codes on a per trader basis
-type ReferralCodeTraderDayData @entity {
-    "format: <referal code>-<day id>-<trader>"
-    id: ID!
-    "relationship to trader. since 2022-08-14, for contract traders, this value is changed from the tx sender to contract. eoa traders have no change"
-    trader: Trader!
-    "relationship to referral day data"
-    referralCodeDayData: ReferralCodeDayData!
-    "trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "fees in notional value"
-    fees: BigDecimal!
-}
-
-type ReferralCodeDayData @entity {
-    "format: <referal code>-<day id>"
-    id: ID!
-    referralCode: ReferralCode!
-    "timestamp"
-    date: BigInt!
-    "total trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "total fees paid during day"
-    fees: BigDecimal!
-    "trading volume and fees grouped by trader"
-    traderData: [ReferralCodeTraderDayData!]! @derivedFrom(field: "referralCodeDayData")
-    "a list of new referees added today"
-    newReferees: [Trader!]!
-    "a list of referees which have traded on the day"
-    activeReferees: [Trader!]!
-}
 
 type ReferralCode @entity {
     id: ID!
@@ -767,15 +646,8 @@ type ReferralCode @entity {
     referees: [Trader!]! @derivedFrom(field: "refereeCode")
     "date created at"
     createdAt: BigInt!
-    "day data link"
-    dayData: [ReferralCodeDayData!] @derivedFrom(field: "referralCode")
-    "if user is vip tier"
-    vipTier: String
-    "how long user has been vip since"
-    vipSince: BigInt
     "whether or not the referral code exists in the referral contract"
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
 }
-
