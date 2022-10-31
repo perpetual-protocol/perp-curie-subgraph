@@ -71,7 +71,7 @@ type Market @entity {
 
 # Vault
 
-type Deposited @entity {
+type Deposited @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -91,7 +91,7 @@ type Deposited @entity {
     timestamp: BigInt!
 }
 
-type Withdrawn @entity {
+type Withdrawn @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -111,7 +111,7 @@ type Withdrawn @entity {
     timestamp: BigInt!
 }
 
-type CollateralLiquidated @entity {
+type CollateralLiquidated @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -139,7 +139,7 @@ type CollateralLiquidated @entity {
     timestamp: BigInt!
 }
 
-type BadDebtSettled @entity {
+type BadDebtSettled @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "trader"
@@ -179,7 +179,7 @@ type ProtocolCollateralTokenBalance @entity {
 
 # InsuranceFund
 
-type Repaid @entity {
+type Repaid @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "repaid amount"
@@ -199,7 +199,7 @@ type Repaid @entity {
 
 # Exchange
 
-type FundingUpdated @entity {
+type FundingUpdated @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -223,7 +223,7 @@ type FundingUpdated @entity {
 
 # ClearingHouse
 
-type PositionChanged @entity {
+type PositionChanged @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -265,7 +265,7 @@ type PositionChanged @entity {
     referralCode: ReferralCode
 }
 
-type PositionLiquidated @entity {
+type PositionLiquidated @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -291,7 +291,7 @@ type PositionLiquidated @entity {
     timestamp: BigInt!
 }
 
-type PositionClosed @entity {
+type PositionClosed @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -319,7 +319,7 @@ type PositionClosed @entity {
     timestamp: BigInt!
 }
 
-type FundingPaymentSettled @entity {
+type FundingPaymentSettled @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -412,7 +412,7 @@ type TraderMarket @entity {
     marketRef: Market!
 }
 
-type LiquidityChanged @entity {
+type LiquidityChanged @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -490,7 +490,7 @@ type OpenOrder @entity {
 
 # AccountBalance
 
-type PnlRealized @entity {
+type PnlRealized @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -510,7 +510,7 @@ type PnlRealized @entity {
 
 # DelegateApproval
 
-type DelegationApproved @entity {
+type DelegationApproved @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -530,7 +530,7 @@ type DelegationApproved @entity {
     timestamp: BigInt!
 }
 
-type DelegationRevoked @entity {
+type DelegationRevoked @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -552,7 +552,7 @@ type DelegationRevoked @entity {
 
 # LimitOrderBook
 
-type LimitOrderFilled @entity {
+type LimitOrderFilled @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -584,7 +584,7 @@ type LimitOrderFilled @entity {
     timestamp: BigInt!
 }
 
-type LimitOrderCancelled @entity {
+type LimitOrderCancelled @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
@@ -614,7 +614,7 @@ type LimitOrderCancelled @entity {
 
 # LimitOrderRewardVault
 
-type Disbursed @entity {
+type Disbursed @entity(immutable: true) {
     "format: orderHash"
     id: ID!
     "transaction hash"
