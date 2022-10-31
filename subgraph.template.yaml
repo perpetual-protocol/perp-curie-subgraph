@@ -102,18 +102,16 @@ dataSources:
       entities:
         - PositionChanged
         - PositionClosed
-        - Protocol
-        - Market
-        - Trader
-        - Position
         - PositionLiquidated
         - LiquidityChanged
+        - FundingPaymentSettled
+        - Protocol
+        - ProtocolEventInfo
+        - Market
+        - Trader
+        - TraderMarket
         - Maker
         - OpenOrder
-        - FundingPaymentSettled
-        - TraderDayData
-        - ReferralCodeDayData
-        - ReferralCodeWeeklyData
         - ReferralCode
       abis:
         - name: ClearingHouse
@@ -145,9 +143,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/accountBalance.ts
       entities:
-        - Protocol
         - PnlRealized
         - Trader
+        - ProtocolEventInfo
       abis:
         - name: AccountBalance
           file: ./abis/AccountBalance.json
@@ -168,8 +166,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/insuranceFund.ts
       entities:
-        - Protocol
         - Repaid
+        - Protocol
+        - ProtocolEventInfo
       abis:
         - name: InsuranceFund
           file: ./abis/InsuranceFund.json
@@ -191,6 +190,7 @@ dataSources:
       file: ./src/mappings/collateralManager.ts
       entities:
         - Token
+        - ProtocolEventInfo
       abis:
         - name: CollateralManager
           file: ./abis/CollateralManager.json
@@ -213,6 +213,7 @@ dataSources:
       entities:
         - DelegationApproved
         - DelegationRevoked
+        - ProtocolEventInfo
       abis:
         - name: DelegateApproval
           file: ./abis/DelegateApproval.json
@@ -283,8 +284,6 @@ dataSources:
       entities:
         - ReferralCode
         - Trader
-        - ReferralCodeDayData
-        - ReferralCodeWeeklyData
       abis:
         - name: Referrer
           file: ./abis/Referrer.json
@@ -293,10 +292,6 @@ dataSources:
           handler: handleReferralCodeCreated
         - event: OnReferralCodeUpserted(address,uint8,uint256,string,string)
           handler: handleReferralCodeUpserted
-        - event: OnUncappedPartnerAssigned(address,string)
-          handler: handleUncappedPartnerUpserted
-        - event: OnUncappedPartnerRemoved(address)
-          handler: handleUncappedPartnerRemoved
   {{/referral}}
 
 {{#graft}}

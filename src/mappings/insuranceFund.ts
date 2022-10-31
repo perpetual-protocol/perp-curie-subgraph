@@ -8,12 +8,11 @@ export function handleRepaid(event: RepaidEvent): void {
     const repaidAmount = fromWei(event.params.repaidAmount, VAULT_DECIMALS)
     const tokenBalanceAfterRepaid = fromWei(event.params.tokenBalanceAfterRepaid, VAULT_DECIMALS)
 
-    // insert repaid
+    // insert Repaid
     const repaid = new Repaid(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
     repaid.repaidAmount = repaidAmount
     repaid.tokenBalanceAfterRepaid = tokenBalanceAfterRepaid
     repaid.caller = event.transaction.from
-
     repaid.blockNumberLogIndex = getBlockNumberLogIndex(event)
     repaid.blockNumber = event.block.number
     repaid.timestamp = event.block.timestamp

@@ -7,7 +7,7 @@ import { DelegationApproved, DelegationRevoked } from "../../generated/schema"
 import { getBlockNumberLogIndex, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleDelegationApproved(event: DelegationApprovedEvent): void {
-    // insert delegationApproved
+    // insert DelegationApproved
     const delegationApproved = new DelegationApproved(
         `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
     )
@@ -30,7 +30,7 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
 }
 
 export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
-    // insert delegationRevoked
+    // insert DelegationRevoked
     const delegationRevoked = new DelegationRevoked(
         `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
     )

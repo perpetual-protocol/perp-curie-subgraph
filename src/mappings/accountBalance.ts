@@ -20,7 +20,6 @@ export function handlePnlRealized(event: PnlRealizedEvent): void {
     trader.timestamp = event.block.timestamp
     trader.totalPnl = trader.totalPnl.plus(pnlRealized.amount)
     trader.settlementTokenBalance = trader.settlementTokenBalance.plus(pnlRealized.amount)
-    trader.collateral = trader.collateral.plus(pnlRealized.amount)
 
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()

@@ -515,6 +515,32 @@ type PnlRealized @entity(immutable: true) {
     timestamp: BigInt!
 }
 
+# CollateralManager
+
+type CollateralAdded @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "collateral token address"
+    token: Bytes!
+    "priceFeed address"
+    priceFeed: Bytes!
+    "collateral ratio"
+    collateralRatio: BigDecimal!
+    "discount ratio"
+    discountRatio: BigDecimal!
+    "deposit cap"
+    depositCap: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 # DelegateApproval
 
 type DelegationApproved @entity(immutable: true) {
