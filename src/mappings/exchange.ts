@@ -2,7 +2,7 @@ import { BigInt } from "@graphprotocol/graph-ts"
 import { FundingUpdated as FundingUpdatedEvent } from "../../generated/Exchange/Exchange"
 import { FundingUpdated } from "../../generated/schema"
 import { fromWei } from "../utils/numbers"
-import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
+import { getBlockNumberLogIndex, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleFundingUpdated(event: FundingUpdatedEvent): void {
     // insert FundingUpdated
@@ -19,11 +19,6 @@ export function handleFundingUpdated(event: FundingUpdatedEvent): void {
         .minus(fundingUpdated.indexTwap)
         .div(fundingUpdated.indexTwap)
 
-    // upsert Protocol
-    const protocol = getOrCreateProtocol()
-    protocol.blockNumber = event.block.number
-    protocol.timestamp = event.block.timestamp
-
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -31,6 +26,5 @@ export function handleFundingUpdated(event: FundingUpdatedEvent): void {
 
     // commit changes
     fundingUpdated.save()
-    protocol.save()
     protocolEventInfo.save()
 }

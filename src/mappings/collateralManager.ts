@@ -11,7 +11,7 @@ export function handleCollateralAdded(event: CollateralAddedEvent): void {
     token.symbol = fetchTokenSymbol(tokenAddr)
     token.decimals = fetchTokenDecimals(tokenAddr)
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "CollateralAdded"

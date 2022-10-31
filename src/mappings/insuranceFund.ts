@@ -27,7 +27,7 @@ export function handleRepaid(event: RepaidEvent): void {
         protocol.totalRepaid = repaidAmount
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "Repaid"

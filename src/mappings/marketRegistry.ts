@@ -8,8 +8,6 @@ export function handlePoolAdded(event: PoolAdded): void {
     // upsert Protocol
     const protocol = getOrCreateProtocol()
     protocol.publicMarketCount = protocol.publicMarketCount.plus(BI_ONE)
-    protocol.blockNumber = event.block.number
-    protocol.timestamp = event.block.timestamp
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
@@ -20,7 +18,7 @@ export function handlePoolAdded(event: PoolAdded): void {
     market.blockNumberAdded = event.block.number
     market.timestampAdded = event.block.timestamp
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "PoolAdded"
@@ -36,7 +34,7 @@ export function handleFeeRatioChanged(event: FeeRatioChanged): void {
     const market = getOrCreateMarket(event.params.baseToken)
     market.feeRatio = BigInt.fromI32(event.params.feeRatio) // it would be ClearingHouse's fee ratio
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "FeeRatioChanged"
