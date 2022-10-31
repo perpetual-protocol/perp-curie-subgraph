@@ -23,7 +23,6 @@ import {
     getOrCreateMaker,
     getOrCreateMarket,
     getOrCreateOpenOrder,
-    getOrCreatePosition,
     getOrCreateProtocol,
     getOrCreateProtocolEventInfo,
     getOrCreateTrader,
@@ -267,11 +266,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
             if (fixedDataMap) {
                 traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")!
                 traderMarket.openNotional = fixedDataMap.get("openNotional")!
-
-                const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
-                position.positionSize = fixedDataMap.get("takerPositionSize")!
-                position.openNotional = fixedDataMap.get("openNotional")!
-                position.save()
             }
         }
     }

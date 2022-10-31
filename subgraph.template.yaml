@@ -239,6 +239,7 @@ dataSources:
       entities:
         - LimitOrderFilled
         - LimitOrderCancelled
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderBook
           file: ./abis/LimitOrderBook.json
@@ -262,6 +263,7 @@ dataSources:
       file: ./src/mappings/limitOrderRewardVault.ts
       entities:
         - Disbursed
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderRewardVault
           file: ./abis/LimitOrderRewardVault.json
@@ -285,6 +287,7 @@ dataSources:
       entities:
         - ReferralCode
         - Trader
+        - ProtocolEventInfo
       abis:
         - name: Referrer
           file: ./abis/Referrer.json

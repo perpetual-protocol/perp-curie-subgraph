@@ -3,16 +3,12 @@ import {
     Maker,
     Market,
     OpenOrder,
-    Position,
     Protocol,
     ProtocolEventInfo,
     ProtocolTokenBalance,
     ReferralCode,
-    ReferralCodeDayData,
-    ReferralCodeTraderDayData,
     Token,
     Trader,
-    TraderDayData,
     TraderMarket,
     TraderTokenBalance,
 } from "../../generated/schema"
@@ -75,8 +71,6 @@ export function getOrCreateMarket(baseToken: Address): Market {
         market.quoteAmount = BD_ZERO
         market.blockNumberAdded = BI_ZERO
         market.timestampAdded = BI_ZERO
-        market.blockNumber = BI_ZERO
-        market.timestamp = BI_ZERO
         market.save()
     }
     return market
@@ -137,34 +131,6 @@ export function getOrCreateTraderMarket(traderAddr: Address, baseToken: Address)
     return traderMarket
 }
 
-export function formatPositionId(trader: Address, baseToken: Address): string {
-    return `${trader.toHexString()}-${baseToken.toHexString()}`
-}
-
-export function getOrCreatePosition(trader: Address, baseToken: Address): Position {
-    const positionId = formatPositionId(trader, baseToken)
-    let position = Position.load(positionId)
-    if (!position) {
-        position = new Position(positionId)
-        position.trader = trader
-        position.baseToken = baseToken
-        position.positionSize = BD_ZERO
-        position.openNotional = BD_ZERO
-        position.entryPrice = BD_ZERO
-        position.tradingVolume = BD_ZERO
-        position.realizedPnl = BD_ZERO
-        position.fundingPayment = BD_ZERO
-        position.tradingFee = BD_ZERO
-        position.liquidationFee = BD_ZERO
-        position.blockNumber = BI_ZERO
-        position.timestamp = BI_ZERO
-        position.traderRef = formatTraderId(trader)
-        position.marketRef = formatMarketId(baseToken)
-        position.save()
-    }
-    return position
-}
-
 function formatMakerId(makerAddr: Address): string {
     return makerAddr.toHexString()
 }
@@ -206,7 +172,6 @@ export function getOrCreateOpenOrder(
         openOrder.blockNumber = BI_ZERO
         openOrder.timestamp = BI_ZERO
         openOrder.makerRef = formatMakerId(makerAddr)
-        openOrder.marketRef = formatMarketId(baseToken)
         openOrder.save()
     }
     return openOrder
@@ -263,27 +228,6 @@ export function getOrCreateProtocolTokenBalance(tokenAddr: Address): ProtocolTok
     return tokenBalance
 }
 
-export function getTraderDayData(event: ethereum.Event, trader: Address): TraderDayData {
-    let _trader = getOrCreateTrader(trader)
-    let timestamp = event.block.timestamp.toI32()
-    let dayID = timestamp / 86400
-    let id = _trader.id + "-" + dayID.toString()
-
-    let dayData = TraderDayData.load(id)
-    let dayStartTimestamp = dayID * 86400
-
-    if (!dayData) {
-        dayData = new TraderDayData(id)
-        dayData.date = BigInt.fromI32(dayStartTimestamp)
-        dayData.fee = BI_ZERO
-        dayData.tradingVolume = BD_ZERO
-        dayData.realizedPnl = BI_ZERO
-        dayData.trader = _trader.id
-        dayData.save()
-    }
-    return dayData!
-}
-
 export function createReferralCode(referralCode: string, referrer: Address, createdAt: BigInt): ReferralCode {
     let _referralCode = new ReferralCode(referralCode)
     let _referrer = getOrCreateTrader(referrer)
@@ -297,51 +241,4 @@ export function createReferralCode(referralCode: string, referrer: Address, crea
 
 export function getReferralCode(referralCode: string): ReferralCode | null {
     return ReferralCode.load(referralCode)
-}
-
-export function getReferralCodeDayData(event: ethereum.Event, referralCode: string): ReferralCodeDayData {
-    let timestamp = event.block.timestamp.toI32()
-    let dayID = timestamp / 86400
-    let id = referralCode + "-" + dayID.toString()
-    let dayData = ReferralCodeDayData.load(id)
-    let dayStartTimestamp = dayID * 86400
-
-    if (!dayData) {
-        dayData = new ReferralCodeDayData(id)
-        dayData.referralCode = referralCode
-        dayData.tradingVolume = BD_ZERO
-        dayData.fees = BD_ZERO
-        dayData.date = BigInt.fromI32(dayStartTimestamp)
-        dayData.newReferees = []
-        dayData.activeReferees = []
-        dayData.save()
-    }
-    return dayData!
-}
-
-export function getReferralCodeTraderDayData(dayDataId: string, trader: string): ReferralCodeTraderDayData {
-    let id = dayDataId + "-" + trader
-    let tradeData = ReferralCodeTraderDayData.load(id)
-    if (!tradeData) {
-        tradeData = new ReferralCodeTraderDayData(id)
-        tradeData.fees = BD_ZERO
-        tradeData.tradingVolume = BD_ZERO
-        tradeData.referralCodeDayData = dayDataId
-        tradeData.trader = trader
-        tradeData.save()
-    }
-    return tradeData
-}
-
-export function removeAddressFromList(addresses: string[], addressToRemove: string): string[] {
-    let spliceIndex = -1
-    for (let i = 0; i < addresses.length; ++i) {
-        if (addressToRemove == addresses[i]) {
-            spliceIndex = i
-        }
-    }
-    if (spliceIndex > -1) {
-        addresses.splice(spliceIndex, 1)
-    }
-    return addresses
 }
