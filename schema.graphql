@@ -64,6 +64,41 @@ type Market @entity {
     timestamp: BigInt!
 }
 
+type Token @entity(immutable: true) {
+    "format: tokenAddress"
+    id: ID!
+    "token name"
+    name: String!
+    "token symbol"
+    symbol: String!
+    "token decimals"
+    decimals: BigInt!
+}
+
+type TraderTokenBalance @entity {
+    "format: traderAddress-collateralTokenAddress"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+    "collateral token"
+    token: Token!
+
+    "foreign key to Trader"
+    trader: Trader!
+}
+
+type ProtocolTokenBalance @entity {
+    "format: collateralTokenAddress"
+    id: ID!
+    "amount"
+    amount: BigDecimal!
+    "collateral token"
+    token: Token!
+
+    "foreign key to Protocol"
+    protocol: Protocol!
+}
+
 # Vault
 
 type Deposited @entity(immutable: true) {
@@ -152,41 +187,6 @@ type BadDebtSettled @entity(immutable: true) {
     timestamp: BigInt!
 }
 
-type Token @entity(immutable: true) {
-    "format: tokenAddress"
-    id: ID!
-    "token name"
-    name: String!
-    "token symbol"
-    symbol: String!
-    "token decimals"
-    decimals: BigInt!
-}
-
-type TraderTokenBalance @entity {
-    "format: traderAddress-collateralTokenAddress"
-    id: ID!
-    "amount"
-    amount: BigDecimal!
-    "collateral token"
-    token: Token!
-
-    "foreign key to Trader"
-    trader: Trader!
-}
-
-type ProtocolTokenBalance @entity {
-    "format: collateralTokenAddress"
-    id: ID!
-    "amount"
-    amount: BigDecimal!
-    "collateral token"
-    token: Token!
-
-    "foreign key to Protocol"
-    protocol: Protocol!
-}
-
 # InsuranceFund
 
 type Repaid @entity(immutable: true) {
@@ -198,30 +198,6 @@ type Repaid @entity(immutable: true) {
     tokenBalanceAfterRepaid: BigDecimal!
     "caller address"
     caller: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-# Exchange
-
-type FundingUpdated @entity(immutable: true) {
-    "format: txHash-eventLogIndex"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "mark price twap"
-    markTwap: BigDecimal!
-    "index price twap"
-    indexTwap: BigDecimal!
-    "daily funding rate"
-    dailyFundingRate: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -275,32 +251,6 @@ type PositionChanged @entity(immutable: true) {
     referralCode: ReferralCode
 }
 
-type PositionLiquidated @entity(immutable: true) {
-    "format: txHash-eventLogIndex"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "liquidator address"
-    liquidator: Bytes!
-    "liquidated position notional abs"
-    positionNotionalAbs: BigDecimal!
-    "liquidated position size abs"
-    positionSizeAbs: BigDecimal!
-    "liquidation penalty"
-    liquidationFee: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
 type PositionClosed @entity(immutable: true) {
     "format: txHash-eventLogIndex"
     id: ID!
@@ -320,6 +270,32 @@ type PositionClosed @entity(immutable: true) {
     realizedPnl: BigDecimal!
     "closed price of this tx"
     closedPrice: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type PositionLiquidated @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "liquidator address"
+    liquidator: Bytes!
+    "liquidated position notional abs"
+    positionNotionalAbs: BigDecimal!
+    "liquidated position size abs"
+    positionSizeAbs: BigDecimal!
+    "liquidation penalty"
+    liquidationFee: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -510,6 +486,30 @@ type PnlRealized @entity(immutable: true) {
     trader: Bytes!
     "amount"
     amount: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# Exchange
+
+type FundingUpdated @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "mark price twap"
+    markTwap: BigDecimal!
+    "index price twap"
+    indexTwap: BigDecimal!
+    "daily funding rate"
+    dailyFundingRate: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
