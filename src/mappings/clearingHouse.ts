@@ -133,8 +133,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.timestamp = event.block.timestamp
     market.tradingVolume = market.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
-    market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
-    market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
@@ -295,8 +293,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     const market = getOrCreateMarket(event.params.baseToken)
     market.blockNumber = event.block.number
     market.timestamp = event.block.timestamp
-    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
-    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()

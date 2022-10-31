@@ -49,10 +49,6 @@ type Market @entity {
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
-    "provided liquidity base amount"
-    baseAmount: BigDecimal!
-    "provided liquidity quote amount"
-    quoteAmount: BigDecimal!
 
     "block number the pool was added to ClearingHouse"
     blockNumberAdded: BigInt!

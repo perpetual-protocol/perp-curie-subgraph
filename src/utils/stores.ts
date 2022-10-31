@@ -67,8 +67,6 @@ export function getOrCreateMarket(baseToken: Address): Market {
         market.feeRatio = BD_ZERO
         market.tradingFee = BD_ZERO
         market.tradingVolume = BD_ZERO
-        market.baseAmount = BD_ZERO
-        market.quoteAmount = BD_ZERO
         market.blockNumberAdded = BI_ZERO
         market.timestampAdded = BI_ZERO
         market.blockNumber = BI_ZERO
