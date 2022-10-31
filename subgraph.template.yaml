@@ -189,6 +189,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/collateralManager.ts
       entities:
+        - CollateralAdded
         - Token
         - ProtocolEventInfo
       abis:
