@@ -40,7 +40,7 @@ type ProtocolEventInfo @entity {
 # MarketRegistry
 
 type Market @entity {
-    "format: baseToken address"
+    "format: baseTokenAddress"
     id: ID!
     "baseToken address"
     baseToken: Bytes!
@@ -72,7 +72,7 @@ type Market @entity {
 # Vault
 
 type Deposited @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -92,7 +92,7 @@ type Deposited @entity {
 }
 
 type Withdrawn @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -112,7 +112,7 @@ type Withdrawn @entity {
 }
 
 type CollateralLiquidated @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -140,7 +140,7 @@ type CollateralLiquidated @entity {
 }
 
 type BadDebtSettled @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "trader"
     trader: Bytes!
@@ -180,13 +180,13 @@ type ProtocolCollateralTokenBalance @entity {
 # InsuranceFund
 
 type Repaid @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "repaid amount"
     repaidAmount: BigDecimal!
     "insurance fund balance after repaid"
     tokenBalanceAfterRepaid: BigDecimal!
-    "caller"
+    "caller address"
     caller: Bytes!
 
     "(block number * 1000 + tx log index) for sorting"
@@ -200,7 +200,7 @@ type Repaid @entity {
 # Exchange
 
 type FundingUpdated @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -224,7 +224,7 @@ type FundingUpdated @entity {
 # ClearingHouse
 
 type PositionChanged @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -266,7 +266,7 @@ type PositionChanged @entity {
 }
 
 type PositionLiquidated @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -292,7 +292,7 @@ type PositionLiquidated @entity {
 }
 
 type PositionClosed @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -320,7 +320,7 @@ type PositionClosed @entity {
 }
 
 type FundingPaymentSettled @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -340,7 +340,7 @@ type FundingPaymentSettled @entity {
 }
 
 type Trader @entity {
-    "format: trader address"
+    "format: traderAddress"
     id: ID!
     "total deposited settlement collateral + cumulative total pnl"
     settlementTokenBalance: BigDecimal!
@@ -375,7 +375,7 @@ type Trader @entity {
 }
 
 type TraderMarket @entity {
-    "format: <trader address>-<baseToken address>"
+    "format: traderAddress-baseTokenAddress>"
     id: ID!
     "trader address"
     trader: Bytes!
@@ -413,7 +413,7 @@ type TraderMarket @entity {
 }
 
 type LiquidityChanged @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -447,7 +447,7 @@ type LiquidityChanged @entity {
 }
 
 type Maker @entity {
-    "format: maker address"
+    "format: makerAddress"
     id: ID!
     "total collected maker fee across all openOrders"
     collectedFee: BigDecimal!
@@ -462,7 +462,7 @@ type Maker @entity {
 }
 
 type OpenOrder @entity {
-    "format: <maker address>-<baseToken address>-<lowerTick>-<upperTick>"
+    "format: makerAddress-baseTokenAddress-lowerTick-upperTick"
     id: ID!
     "maker address"
     maker: Bytes!
@@ -491,7 +491,7 @@ type OpenOrder @entity {
 # AccountBalance
 
 type PnlRealized @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -511,7 +511,7 @@ type PnlRealized @entity {
 # DelegateApproval
 
 type DelegationApproved @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -531,7 +531,7 @@ type DelegationApproved @entity {
 }
 
 type DelegationRevoked @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -553,7 +553,7 @@ type DelegationRevoked @entity {
 # LimitOrderBook
 
 type LimitOrderFilled @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -585,7 +585,7 @@ type LimitOrderFilled @entity {
 }
 
 type LimitOrderCancelled @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -615,7 +615,7 @@ type LimitOrderCancelled @entity {
 # LimitOrderRewardVault
 
 type Disbursed @entity {
-    "format: <orderHash>"
+    "format: orderHash"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -639,6 +639,7 @@ type Disbursed @entity {
 # Referral
 
 type ReferralCode @entity {
+    "format: referralCode"
     id: ID!
     "referrer/partner address"
     referrer: Trader!
