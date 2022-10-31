@@ -79,6 +79,7 @@ dataSources:
       file: ./src/mappings/exchange.ts
       entities:
         - FundingUpdated
+        - ProtocolEventInfo
       abis:
         - name: Exchange
           file: ./abis/Exchange.json
