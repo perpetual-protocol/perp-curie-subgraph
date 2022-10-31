@@ -34,6 +34,15 @@ type Protocol @entity {
     totalRepaid: BigDecimal
 }
 
+type ProtocolEventInfo @entity {
+    "hardcoded as 'protocol-event-info'"
+    id: ID!
+    "total count of all events"
+    totalEventCount: BigInt!
+    "last process event name"
+    lastProcessedEventName: String!
+}
+
 # MarketRegistry
 
 type Market @entity {
@@ -177,7 +186,69 @@ type CollateralLiquidated @entity {
     timestamp: BigInt!
 }
 
+type BadDebtSettled @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "trader"
+    trader: Bytes!
+    "bad debt amount"
+    amount: BigDecimal!
+    "caller"
+    caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# InsuranceFund
+
+type Repaid @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "repaid amount"
+    repaidAmount: BigDecimal!
+    "insurance fund balance after repaid"
+    tokenBalanceAfterRepaid: BigDecimal!
+    "caller"
+    caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 # Exchange
+
+type FundingUpdated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "mark price twap"
+    markTwap: BigDecimal!
+    "index price twap"
+    indexTwap: BigDecimal!
+    "daily funding rate"
+    dailyFundingRate: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# ClearingHouse
 
 type PositionChanged @entity {
     "format: <tx hash>-<tx log index>"
@@ -221,6 +292,32 @@ type PositionChanged @entity {
     referralCode: ReferralCode
 }
 
+type PositionLiquidated @entity {
+    "format: <tx hash>-<tx log index>"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "trader address"
+    trader: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "liquidator address"
+    liquidator: Bytes!
+    "liquidated position notional abs"
+    positionNotionalAbs: BigDecimal!
+    "liquidated position size abs"
+    positionSizeAbs: BigDecimal!
+    "liquidation penalty"
+    liquidationFee: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 type PositionClosed @entity {
     "format: <tx hash>-<tx log index>"
     id: ID!
@@ -240,28 +337,6 @@ type PositionClosed @entity {
     realizedPnl: BigDecimal!
     "closed price of this tx"
     closedPrice: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-type FundingUpdated @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "mark price twap"
-    markTwap: BigDecimal!
-    "index price twap"
-    indexTwap: BigDecimal!
-    "daily funding rate"
-    dailyFundingRate: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -408,25 +483,31 @@ type Position @entity {
     marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
 }
 
-# ClearingHouse
-
-type PositionLiquidated @entity {
+type LiquidityChanged @entity {
     "format: <tx hash>-<tx log index>"
     id: ID!
     "transaction hash"
     txHash: Bytes!
-    "trader address"
-    trader: Bytes!
+    "maker address"
+    maker: Bytes!
     "baseToken address"
     baseToken: Bytes!
-    "liquidator address"
-    liquidator: Bytes!
-    "liquidated position notional abs"
-    positionNotionalAbs: BigDecimal!
-    "liquidated position size abs"
-    positionSizeAbs: BigDecimal!
-    "liquidation penalty"
-    liquidationFee: BigDecimal!
+    "quoteToken address"
+    quoteToken: Bytes!
+    "lower tick"
+    lowerTick: BigInt!
+    "upper tick"
+    upperTick: BigInt!
+    "amount of base token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
+    base: BigDecimal!
+    "amount of quote token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
+    quote: BigDecimal!
+    "amount of liquidity unit added (+: add liquidity, -: remove liquidity)"
+    liquidity: BigInt!
+    "amount of quote token the maker received as fee"
+    quoteFee: BigDecimal!
+    "from function signature"
+    fromFunctionSignature: Bytes!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -478,40 +559,6 @@ type OpenOrder @entity {
     makerRef: Maker!
     "foreign key to Market"
     marketRef: Market!
-}
-
-type LiquidityChanged @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "maker address"
-    maker: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "quoteToken address"
-    quoteToken: Bytes!
-    "lower tick"
-    lowerTick: BigInt!
-    "upper tick"
-    upperTick: BigInt!
-    "amount of base token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
-    base: BigDecimal!
-    "amount of quote token added to the liquidity, exclude fee (+: add liquidity, -: remove liquidity)"
-    quote: BigDecimal!
-    "amount of liquidity unit added (+: add liquidity, -: remove liquidity)"
-    liquidity: BigInt!
-    "amount of quote token the maker received as fee"
-    quoteFee: BigDecimal!
-    "from function signature"
-    fromFunctionSignature: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
 }
 
 # AccountBalance
@@ -732,47 +779,3 @@ type ReferralCode @entity {
     numReferees: BigInt!
 }
 
-type BadDebtSettled @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "trader"
-    trader: Bytes!
-    "bad debt amount"
-    amount: BigDecimal!
-    "caller"
-    caller: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-type Repaid @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "repaid amount"
-    repaidAmount: BigDecimal!
-    "insurance fund balance after repaid"
-    tokenBalanceAfterRepaid: BigDecimal!
-    "caller"
-    caller: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-type ProtocolEventInfo @entity {
-    "hardcoded as 'protocol-event-info'"
-    id: ID!
-    "total count of all events"
-    totalEventCount: BigInt!
-    "last process event name"
-    lastProcessedEventName: String!
-}
