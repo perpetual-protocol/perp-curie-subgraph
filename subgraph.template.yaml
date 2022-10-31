@@ -271,14 +271,14 @@ dataSources:
         - event: Disbursed(bytes32,address,address,uint256)
           handler: handleDisbursed
 
-  {{#referral}}
+  {{#periphery.externalContracts.PerpetualProtocolReferrer}}
   - kind: ethereum/contract
     name: Referrer
     network: {{ network }}
     source:
       abi: Referrer
-      address: "{{ referral.contracts.PerpetualProtocolReferrer }}"
-      startBlock: {{ referral.contracts.PerpetualProtocolReferrerStartBlock }}
+      address: "{{ periphery.externalContracts.PerpetualProtocolReferrer }}"
+      startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -296,7 +296,7 @@ dataSources:
           handler: handleReferralCodeCreated
         - event: OnReferralCodeUpserted(address,uint8,uint256,string,string)
           handler: handleReferralCodeUpserted
-  {{/referral}}
+  {{/periphery.externalContracts.PerpetualProtocolReferrer}}
 
 {{#graft}}
 features:
