@@ -44,8 +44,8 @@ type Market @entity {
     quoteToken: Bytes!
     "pool address"
     pool: Bytes!
-    "trading fee ratio in uint24: 1000 == 0.1%"
-    feeRatio: BigInt!
+    "trading fee ratio"
+    feeRatio: BigDecimal!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative trading fee"

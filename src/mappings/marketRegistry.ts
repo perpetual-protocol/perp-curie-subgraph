@@ -1,7 +1,7 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts"
 import { FeeRatioChanged, PoolAdded } from "../../generated/MarketRegistry/MarketRegistry"
 import { QuoteTokenAddress } from "../constants"
-import { BI_ONE } from "../utils/numbers"
+import { BI_ONE, RATIO_ONE } from "../utils/numbers"
 import { getOrCreateMarket, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handlePoolAdded(event: PoolAdded): void {
@@ -14,7 +14,8 @@ export function handlePoolAdded(event: PoolAdded): void {
     market.baseToken = event.params.baseToken
     market.quoteToken = QuoteTokenAddress
     market.pool = event.params.pool
-    market.feeRatio = BigInt.fromI32(event.params.feeRatio) // initially it would be UniswapV3 pool's fee ratio
+    // initially it would be UniswapV3 pool's fee ratio
+    market.feeRatio = BigDecimal.fromString(event.params.feeRatio.toString()).div(RATIO_ONE)
     market.blockNumberAdded = event.block.number
     market.timestampAdded = event.block.timestamp
 
@@ -32,7 +33,8 @@ export function handlePoolAdded(event: PoolAdded): void {
 export function handleFeeRatioChanged(event: FeeRatioChanged): void {
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
-    market.feeRatio = BigInt.fromI32(event.params.feeRatio) // it would be ClearingHouse's fee ratio
+    // it would be Perp Exchange's fee ratio
+    market.feeRatio = BigDecimal.fromString(event.params.feeRatio.toString()).div(RATIO_ONE)
 
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()

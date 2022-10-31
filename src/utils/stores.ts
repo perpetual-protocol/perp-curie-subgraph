@@ -64,7 +64,7 @@ export function getOrCreateMarket(baseToken: Address): Market {
         market.baseToken = Address.fromString(ADDRESS_ZERO)
         market.quoteToken = Address.fromString(ADDRESS_ZERO)
         market.pool = Address.fromString(ADDRESS_ZERO)
-        market.feeRatio = BI_ZERO
+        market.feeRatio = BD_ZERO
         market.tradingFee = BD_ZERO
         market.tradingVolume = BD_ZERO
         market.baseAmount = BD_ZERO
