@@ -17,7 +17,6 @@ type Protocol @entity {
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
     totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
-
     "total bad debt settled"
     totalSettledBadDebt: BigDecimal
     "total repaid"
@@ -59,6 +58,10 @@ type Market @entity {
     blockNumberAdded: BigInt!
     "block timestamp the pool was added to ClearingHouse"
     timestampAdded: BigInt!
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
 }
 
 # Vault
@@ -377,6 +380,7 @@ type Trader @entity {
     referrerCode: ReferralCode
     "the referral code the trader has registered to themselves"
     refereeCode: ReferralCode
+
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
 }

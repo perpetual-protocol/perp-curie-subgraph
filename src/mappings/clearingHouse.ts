@@ -35,6 +35,62 @@ const map = new TypedMap<string, HardFixedDataMap>()
 map.set("optimism", hardFixedDataMapOP)
 const hardFixedDataMap = map.get(Network)
 
+export function handlePositionClosed(event: PositionClosedEvent): void {
+    // insert PositionClosed
+    const positionClosed = new PositionClosed(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
+    positionClosed.txHash = event.transaction.hash
+    positionClosed.trader = event.params.trader
+    positionClosed.baseToken = event.params.baseToken
+    positionClosed.closedPositionSize = fromWei(event.params.closedPositionSize)
+    positionClosed.closedPositionNotional = fromWei(event.params.closedPositionNotional)
+    positionClosed.openNotionalBeforeClose = fromWei(event.params.openNotional)
+    positionClosed.realizedPnl = fromWei(event.params.realizedPnl)
+    positionClosed.closedPrice = fromWei(event.params.closedPrice)
+    positionClosed.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    positionClosed.blockNumber = event.block.number
+    positionClosed.timestamp = event.block.timestamp
+
+    // upsert Protocol
+    const protocol = getOrCreateProtocol()
+    protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
+    // upsert Market
+    const market = getOrCreateMarket(event.params.baseToken)
+    market.blockNumber = event.block.number
+    market.timestamp = event.block.timestamp
+    market.tradingVolume = market.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
+    // upsert Trader
+    const trader = getOrCreateTrader(event.params.trader)
+    trader.blockNumber = event.block.number
+    trader.timestamp = event.block.timestamp
+    trader.tradingVolume = trader.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    trader.realizedPnl = trader.realizedPnl.plus(positionClosed.realizedPnl)
+
+    // upsert TraderMarket
+    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
+    traderMarket.blockNumber = event.block.number
+    traderMarket.timestamp = event.block.timestamp
+    traderMarket.takerPositionSize = BD_ZERO
+    traderMarket.openNotional = BD_ZERO
+    traderMarket.entryPrice = BD_ZERO
+    traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
+
+    // upsert ProtocolEventInfo
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "PositionClosed"
+
+    // commit changes
+    positionClosed.save()
+    protocol.save()
+    protocolEventInfo.save()
+    market.save()
+    trader.save()
+    traderMarket.save()
+}
+
 export function handlePositionChanged(event: PositionChangedEvent): void {
     // insert PositionChanged
     const positionChanged = new PositionChanged(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
@@ -73,6 +129,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
+    market.blockNumber = event.block.number
+    market.timestamp = event.block.timestamp
     market.tradingVolume = market.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
     market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
@@ -114,60 +172,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
 
     // commit changes
     positionChanged.save()
-    protocol.save()
-    protocolEventInfo.save()
-    market.save()
-    trader.save()
-    traderMarket.save()
-}
-
-export function handlePositionClosed(event: PositionClosedEvent): void {
-    // insert PositionClosed
-    const positionClosed = new PositionClosed(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
-    positionClosed.txHash = event.transaction.hash
-    positionClosed.trader = event.params.trader
-    positionClosed.baseToken = event.params.baseToken
-    positionClosed.closedPositionSize = fromWei(event.params.closedPositionSize)
-    positionClosed.closedPositionNotional = fromWei(event.params.closedPositionNotional)
-    positionClosed.openNotionalBeforeClose = fromWei(event.params.openNotional)
-    positionClosed.realizedPnl = fromWei(event.params.realizedPnl)
-    positionClosed.closedPrice = fromWei(event.params.closedPrice)
-    positionClosed.blockNumberLogIndex = getBlockNumberLogIndex(event)
-    positionClosed.blockNumber = event.block.number
-    positionClosed.timestamp = event.block.timestamp
-
-    // upsert Protocol
-    const protocol = getOrCreateProtocol()
-    protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-
-    // upsert Market
-    const market = getOrCreateMarket(event.params.baseToken)
-    market.tradingVolume = market.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-
-    // upsert Trader
-    const trader = getOrCreateTrader(event.params.trader)
-    trader.blockNumber = event.block.number
-    trader.timestamp = event.block.timestamp
-    trader.tradingVolume = trader.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-    trader.realizedPnl = trader.realizedPnl.plus(positionClosed.realizedPnl)
-
-    // upsert TraderMarket
-    const traderMarket = getOrCreateTraderMarket(event.params.trader, event.params.baseToken)
-    traderMarket.blockNumber = event.block.number
-    traderMarket.timestamp = event.block.timestamp
-    traderMarket.takerPositionSize = BD_ZERO
-    traderMarket.openNotional = BD_ZERO
-    traderMarket.entryPrice = BD_ZERO
-    traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-    traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
-
-    // upsert ProtocolEventInfo
-    const protocolEventInfo = getOrCreateProtocolEventInfo()
-    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
-    protocolEventInfo.lastProcessedEventName = "PositionClosed"
-
-    // commit changes
-    positionClosed.save()
     protocol.save()
     protocolEventInfo.save()
     market.save()
@@ -287,8 +291,10 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
 
-    // upsert market
+    // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
+    market.blockNumber = event.block.number
+    market.timestamp = event.block.timestamp
     market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
     market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
 
