@@ -425,7 +425,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.2.0"
+        "version": "2.2.3"
     },
     "periphery": {
         "chainId": 10,
