@@ -18,6 +18,7 @@ dataSources:
       file: ./src/mappings/marketRegistry.ts
       entities:
         - Protocol
+        - ProtocolEventInfo
         - Market
       abis:
         - name: MarketRegistry
@@ -43,10 +44,14 @@ dataSources:
       entities:
         - Deposited
         - Withdrawn
-        - Protocol
-        - Trader
         - CollateralLiquidated
         - BadDebtSettled
+        - Protocol
+        - ProtocolEventInfo
+        - ProtocolTokenBalance
+        - Trader
+        - TraderTokenBalance
+        - Token
       abis:
         - name: Vault
           file: ./abis/Vault.json

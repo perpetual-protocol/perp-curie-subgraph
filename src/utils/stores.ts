@@ -38,7 +38,6 @@ export function getOrCreateProtocol(): Protocol {
         protocol.tradingFee = BD_ZERO
         protocol.tradingVolume = BD_ZERO
         protocol.totalSettlementTokenBalance = BD_ZERO
-        protocol.totalValueLocked = BD_ZERO
         protocol.blockNumber = BI_ZERO
         protocol.timestamp = BI_ZERO
         protocol.totalSettledBadDebt = BD_ZERO
@@ -106,7 +105,6 @@ export function getOrCreateTrader(traderAddr: Address): Trader {
         trader.timestamp = BI_ZERO
         trader.refereeCode = ""
         trader.referrerCode = ""
-        trader.collateral = BD_ZERO
         trader.save()
     }
     return trader
@@ -228,7 +226,6 @@ export function getOrCreateToken(tokenAddr: Address): Token {
         token.name = fetchTokenName(tokenAddr)
         token.symbol = fetchTokenSymbol(tokenAddr)
         token.decimals = fetchTokenDecimals(tokenAddr)
-        token.totalDeposited = BD_ZERO
         token.save()
     }
     return token

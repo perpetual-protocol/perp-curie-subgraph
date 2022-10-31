@@ -16,7 +16,7 @@ type Protocol @entity {
     "total settlement token"
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
-    totalNonSettlementTokenBalances: [ProtocolCollateralTokenBalance!] @derivedFrom(field: "protocol")
+    totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
     "block number"
     blockNumber: BigInt!
     "block timestamp"
@@ -157,21 +157,36 @@ type BadDebtSettled @entity(immutable: true) {
     timestamp: BigInt!
 }
 
-type TraderCollateralTokenBalance @entity {
+type Token @entity(immutable: true) {
+    "format: tokenAddress"
+    id: ID!
+    "token name"
+    name: String!
+    "token symbol"
+    symbol: String!
+    "token decimals"
+    decimals: BigInt!
+}
+
+type TraderTokenBalance @entity {
     "format: traderAddress-collateralTokenAddress"
     id: ID!
     "amount"
     amount: BigDecimal!
+    "collateral token"
+    token: Token!
 
     "foreign key to Trader"
     trader: Trader!
 }
 
-type ProtocolCollateralTokenBalance @entity {
+type ProtocolTokenBalance @entity {
     "format: collateralTokenAddress"
     id: ID!
     "amount"
     amount: BigDecimal!
+    "collateral token"
+    token: Token!
 
     "foreign key to Protocol"
     protocol: Protocol!
@@ -345,7 +360,7 @@ type Trader @entity {
     "total deposited settlement collateral + cumulative total pnl"
     settlementTokenBalance: BigDecimal!
     "total deposited non-settlement collateral"
-    nonSettlementTokenBalances: [TraderCollateralTokenBalance!] @derivedFrom(field: "trader")
+    nonSettlementTokenBalances: [TraderTokenBalance!] @derivedFrom(field: "trader")
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative realize pnl"
