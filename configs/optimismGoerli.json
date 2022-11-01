@@ -292,7 +292,8 @@
         },
         "externalContracts": {
             "DefaultProxyAdmin": "0xDE1Ae15927D76865f31AEC3231aeFCFa7F2F59d4",
-            "PERP": "0x090beB6896Aa51AB7403c7Be134970223D624dA7"
+            "PERP": "0x090beB6896Aa51AB7403c7Be134970223D624dA7",
+            "PerpetualProtocolReferrer": "0xDb6c7003C120D810D5e25ea09e2659F258687039"
         },
         "network": "optimism-goerli",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
