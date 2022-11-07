@@ -1,16 +1,27 @@
-import { OnReferralCodeCreated, OnReferralCodeUpserted } from "../../generated/Referrer/Referrer"
-import { createReferralCode, getOrCreateProtocolEventInfo, getOrCreateTrader, getReferralCode } from "../utils/stores"
+import {
+    OnReferralCodeCreated,
+    OnReferralCodeUpserted,
+    OnUncappedPartnerAssigned,
+    OnUncappedPartnerRemoved,
+} from "../../generated/Referrer/Referrer"
+import {
+    createReferralCode,
+    getOrCreateProtocolEventInfo,
+    getOrCreateTrader,
+    getReferralCode,
+    getReferralCodeDayData,
+} from "../utils/stores"
 
 import { BigInt } from "@graphprotocol/graph-ts"
 import { ReferralCode } from "../../generated/schema"
 import { BI_ONE } from "../utils/numbers"
 
 export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
-    // createdFor represents the referrer
-    createReferralCode(event.params.referralCode, event.params.createdFor, event.params.timestamp)
-
     // upsert Trader
     const trader = getOrCreateTrader(event.params.createdFor)
+
+    // createdFor represents the referrer
+    createReferralCode(event.params.referralCode, event.params.createdFor, event.params.timestamp)
     trader.referrerCode = event.params.referralCode
 
     // upsert ProtocolEventInfo
@@ -107,4 +118,57 @@ function updateNewRefCode(newRefCode: ReferralCode, event: OnReferralCodeUpserte
     const trader = getOrCreateTrader(event.params.addr)
     trader.refereeCode = newRefCode.id
     trader.save()
+
+    const newRefCodeDayData = getReferralCodeDayData(event, newRefCode.id)
+    const newReferees = newRefCodeDayData.newReferees
+    newReferees.push(event.params.addr.toHexString())
+    newRefCodeDayData.newReferees = newReferees
+    newRefCodeDayData.save()
+}
+
+export function handleUncappedPartnerUpserted(event: OnUncappedPartnerAssigned): void {
+    let trader = getOrCreateTrader(event.params.addr)
+    let referrerCode = trader.referrerCode
+    // confirm that the partner indeed has a referrer code
+    if (referrerCode) {
+        let referralCode = getReferralCode(referrerCode)
+        if (referralCode != null) {
+            referralCode.vipTier = event.params.tier
+            if (!referralCode.vipSince) {
+                referralCode.vipSince = event.block.timestamp
+            }
+            referralCode.save()
+        }
+    }
+
+    // upsert ProtocolEventInfo
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerAssigned"
+
+    // commit changes
+    protocolEventInfo.save()
+}
+
+export function handleUncappedPartnerRemoved(event: OnUncappedPartnerRemoved): void {
+    let trader = getOrCreateTrader(event.params.addr)
+    let referrerCode = trader.referrerCode
+
+    // confirm that the partner indeed has a referrer code
+    if (referrerCode) {
+        let referralCode = getReferralCode(referrerCode)
+        if (referralCode != null) {
+            referralCode.vipTier = null
+            referralCode.vipSince = null
+            referralCode.save()
+        }
+    }
+
+    // upsert ProtocolEventInfo
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerRemoved"
+
+    // commit changes
+    protocolEventInfo.save()
 }
