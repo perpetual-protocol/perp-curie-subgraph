@@ -8,7 +8,6 @@ import {
     ProtocolTokenBalance,
     ReferralCode,
     ReferralCodeDayData,
-    ReferralCodeTraderDayData,
     Token,
     Trader,
     TraderDayData,
@@ -243,9 +242,8 @@ export function getTraderDayData(event: ethereum.Event, trader: Address): Trader
     if (!dayData) {
         dayData = new TraderDayData(id)
         dayData.date = BigInt.fromI32(dayStartTimestamp)
-        dayData.fee = BI_ZERO
         dayData.tradingVolume = BD_ZERO
-        dayData.realizedPnl = BI_ZERO
+        dayData.tradingFee = BD_ZERO
         dayData.trader = _trader.id
         dayData.save()
     }
@@ -278,27 +276,13 @@ export function getReferralCodeDayData(event: ethereum.Event, referralCode: stri
         dayData = new ReferralCodeDayData(id)
         dayData.referralCode = referralCode
         dayData.tradingVolume = BD_ZERO
-        dayData.fees = BD_ZERO
+        dayData.tradingFee = BD_ZERO
         dayData.date = BigInt.fromI32(dayStartTimestamp)
         dayData.newReferees = []
         dayData.activeReferees = []
         dayData.save()
     }
     return dayData!
-}
-
-export function getReferralCodeTraderDayData(dayDataId: string, trader: string): ReferralCodeTraderDayData {
-    let id = dayDataId + "-" + trader
-    let tradeData = ReferralCodeTraderDayData.load(id)
-    if (!tradeData) {
-        tradeData = new ReferralCodeTraderDayData(id)
-        tradeData.fees = BD_ZERO
-        tradeData.tradingVolume = BD_ZERO
-        tradeData.referralCodeDayData = dayDataId
-        tradeData.trader = trader
-        tradeData.save()
-    }
-    return tradeData
 }
 
 export function removeAddressFromList(addresses: string[], addressToRemove: string): string[] {

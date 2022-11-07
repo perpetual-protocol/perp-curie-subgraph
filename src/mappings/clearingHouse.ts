@@ -29,7 +29,7 @@ import {
     getOrCreateTraderMarket,
     getReferralCode,
     getReferralCodeDayData,
-    getReferralCodeTraderDayData,
+    getTraderDayData,
 } from "../utils/stores"
 
 // NOTE: always use TypedMap instead of Map, Map.get() will throw an error if the key does not exist
@@ -79,6 +79,10 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
 
+    // update TraderDayData
+    const traderDayData = getTraderDayData(event, event.params.trader)
+    traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -91,6 +95,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     market.save()
     trader.save()
     traderMarket.save()
+    traderDayData.save()
 }
 
 export function handlePositionChanged(event: PositionChangedEvent): void {
@@ -165,6 +170,11 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     positionChanged.positionSizeAfter = traderMarket.takerPositionSize
     positionChanged.entryPriceAfter = traderMarket.entryPrice
 
+    // update TraderDayData
+    const traderDayData = getTraderDayData(event, event.params.trader)
+    traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
+    traderDayData.tradingFee = traderDayData.tradingFee.plus(positionChanged.fee)
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -177,6 +187,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.save()
     trader.save()
     traderMarket.save()
+    traderDayData.save()
 }
 
 export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
@@ -366,13 +377,12 @@ export function handleReferralPositionChanged(event: ReferredPositionChangedEven
         return
     }
 
-    const tradingVolume = abs(positionChanged.exchangedPositionNotional)
-    const tradingFee = positionChanged.fee
-
     // uptick trading vol and fees for the referral code day tracking
     const referralCodeDayData = getReferralCodeDayData(event, referralCode.id)
-    referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(tradingVolume)
-    referralCodeDayData.fees = referralCodeDayData.fees.plus(tradingFee)
+    referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(
+        abs(positionChanged.exchangedPositionNotional),
+    )
+    referralCodeDayData.tradingFee = referralCodeDayData.tradingFee.plus(positionChanged.fee)
 
     // start from timestamp 1660435200 (2022-08-14T00:00:00.000Z)
     // trader is changed from tx sender to the one whose position has changed
@@ -380,10 +390,6 @@ export function handleReferralPositionChanged(event: ReferredPositionChangedEven
         ? Address.fromBytes(positionChanged.trader)
         : event.transaction.from
     const trader = getOrCreateTrader(traderAddr)
-    // uptick trading vol and fees for the referral code day tracking for the trader
-    const referralCodeTraderDayData = getReferralCodeTraderDayData(referralCodeDayData.id, trader.id)
-    referralCodeTraderDayData.tradingVolume = referralCodeTraderDayData.tradingVolume.plus(tradingVolume)
-    referralCodeTraderDayData.fees = referralCodeTraderDayData.fees.plus(tradingFee)
 
     // uptick active traders for the referral code
     const activeTraders = referralCodeDayData.activeReferees
@@ -401,7 +407,6 @@ export function handleReferralPositionChanged(event: ReferredPositionChangedEven
     protocolEventInfo.lastProcessedEventName = "ReferralPositionChanged"
 
     referralCodeDayData.save()
-    referralCodeTraderDayData.save()
     positionChanged.save()
     protocolEventInfo.save()
 }

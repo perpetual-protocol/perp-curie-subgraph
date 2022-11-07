@@ -352,9 +352,24 @@ type Trader @entity {
     referrerCode: ReferralCode
     "the referral code the trader has registered to themselves"
     refereeCode: ReferralCode
+    "trader day data"
+    dayData: [TraderDayData!] @derivedFrom(field: "trader")
 
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
+}
+
+type TraderDayData @entity {
+    "format: <trader id>-<day id>"
+    id: ID!
+    "trader address"
+    trader: Trader!
+    "timestamp"
+    date: BigInt!
+    "trading volume aggregated per day for trader"
+    tradingVolume: BigDecimal!
+    "trading fee aggregated per day for trader"
+    tradingFee: BigDecimal!
 }
 
 type TraderMarket @entity {
@@ -672,7 +687,6 @@ type Disbursed @entity(immutable: true) {
 # Referral
 
 type ReferralCode @entity {
-    "format: referralCode"
     id: ID!
     "referrer/partner address"
     referrer: Trader!
@@ -680,8 +694,31 @@ type ReferralCode @entity {
     referees: [Trader!]! @derivedFrom(field: "refereeCode")
     "date created at"
     createdAt: BigInt!
+    "day data link"
+    dayData: [ReferralCodeDayData!] @derivedFrom(field: "referralCode")
+    "if user is vip tier"
+    vipTier: String
+    "how long user has been vip since"
+    vipSince: BigInt
     "whether or not the referral code exists in the referral contract"
     registeredOnChain: Boolean
     "total number of registered referees"
     numReferees: BigInt!
+}
+
+type ReferralCodeDayData @entity {
+    "format: <referral code>-<day id>"
+    id: ID!
+    "referral code"
+    referralCode: ReferralCode!
+    "timestamp"
+    date: BigInt!
+    "total trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "total fees paid during day"
+    tradingFee: BigDecimal!
+    "a list of new referees added today"
+    newReferees: [Trader!]!
+    "a list of referees which have traded on the day"
+    activeReferees: [Trader!]!
 }

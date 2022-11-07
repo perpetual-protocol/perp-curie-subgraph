@@ -286,6 +286,7 @@ dataSources:
       file: ./src/mappings/referrer.ts
       entities:
         - ReferralCode
+        - ReferralCodeDayData
         - Trader
         - ProtocolEventInfo
       abis:
@@ -296,6 +297,10 @@ dataSources:
           handler: handleReferralCodeCreated
         - event: OnReferralCodeUpserted(address,uint8,uint256,string,string)
           handler: handleReferralCodeUpserted
+        - event: OnUncappedPartnerAssigned(address,string)
+          handler: handleUncappedPartnerUpserted
+        - event: OnUncappedPartnerRemoved(address)
+          handler: handleUncappedPartnerRemoved
   {{/periphery.externalContracts.PerpetualProtocolReferrer}}
 
 {{#graft}}
