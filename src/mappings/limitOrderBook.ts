@@ -26,7 +26,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
         limitOrderFilled.exchangedPositionNotional.div(limitOrderFilled.exchangedPositionSize),
     )
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "LimitOrderFilled"
@@ -51,7 +51,7 @@ export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void
     limitOrderCancelled.positionNotional = fromWei(event.params.positionNotional)
     limitOrderCancelled.limitPrice = abs(limitOrderCancelled.positionNotional.div(limitOrderCancelled.positionSize))
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "LimitOrderCancelled"

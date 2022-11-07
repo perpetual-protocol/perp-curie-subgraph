@@ -18,6 +18,7 @@ dataSources:
       file: ./src/mappings/marketRegistry.ts
       entities:
         - Protocol
+        - ProtocolEventInfo
         - Market
       abis:
         - name: MarketRegistry
@@ -43,10 +44,14 @@ dataSources:
       entities:
         - Deposited
         - Withdrawn
-        - Protocol
-        - Trader
         - CollateralLiquidated
         - BadDebtSettled
+        - Protocol
+        - ProtocolEventInfo
+        - ProtocolTokenBalance
+        - Trader
+        - TraderTokenBalance
+        - Token
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -74,6 +79,7 @@ dataSources:
       file: ./src/mappings/exchange.ts
       entities:
         - FundingUpdated
+        - ProtocolEventInfo
       abis:
         - name: Exchange
           file: ./abis/Exchange.json
@@ -96,18 +102,18 @@ dataSources:
       entities:
         - PositionChanged
         - PositionClosed
-        - Protocol
-        - Market
-        - Trader
-        - Position
         - PositionLiquidated
         - LiquidityChanged
+        - FundingPaymentSettled
+        - Protocol
+        - ProtocolEventInfo
+        - Market
+        - Trader
+        - TraderMarket
         - Maker
         - OpenOrder
-        - FundingPaymentSettled
         - TraderDayData
         - ReferralCodeDayData
-        - ReferralCodeWeeklyData
         - ReferralCode
       abis:
         - name: ClearingHouse
@@ -139,9 +145,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/accountBalance.ts
       entities:
-        - Protocol
         - PnlRealized
         - Trader
+        - ProtocolEventInfo
       abis:
         - name: AccountBalance
           file: ./abis/AccountBalance.json
@@ -162,8 +168,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/insuranceFund.ts
       entities:
-        - Protocol
         - Repaid
+        - Protocol
+        - ProtocolEventInfo
       abis:
         - name: InsuranceFund
           file: ./abis/InsuranceFund.json
@@ -184,7 +191,9 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/mappings/collateralManager.ts
       entities:
+        - CollateralAdded
         - Token
+        - ProtocolEventInfo
       abis:
         - name: CollateralManager
           file: ./abis/CollateralManager.json
@@ -207,6 +216,7 @@ dataSources:
       entities:
         - DelegationApproved
         - DelegationRevoked
+        - ProtocolEventInfo
       abis:
         - name: DelegateApproval
           file: ./abis/DelegateApproval.json
@@ -231,6 +241,7 @@ dataSources:
       entities:
         - LimitOrderFilled
         - LimitOrderCancelled
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderBook
           file: ./abis/LimitOrderBook.json
@@ -254,6 +265,7 @@ dataSources:
       file: ./src/mappings/limitOrderRewardVault.ts
       entities:
         - Disbursed
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderRewardVault
           file: ./abis/LimitOrderRewardVault.json
@@ -261,14 +273,14 @@ dataSources:
         - event: Disbursed(bytes32,address,address,uint256)
           handler: handleDisbursed
 
-  {{#referral}}
+  {{#periphery.externalContracts.PerpetualProtocolReferrer}}
   - kind: ethereum/contract
     name: Referrer
     network: {{ network }}
     source:
       abi: Referrer
-      address: "{{ referral.contracts.PerpetualProtocolReferrer }}"
-      startBlock: {{ referral.contracts.PerpetualProtocolReferrerStartBlock }}
+      address: "{{ periphery.externalContracts.PerpetualProtocolReferrer }}"
+      startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -276,9 +288,9 @@ dataSources:
       file: ./src/mappings/referrer.ts
       entities:
         - ReferralCode
-        - Trader
         - ReferralCodeDayData
-        - ReferralCodeWeeklyData
+        - Trader
+        - ProtocolEventInfo
       abis:
         - name: Referrer
           file: ./abis/Referrer.json
@@ -291,7 +303,7 @@ dataSources:
           handler: handleUncappedPartnerUpserted
         - event: OnUncappedPartnerRemoved(address)
           handler: handleUncappedPartnerRemoved
-  {{/referral}}
+  {{/periphery.externalContracts.PerpetualProtocolReferrer}}
 
 {{#graft}}
 features:

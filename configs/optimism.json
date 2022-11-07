@@ -425,7 +425,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.2.0"
+        "version": "2.2.3"
     },
     "periphery": {
         "chainId": 10,
@@ -463,11 +463,5 @@
         },
         "network": "optimism",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
-    },
-    "referral": {
-        "contracts": {
-            "PerpetualProtocolReferrer": "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
-            "PerpetualProtocolReferrerStartBlock": 513591
-        }
     }
 }

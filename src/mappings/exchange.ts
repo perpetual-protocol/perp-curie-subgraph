@@ -19,7 +19,7 @@ export function handleFundingUpdated(event: FundingUpdatedEvent): void {
         .minus(fundingUpdated.indexTwap)
         .div(fundingUpdated.indexTwap)
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "FundingUpdated"

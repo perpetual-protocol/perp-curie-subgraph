@@ -17,27 +17,25 @@ type Protocol @entity {
     totalSettlementTokenBalance: BigDecimal!
     "total non settlement tokens"
     totalNonSettlementTokenBalances: [ProtocolTokenBalance!] @derivedFrom(field: "protocol")
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-
-    "DEPRECATED: total settlement token in the protocol"
-    totalValueLocked: BigDecimal! @deprecated(reason: "totalValueLocked is deprecated, use totalSettlementTokenBalance/totalNonSettlementTokenBalances instead")
-    "DEPRECATED: bad debt"
-    badDebt: BigDecimal! @deprecated(reason: "badDebt is deprecated, value of this field will always be zero")
-
     "total bad debt settled"
     totalSettledBadDebt: BigDecimal
-
     "total repaid"
     totalRepaid: BigDecimal
+}
+
+type ProtocolEventInfo @entity {
+    "hardcoded as 'protocol-event-info'"
+    id: ID!
+    "total count of all events"
+    totalEventCount: BigInt!
+    "last process event name"
+    lastProcessedEventName: String!
 }
 
 # MarketRegistry
 
 type Market @entity {
-    "format: baseToken address"
+    "format: baseTokenAddress"
     id: ID!
     "baseToken address"
     baseToken: Bytes!
@@ -45,16 +43,12 @@ type Market @entity {
     quoteToken: Bytes!
     "pool address"
     pool: Bytes!
-    "trading fee ratio in uint24: 1000 == 0.1%"
-    feeRatio: BigInt!
+    "trading fee ratio"
+    feeRatio: BigDecimal!
     "cumulative trading volume"
     tradingVolume: BigDecimal!
     "cumulative trading fee"
     tradingFee: BigDecimal!
-    "provided liquidity base amount"
-    baseAmount: BigDecimal!
-    "provided liquidity quote amount"
-    quoteAmount: BigDecimal!
 
     "block number the pool was added to ClearingHouse"
     blockNumberAdded: BigInt!
@@ -64,15 +58,10 @@ type Market @entity {
     blockNumber: BigInt!
     "last updated block timestamp"
     timestamp: BigInt!
-
-    "positions"
-    positions: [Position!]! @derivedFrom(field: "marketRef")
-    "open orders"
-    openOrders: [OpenOrder!]! @derivedFrom(field: "marketRef")
 }
 
-type Token @entity {
-    "format: <token address>"
+type Token @entity(immutable: true) {
+    "format: tokenAddress"
     id: ID!
     "token name"
     name: String!
@@ -80,37 +69,36 @@ type Token @entity {
     symbol: String!
     "token decimals"
     decimals: BigInt!
-
-    "total amount deposited"
-    totalDeposited: BigDecimal!
 }
 
 type TraderTokenBalance @entity {
-    "format: <trader address>-<token address>"
+    "format: traderAddress-collateralTokenAddress"
     id: ID!
     "amount"
     amount: BigDecimal!
-
+    "collateral token"
     token: Token!
+
     "foreign key to Trader"
     trader: Trader!
 }
 
 type ProtocolTokenBalance @entity {
-    "format: <token address>"
+    "format: collateralTokenAddress"
     id: ID!
     "amount"
     amount: BigDecimal!
-
+    "collateral token"
     token: Token!
+
     "foreign key to Protocol"
     protocol: Protocol!
 }
 
 # Vault
 
-type Deposited @entity {
-    "format: <tx hash>-<tx log index>"
+type Deposited @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -129,8 +117,8 @@ type Deposited @entity {
     timestamp: BigInt!
 }
 
-type Withdrawn @entity {
-    "format: <tx hash>-<tx log index>"
+type Withdrawn @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -149,8 +137,8 @@ type Withdrawn @entity {
     timestamp: BigInt!
 }
 
-type CollateralLiquidated @entity {
-    "format: <tx hash>-<tx log index>"
+type CollateralLiquidated @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -177,10 +165,48 @@ type CollateralLiquidated @entity {
     timestamp: BigInt!
 }
 
-# Exchange
+type BadDebtSettled @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "trader"
+    trader: Bytes!
+    "bad debt amount"
+    amount: BigDecimal!
+    "caller"
+    caller: Bytes!
 
-type PositionChanged @entity {
-    "format: <tx hash>-<tx log index>"
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# InsuranceFund
+
+type Repaid @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "repaid amount"
+    repaidAmount: BigDecimal!
+    "insurance fund balance after repaid"
+    tokenBalanceAfterRepaid: BigDecimal!
+    "caller address"
+    caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# ClearingHouse
+
+type PositionChanged @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -221,8 +247,8 @@ type PositionChanged @entity {
     referralCode: ReferralCode
 }
 
-type PositionClosed @entity {
-    "format: <tx hash>-<tx log index>"
+type PositionClosed @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -249,19 +275,23 @@ type PositionClosed @entity {
     timestamp: BigInt!
 }
 
-type FundingUpdated @entity {
-    "format: <tx hash>-<tx log index>"
+type PositionLiquidated @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
+    "trader address"
+    trader: Bytes!
     "baseToken address"
     baseToken: Bytes!
-    "mark price twap"
-    markTwap: BigDecimal!
-    "index price twap"
-    indexTwap: BigDecimal!
-    "daily funding rate"
-    dailyFundingRate: BigDecimal!
+    "liquidator address"
+    liquidator: Bytes!
+    "liquidated position notional abs"
+    positionNotionalAbs: BigDecimal!
+    "liquidated position size abs"
+    positionSizeAbs: BigDecimal!
+    "liquidation penalty"
+    liquidationFee: BigDecimal!
 
     "(block number * 1000 + tx log index) for sorting"
     blockNumberLogIndex: BigInt!
@@ -271,8 +301,8 @@ type FundingUpdated @entity {
     timestamp: BigInt!
 }
 
-type FundingPaymentSettled @entity {
-    "format: <tx hash>-<tx log index>"
+type FundingPaymentSettled @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -292,7 +322,7 @@ type FundingPaymentSettled @entity {
 }
 
 type Trader @entity {
-    "format: trader address"
+    "format: traderAddress"
     id: ID!
     "total deposited settlement collateral + cumulative total pnl"
     settlementTokenBalance: BigDecimal!
@@ -318,25 +348,19 @@ type Trader @entity {
     "last updated block timestamp"
     timestamp: BigInt!
 
-    "positions"
-    positions: [Position!]! @derivedFrom(field: "traderRef")
-
-    dayData: [TraderDayData!] @derivedFrom(field: "trader")
     "the referral code the trader owns and provides to other traders"
     referrerCode: ReferralCode
-    "the referral code the trader has registered to themselve"
+    "the referral code the trader has registered to themselves"
     refereeCode: ReferralCode
+    "trader day data"
+    dayData: [TraderDayData!] @derivedFrom(field: "trader")
+
     "A list of markets that the traders have traded on"
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
-
-    "DEPRECATED: total deposited settlement token + cumulative total pnl"
-    collateral: BigDecimal! @deprecated(reason: "collateral is deprecated, use settlementTokenBalance/nonSettlementTokenBalances instead")
-    "DEPRECATED: cumulative bad debt"
-    badDebt: BigDecimal!
 }
 
 type TraderMarket @entity {
-    "format: <trader address>-<baseToken address>"
+    "format: traderAddress-baseTokenAddress>"
     id: ID!
     "trader address"
     trader: Bytes!
@@ -373,115 +397,8 @@ type TraderMarket @entity {
     marketRef: Market!
 }
 
-type Position @entity {
-    "deprecated: format: <trader address>-<baseToken address>"
-    id: ID! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: trader address"
-    trader: Bytes! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: baseToken address"
-    baseToken: Bytes! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: current position size"
-    positionSize: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: average open notional of the current position"
-    openNotional: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: average entry price of the current position = abs(openNotional / positionSize)"
-    entryPrice: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative trading volume"
-    tradingVolume: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative realize pnl"
-    realizedPnl: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative funding payment: - is received and + is sent"
-    fundingPayment: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative trading fee"
-    tradingFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: cumulative liquidation fee"
-    liquidationFee: BigDecimal! @deprecated(reason: "Use TraderMarket instead.")
-
-    "deprecated: last updated block number"
-    blockNumber: BigInt! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: last updated block timestamp"
-    timestamp: BigInt! @deprecated(reason: "Use TraderMarket instead.")
-
-    "deprecated: foreign key to Trader"
-    traderRef: Trader! @deprecated(reason: "Use TraderMarket instead.")
-    "deprecated: foreign key to Market"
-    marketRef: Market! @deprecated(reason: "Use TraderMarket instead.")
-}
-
-# ClearingHouse
-
-type PositionLiquidated @entity {
-    "format: <tx hash>-<tx log index>"
-    id: ID!
-    "transaction hash"
-    txHash: Bytes!
-    "trader address"
-    trader: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "liquidator address"
-    liquidator: Bytes!
-    "liquidated position notional abs"
-    positionNotionalAbs: BigDecimal!
-    "liquidated position size abs"
-    positionSizeAbs: BigDecimal!
-    "liquidation penalty"
-    liquidationFee: BigDecimal!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-type Maker @entity {
-    "format: maker address"
-    id: ID!
-    "total collected maker fee across all openOrders"
-    collectedFee: BigDecimal!
-
-    "last updated block number"
-    blockNumber: BigInt!
-    "last updated block timestamp"
-    timestamp: BigInt!
-
-    "open orders"
-    openOrders: [OpenOrder!]! @derivedFrom(field: "makerRef")
-}
-
-type OpenOrder @entity {
-    "format: <maker address>-<baseToken address>-<lowerTick>-<upperTick>"
-    id: ID!
-    "maker address"
-    maker: Bytes!
-    "baseToken address"
-    baseToken: Bytes!
-    "lower tick"
-    lowerTick: BigInt!
-    "upper tick"
-    upperTick: BigInt!
-    "current liquidity"
-    liquidity: BigInt!
-    "total collected maker fee"
-    collectedFee: BigDecimal!
-    "collected maker fee in this lifecycle"
-    collectedFeeInThisLifecycle: BigDecimal!
-
-    "last updated block number"
-    blockNumber: BigInt!
-    "last updated block timestamp"
-    timestamp: BigInt!
-
-    "foreign key to Maker"
-    makerRef: Maker!
-    "foreign key to Market"
-    marketRef: Market!
-}
-
-type LiquidityChanged @entity {
-    "format: <tx hash>-<tx log index>"
+type LiquidityChanged @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -514,10 +431,52 @@ type LiquidityChanged @entity {
     timestamp: BigInt!
 }
 
+type Maker @entity {
+    "format: makerAddress"
+    id: ID!
+    "total collected maker fee across all openOrders"
+    collectedFee: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "open orders"
+    openOrders: [OpenOrder!]! @derivedFrom(field: "makerRef")
+}
+
+type OpenOrder @entity {
+    "format: makerAddress-baseTokenAddress-lowerTick-upperTick"
+    id: ID!
+    "maker address"
+    maker: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "lower tick"
+    lowerTick: BigInt!
+    "upper tick"
+    upperTick: BigInt!
+    "current liquidity"
+    liquidity: BigInt!
+    "total collected maker fee"
+    collectedFee: BigDecimal!
+    "collected maker fee in this lifecycle"
+    collectedFeeInThisLifecycle: BigDecimal!
+
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
+
+    "foreign key to Maker"
+    makerRef: Maker!
+}
+
 # AccountBalance
 
-type PnlRealized @entity {
-    "format: <tx hash>-<tx log index>"
+type PnlRealized @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -534,10 +493,60 @@ type PnlRealized @entity {
     timestamp: BigInt!
 }
 
+# Exchange
+
+type FundingUpdated @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "baseToken address"
+    baseToken: Bytes!
+    "mark price twap"
+    markTwap: BigDecimal!
+    "index price twap"
+    indexTwap: BigDecimal!
+    "daily funding rate"
+    dailyFundingRate: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+# CollateralManager
+
+type CollateralAdded @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "transaction hash"
+    txHash: Bytes!
+    "collateral token address"
+    token: Bytes!
+    "priceFeed address"
+    priceFeed: Bytes!
+    "collateral ratio"
+    collateralRatio: BigDecimal!
+    "discount ratio"
+    discountRatio: BigDecimal!
+    "deposit cap"
+    depositCap: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
 # DelegateApproval
 
-type DelegationApproved @entity {
-    "format: <tx hash>-<tx log index>"
+type DelegationApproved @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -556,8 +565,8 @@ type DelegationApproved @entity {
     timestamp: BigInt!
 }
 
-type DelegationRevoked @entity {
-    "format: <tx hash>-<tx log index>"
+type DelegationRevoked @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -578,8 +587,8 @@ type DelegationRevoked @entity {
 
 # LimitOrderBook
 
-type LimitOrderFilled @entity {
-    "format: <tx hash>-<tx log index>"
+type LimitOrderFilled @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -610,8 +619,8 @@ type LimitOrderFilled @entity {
     timestamp: BigInt!
 }
 
-type LimitOrderCancelled @entity {
-    "format: <tx hash>-<tx log index>"
+type LimitOrderCancelled @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -640,8 +649,8 @@ type LimitOrderCancelled @entity {
 
 # LimitOrderRewardVault
 
-type Disbursed @entity {
-    "format: <orderHash>"
+type Disbursed @entity(immutable: true) {
+    "format: orderHash"
     id: ID!
     "transaction hash"
     txHash: Bytes!
@@ -662,55 +671,7 @@ type Disbursed @entity {
     timestamp: BigInt!
 }
 
-# Trader Historical Data
-
-type TraderDayData @entity {
-    "format: <trader id>-<day id>"
-    id: ID!
-    trader: Trader!
-    "timestamp"
-    date: BigInt!
-    "trading volume aggregated per day for trader"
-    tradingVolume: BigDecimal!
-    "trading fee aggregated per day for trader"
-    fee: BigInt!
-    "total pnl aggregated per day for trader"
-    realizedPnl: BigInt!
-}
-
 # Referral
-
-# For tracking day trade metrics for referral codes on a per trader basis
-type ReferralCodeTraderDayData @entity {
-    "format: <referal code>-<day id>-<trader>"
-    id: ID!
-    "relationship to trader. since 2022-08-14, for contract traders, this value is changed from the tx sender to contract. eoa traders have no change"
-    trader: Trader!
-    "relationship to referral day data"
-    referralCodeDayData: ReferralCodeDayData!
-    "trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "fees in notional value"
-    fees: BigDecimal!
-}
-
-type ReferralCodeDayData @entity {
-    "format: <referal code>-<day id>"
-    id: ID!
-    referralCode: ReferralCode!
-    "timestamp"
-    date: BigInt!
-    "total trading volume in notional value"
-    tradingVolume: BigDecimal!
-    "total fees paid during day"
-    fees: BigDecimal!
-    "trading volume and fees grouped by trader"
-    traderData: [ReferralCodeTraderDayData!]! @derivedFrom(field: "referralCodeDayData")
-    "a list of new referees added today"
-    newReferees: [Trader!]!
-    "a list of referees which have traded on the day"
-    activeReferees: [Trader!]!
-}
 
 type ReferralCode @entity {
     id: ID!
@@ -732,47 +693,32 @@ type ReferralCode @entity {
     numReferees: BigInt!
 }
 
-type BadDebtSettled @entity {
-    "format: <tx hash>-<tx log index>"
+type ReferralCodeDayData @entity {
+    "format: <referral code>-<day id>"
     id: ID!
-    "trader"
-    trader: Bytes!
-    "bad debt amount"
-    amount: BigDecimal!
-    "caller"
-    caller: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
+    "referral code"
+    referralCode: ReferralCode!
+    "timestamp"
+    date: BigInt!
+    "total trading volume in notional value"
+    tradingVolume: BigDecimal!
+    "total fees paid during day"
+    tradingFee: BigDecimal!
+    "a list of new referees added today"
+    newReferees: [Trader!]!
+    "a list of referees which have traded on the day"
+    activeReferees: [Trader!]!
 }
 
-type Repaid @entity {
-    "format: <tx hash>-<tx log index>"
+type TraderDayData @entity {
+    "format: <trader id>-<day id>"
     id: ID!
-    "repaid amount"
-    repaidAmount: BigDecimal!
-    "insurance fund balance after repaid"
-    tokenBalanceAfterRepaid: BigDecimal!
-    "caller"
-    caller: Bytes!
-
-    "(block number * 1000 + tx log index) for sorting"
-    blockNumberLogIndex: BigInt!
-    "block number"
-    blockNumber: BigInt!
-    "block timestamp"
-    timestamp: BigInt!
-}
-
-type ProtocolEventInfo @entity {
-    "hardcoded as 'protocol-event-info'"
-    id: ID!
-    "total count of all events"
-    totalEventCount: BigInt!
-    "last process event name"
-    lastProcessedEventName: String!
+    "trader address"
+    trader: Trader!
+    "timestamp"
+    date: BigInt!
+    "trading volume aggregated per day for trader"
+    tradingVolume: BigDecimal!
+    "trading fee aggregated per day for trader"
+    tradingFee: BigDecimal!
 }

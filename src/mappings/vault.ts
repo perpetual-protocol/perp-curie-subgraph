@@ -23,7 +23,6 @@ export function handleDeposited(event: DepositedEvent): void {
     // upsert Token
     const token = getOrCreateToken(event.params.collateralToken)
     const amount = fromWei(event.params.amount, token.decimals)
-    token.totalDeposited = token.totalDeposited.plus(amount)
 
     // insert Deposited
     const deposited = new Deposited(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
@@ -42,15 +41,11 @@ export function handleDeposited(event: DepositedEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
-    protocol.blockNumber = event.block.number
-    protocol.timestamp = event.block.timestamp
 
     // update deposited amount
     if (deposited.collateralToken.equals(USDCAddress)) {
         trader.settlementTokenBalance = trader.settlementTokenBalance.plus(amount)
-        trader.collateral = trader.collateral.plus(amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.plus(amount)
-        protocol.totalValueLocked = protocol.totalValueLocked.plus(amount)
     } else {
         const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
@@ -63,13 +58,12 @@ export function handleDeposited(event: DepositedEvent): void {
         protocolNonSettlementTokenBalance.save()
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "Deposited"
 
     // commit changes
-    token.save()
     deposited.save()
     trader.save()
     protocol.save()
@@ -80,7 +74,6 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
     // upsert Token
     const token = getOrCreateToken(event.params.collateralToken)
     const amount = fromWei(event.params.amount, token.decimals)
-    token.totalDeposited = token.totalDeposited.minus(amount)
 
     // insert Withdrawn
     const withdrawn = new Withdrawn(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
@@ -99,15 +92,11 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
-    protocol.blockNumber = event.block.number
-    protocol.timestamp = event.block.timestamp
 
     // update withdrawn amount
     if (withdrawn.collateralToken.equals(USDCAddress)) {
         trader.settlementTokenBalance = trader.settlementTokenBalance.minus(withdrawn.amount)
-        trader.collateral = trader.collateral.minus(withdrawn.amount)
         protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance.minus(withdrawn.amount)
-        protocol.totalValueLocked = protocol.totalValueLocked.minus(withdrawn.amount)
     } else {
         const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
             event.params.trader,
@@ -120,13 +109,12 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
         protocolNonSettlementTokenBalance.save()
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "Withdrawn"
 
     // commit changes
-    token.save()
     withdrawn.save()
     trader.save()
     protocol.save()
@@ -159,60 +147,58 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     collateralLiquidated.insuranceFundFee = insuranceFundFee
     collateralLiquidated.discountRatio = BigDecimal.fromString(event.params.discountRatio.toString()).div(RATIO_ONE)
 
-    // update trader's non settlement token balance
+    // upsert Trader
+    const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
+    trader.blockNumber = event.block.number
+    trader.timestamp = event.block.timestamp
+    trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repaidSettlementWithoutInsuranceFundFee)
+
     const traderNonSettlementTokenBalance = getOrCreateTraderTokenBalance(
         event.params.trader,
         event.params.collateralToken,
     )
     traderNonSettlementTokenBalance.amount = traderNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
-    // update trader's settlement token balance
-    const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
-    trader.settlementTokenBalance = trader.settlementTokenBalance.plus(repaidSettlementWithoutInsuranceFundFee)
-    trader.collateral = trader.collateral.plus(repaidSettlementWithoutInsuranceFundFee)
-
-    // update protocol's non settlement token balance
-    const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
-    protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(liquidatedAmount)
-
-    // update protocol's settlement token balance
+    // upsert Protocol
     const protocol = getOrCreateProtocol()
     protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance
         .plus(repaidSettlementWithoutInsuranceFundFee)
         .plus(insuranceFundFee)
-    protocol.totalValueLocked = protocol.totalValueLocked
-        .plus(repaidSettlementWithoutInsuranceFundFee)
-        .plus(insuranceFundFee)
 
-    // upsert protocolEventInfo info
+    const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
+    protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(liquidatedAmount)
+
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "CollateralLiquidated"
 
-    collateralToken.save()
-    settlementToken.save()
     collateralLiquidated.save()
-    traderNonSettlementTokenBalance.save()
     trader.save()
-    protocolNonSettlementTokenBalance.save()
+    traderNonSettlementTokenBalance.save()
     protocol.save()
     protocolEventInfo.save()
+    protocolNonSettlementTokenBalance.save()
 }
 
 export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
     const badDebtAmount = fromWei(event.params.amount, VAULT_DECIMALS)
 
-    // insert badDebtSettled
+    // insert BadDebtSettled
     const badDebtSettled = new BadDebtSettled(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
     badDebtSettled.trader = event.params.trader
     badDebtSettled.amount = badDebtAmount
     badDebtSettled.caller = event.transaction.from
-
     badDebtSettled.blockNumberLogIndex = getBlockNumberLogIndex(event)
     badDebtSettled.blockNumber = event.block.number
     badDebtSettled.timestamp = event.block.timestamp
 
-    // update protocol
+    // upsert Trader
+    const trader = Trader.load(formatTraderId(event.params.trader)) as Trader
+    trader.blockNumber = event.block.number
+    trader.timestamp = event.block.timestamp
+
+    // upsert Protocol
     const protocol = getOrCreateProtocol()
     // protocol.totalSettledBadDebt could be null due to backward compatibility
     if (protocol.totalSettledBadDebt !== null) {
@@ -221,13 +207,14 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
         protocol.totalSettledBadDebt = badDebtAmount
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "BadDebtSettled"
 
     // commit changes
     badDebtSettled.save()
+    trader.save()
     protocol.save()
     protocolEventInfo.save()
 }
