@@ -112,6 +112,8 @@ dataSources:
         - TraderMarket
         - Maker
         - OpenOrder
+        - TraderDayData
+        - ReferralCodeDayData
         - ReferralCode
       abis:
         - name: ClearingHouse

@@ -359,19 +359,6 @@ type Trader @entity {
     traderMarkets: [TraderMarket!]! @derivedFrom(field: "traderRef")
 }
 
-type TraderDayData @entity {
-    "format: <trader id>-<day id>"
-    id: ID!
-    "trader address"
-    trader: Trader!
-    "timestamp"
-    date: BigInt!
-    "trading volume aggregated per day for trader"
-    tradingVolume: BigDecimal!
-    "trading fee aggregated per day for trader"
-    tradingFee: BigDecimal!
-}
-
 type TraderMarket @entity {
     "format: traderAddress-baseTokenAddress>"
     id: ID!
@@ -721,4 +708,17 @@ type ReferralCodeDayData @entity {
     newReferees: [Trader!]!
     "a list of referees which have traded on the day"
     activeReferees: [Trader!]!
+}
+
+type TraderDayData @entity {
+    "format: <trader id>-<day id>"
+    id: ID!
+    "trader address"
+    trader: Trader!
+    "timestamp"
+    date: BigInt!
+    "trading volume aggregated per day for trader"
+    tradingVolume: BigDecimal!
+    "trading fee aggregated per day for trader"
+    tradingFee: BigDecimal!
 }
