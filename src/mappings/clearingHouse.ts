@@ -55,6 +55,8 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     // upsert Protocol
     const protocol = getOrCreateProtocol()
     protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
@@ -133,6 +135,8 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     const protocol = getOrCreateProtocol()
     protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     protocol.tradingFee = protocol.tradingFee.plus(positionChanged.fee)
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
@@ -218,6 +222,11 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     traderMarket.timestamp = event.block.timestamp
     traderMarket.liquidationFee = traderMarket.liquidationFee.plus(positionLiquidated.liquidationFee)
 
+    // upsert protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -227,6 +236,7 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     positionLiquidated.save()
     trader.save()
     traderMarket.save()
+    protocol.save()
     protocolEventInfo.save()
 }
 
@@ -307,6 +317,11 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     market.blockNumber = event.block.number
     market.timestamp = event.block.timestamp
 
+    // upsert protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -319,6 +334,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.save()
     openOrder.save()
     market.save()
+    protocol.save()
     protocolEventInfo.save()
 }
 

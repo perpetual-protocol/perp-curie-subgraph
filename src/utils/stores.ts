@@ -38,6 +38,8 @@ export function getOrCreateProtocol(): Protocol {
         protocol.totalSettlementTokenBalance = BD_ZERO
         protocol.totalSettledBadDebt = BD_ZERO
         protocol.totalRepaid = BD_ZERO
+        protocol.blockNumber = BI_ZERO
+        protocol.timestamp = BI_ZERO
         protocol.save()
     }
     return protocol

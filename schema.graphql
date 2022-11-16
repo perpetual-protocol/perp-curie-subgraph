@@ -21,6 +21,10 @@ type Protocol @entity {
     totalSettledBadDebt: BigDecimal
     "total repaid"
     totalRepaid: BigDecimal
+    "last updated block number"
+    blockNumber: BigInt!
+    "last updated block timestamp"
+    timestamp: BigInt!
 }
 
 type ProtocolEventInfo @entity {
