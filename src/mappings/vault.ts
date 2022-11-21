@@ -41,6 +41,8 @@ export function handleDeposited(event: DepositedEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
 
     // update deposited amount
     if (deposited.collateralToken.equals(USDCAddress)) {
@@ -92,6 +94,8 @@ export function handleWithdrawn(event: WithdrawnEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
 
     // update withdrawn amount
     if (withdrawn.collateralToken.equals(USDCAddress)) {
@@ -161,6 +165,9 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     protocol.totalSettlementTokenBalance = protocol.totalSettlementTokenBalance
         .plus(repaidSettlementWithoutInsuranceFundFee)
         .plus(insuranceFundFee)
@@ -200,6 +207,9 @@ export function handleBadDebtSettled(event: BadDebtSettledEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // protocol.totalSettledBadDebt could be null due to backward compatibility
     if (protocol.totalSettledBadDebt !== null) {
         protocol.totalSettledBadDebt = protocol.totalSettledBadDebt!.plus(badDebtAmount)

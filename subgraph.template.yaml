@@ -1,4 +1,4 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: Perpetual Protocol Curie (V2) Subgraph
 repository: https://github.com/perpetual-protocol/perp-curie-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{ core.contracts.MarketRegistry.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/marketRegistry.ts
       entities:
@@ -38,7 +38,7 @@ dataSources:
       startBlock: {{ core.contracts.Vault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/vault.ts
       entities:
@@ -74,7 +74,7 @@ dataSources:
       startBlock: {{ core.contracts.Exchange.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/exchange.ts
       entities:
@@ -96,7 +96,7 @@ dataSources:
       startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/clearingHouse.ts
       entities:
@@ -141,7 +141,7 @@ dataSources:
       startBlock: {{ core.contracts.AccountBalance.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/accountBalance.ts
       entities:
@@ -164,7 +164,7 @@ dataSources:
       startBlock: {{ core.contracts.InsuranceFund.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/insuranceFund.ts
       entities:
@@ -187,7 +187,7 @@ dataSources:
       startBlock: {{ core.contracts.CollateralManager.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/collateralManager.ts
       entities:
@@ -210,7 +210,7 @@ dataSources:
       startBlock: {{ core.contracts.DelegateApproval.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/delegateApproval.ts
       entities:
@@ -235,7 +235,7 @@ dataSources:
       startBlock: {{ periphery.contracts.LimitOrderBook.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/limitOrderBook.ts
       entities:
@@ -260,7 +260,7 @@ dataSources:
       startBlock: {{ periphery.contracts.LimitOrderRewardVault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/limitOrderRewardVault.ts
       entities:
@@ -283,7 +283,7 @@ dataSources:
       startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/referrer.ts
       entities:

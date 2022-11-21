@@ -19,6 +19,9 @@ export function handleRepaid(event: RepaidEvent): void {
 
     // update protocol
     const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // protocol.totalRepaid could be null due to backward compatibility
     if (protocol.totalRepaid !== null) {
         protocol.totalRepaid = protocol.totalRepaid!.plus(repaidAmount)

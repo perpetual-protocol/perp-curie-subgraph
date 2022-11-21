@@ -4,7 +4,7 @@ import {
     DelegationRevoked as DelegationRevokedEvent,
 } from "../../generated/DelegateApproval/DelegateApproval"
 import { DelegationApproved, DelegationRevoked } from "../../generated/schema"
-import { getBlockNumberLogIndex, getOrCreateProtocolEventInfo } from "../utils/stores"
+import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     // insert DelegationApproved
@@ -19,6 +19,11 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     delegationApproved.delegate = event.params.delegate
     delegationApproved.actions = BigInt.fromI32(event.params.actions)
 
+    // update protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -26,6 +31,7 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
 
     // commit changes
     delegationApproved.save()
+    protocol.save()
     protocolEventInfo.save()
 }
 
@@ -42,6 +48,11 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
     delegationRevoked.delegate = event.params.delegate
     delegationRevoked.actions = BigInt.fromI32(event.params.actions)
 
+    // update protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -49,5 +60,6 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
 
     // commit changes
     delegationRevoked.save()
+    protocol.save()
     protocolEventInfo.save()
 }
