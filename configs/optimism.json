@@ -24,6 +24,13 @@
                 "name": "Optimism",
                 "priceFeedAddress": "0x0315FFdef8efC88D193F79Ff52e04474F3d81954",
                 "symbol": "OP"
+            },
+            {
+                "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+                "decimals": 6,
+                "name": "Tether USD",
+                "priceFeedAddress": "0x1f51a3bFaCBcF95E5fe36FdCbFe2B48f9eF38338",
+                "symbol": "USDT"
             }
         ],
         "contracts": {
