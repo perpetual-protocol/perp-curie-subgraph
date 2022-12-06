@@ -82,6 +82,11 @@
                 "createdBlockNumber": 6465083,
                 "name": "contracts/CollateralManager.sol:CollateralManager"
             },
+            "DOGEUSDChainlinkPriceFeedV2": {
+                "address": "0x5e359BEcfF1c8f6A1d5DBeB5F115dbdB1561ea41",
+                "createdBlockNumber": 45563378,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
             "DelegateApproval": {
                 "address": "0xfd7bB5F6844a43c5469c972640Eddfa99597a547",
                 "createdBlockNumber": 13868230,
@@ -168,8 +173,8 @@
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
             },
             "PriceFeedUpdater": {
-                "address": "0x3380Cf565B29b367D6F78e79a6C6bb362eC256ed",
-                "createdBlockNumber": 20389667,
+                "address": "0x239891d6C6AaEd08CF49BbE3dfe3fcf11af7D2e5",
+                "createdBlockNumber": 45564218,
                 "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
             },
             "QuoteToken": {
@@ -191,6 +196,11 @@
                 "address": "0x8F9acef0CdC067819cF3ce7fBE23148Cb1BF851E",
                 "createdBlockNumber": 12110703,
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
+            "USDTUSDChainlinkPriceFeed": {
+                "address": "0x1f51a3bFaCBcF95E5fe36FdCbFe2B48f9eF38338",
+                "createdBlockNumber": 45563234,
+                "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
             "Vault": {
                 "address": "0xAD7b4C162707E0B2b5f6fdDbD3f8538A5fbA0d60",

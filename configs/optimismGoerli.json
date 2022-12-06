@@ -31,6 +31,13 @@
                 "name": "Frax",
                 "priceFeedAddress": "0x7539E08d3e5867C06aFC11A7d31C23364A6300A4",
                 "symbol": "FRAX"
+            },
+            {
+                "address": "0x9E16Fc70FAb64414C59E7423d494f8E9Ba5632A5",
+                "decimals": 6,
+                "name": "USDT",
+                "priceFeedAddress": "0x7539E08d3e5867C06aFC11A7d31C23364A6300A4",
+                "symbol": "USDT"
             }
         ],
         "contracts": {
@@ -79,6 +86,11 @@
                 "createdBlockNumber": 1574932,
                 "name": "contracts/CollateralManager.sol:CollateralManager"
             },
+            "DOGEUSDChainlinkPriceFeedV2": {
+                "address": "0x99bA04589E2841dF3AaE193d4B8580b99E18A8d3",
+                "createdBlockNumber": 3198031,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
             "DelegateApproval": {
                 "address": "0x39A7d8BF822C0f98c56370eaeA171081dC5F56C9",
                 "createdBlockNumber": 1575011,
@@ -125,8 +137,8 @@
                 "name": "contracts/OrderBook.sol:OrderBook"
             },
             "PriceFeedUpdater": {
-                "address": "0xfcc3488431bC5Ff9bF65D204296E0E5E24189c4d",
-                "createdBlockNumber": 1638481,
+                "address": "0xfc0e116fd0c0aFfE0cEe5304eC8C2845CB464D10",
+                "createdBlockNumber": 3198050,
                 "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
             },
             "QuoteToken": {
@@ -197,6 +209,7 @@
             "TestUST": "0x75eB27F52C7145E7Be1ed4CbeCe1874E06A7A46A",
             "TestWBTC": "0x648FD1C74213F3B7Bb14B2D7C38bF062C8dfB4F9",
             "USDC": "0xe5e0DE0ABfEc2FFFaC167121E51d7D8f57C8D9bC",
+            "USDT": "0x9E16Fc70FAb64414C59E7423d494f8E9Ba5632A5",
             "UniswapV3Factory": "0xB656dA17129e7EB733A557f4EBc57B76CFbB5d10",
             "WETH9": "0x4200000000000000000000000000000000000006"
         },
@@ -259,7 +272,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.2.3"
+        "version": "2.4.0"
     },
     "periphery": {
         "chainId": 420,
