@@ -50,6 +50,11 @@ jobs:
           kubectl port-forward service/graph-node 8020:8020 &
           npm run deploy-self-hosted:optimism
 
+      - name: Deploy to Self-hosted Graph Node Cluster
+        run: |
+          kubectl port-forward service/graph-node-cluster-index 8020:8020 &
+          npm run deploy-self-hosted:optimism
+
   notify:
     needs: [deploy]
     runs-on: ubuntu-latest
