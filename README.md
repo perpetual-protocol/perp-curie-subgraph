@@ -24,7 +24,7 @@
 ### Self-hosted Graph Node
 
 - Optimism
-    - Playground: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql`
+    - Playground: https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
     - HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - Healthcheck: `https://subgraph-hc-singapore.perp.fi/graphql`
