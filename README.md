@@ -24,15 +24,15 @@
 ### Self-hosted Graph Node
 
 - Optimism
-    - Playground: https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
-    - HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    - WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    - Healthcheck: `https://subgraph-hc-singapore.perp.fi/graphql`
-- Optimism
     - Playground: https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
     - HTTP: `https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - WebSocket: `wss://thegraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - Healthcheck: `https://thegraph-hc.perp.fi/graphql`
+- Optimism
+    - Playground: https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
+    - HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Healthcheck: `https://subgraph-hc-singapore.perp.fi/graphql`
 - Optimism Goerli
     - Playground: https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
     - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
