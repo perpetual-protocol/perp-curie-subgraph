@@ -34,7 +34,7 @@
     - WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - Healthcheck: `https://subgraph-hc-singapore.perp.fi/graphql`
 - Optimism Goerli
-    - Playground: https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
+    - Playground: https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
     - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - Healthcheck: `https://subgraph-hc.perp.fi/graphql`
