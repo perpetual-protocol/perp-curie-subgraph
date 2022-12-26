@@ -24,6 +24,13 @@
                 "name": "Optimism",
                 "priceFeedAddress": "0x0315FFdef8efC88D193F79Ff52e04474F3d81954",
                 "symbol": "OP"
+            },
+            {
+                "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
+                "decimals": 6,
+                "name": "Tether USD",
+                "priceFeedAddress": "0x1f51a3bFaCBcF95E5fe36FdCbFe2B48f9eF38338",
+                "symbol": "USDT"
             }
         ],
         "contracts": {
@@ -242,6 +249,11 @@
                 "createdBlockNumber": 2888896,
                 "name": "contracts/BaseToken.sol:BaseToken"
             },
+            "vDOGE": {
+                "address": "0x8711ac690984BAdC42e7AbE71f351b5Ac2a2Ad0d",
+                "createdBlockNumber": 52085090,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
             "vETH": {
                 "address": "0x8C835DFaA34e2AE61775e80EE29E2c724c6AE2BB",
                 "createdBlockNumber": 513630,
@@ -303,6 +315,7 @@
             "FRAX": "0x2E3D870790dC77A83DD1d18184Acc7439A53f475",
             "OP": "0x4200000000000000000000000000000000000042",
             "USDC": "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
+            "USDT": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
             "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
             "WETH9": "0x4200000000000000000000000000000000000006"
         },
@@ -354,6 +367,13 @@
                 "address": "0x6e39aCC0Dd292a70D92c447ebCcB8728f4eD5FE4",
                 "baseAddress": "0x7161C3416E08AbAa5cd38E68D9A28E43a694e037",
                 "baseSymbol": "vCRV",
+                "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
+                "quoteSymbol": "vUSD"
+            },
+            {
+                "address": "0x7a5D3DA4658e9315E7d385b8A25D92Cece6e6fab",
+                "baseAddress": "0x8711ac690984BAdC42e7AbE71f351b5Ac2a2Ad0d",
+                "baseSymbol": "vDOGE",
                 "quoteAddress": "0xC84Da6c8ec7A57cD10B939E79eaF9d2D17834E04",
                 "quoteSymbol": "vUSD"
             },
@@ -435,7 +455,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.2.3"
+        "version": "2.4.1"
     },
     "periphery": {
         "chainId": 10,
@@ -473,5 +493,10 @@
         },
         "network": "optimism",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
+    },
+    "graft": {
+        "base": "QmaW6fhz2v4YxLRPiViZvBj8yZxWvYvprexRDtfFnNfxz9",
+        "baseForSelfHosted": "QmbCm38nL6C7v3FS5snzjnQyDMvV8FkM72C3o5RCfGpM9P",
+        "block": 46208441
     }
 }

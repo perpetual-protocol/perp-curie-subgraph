@@ -37,11 +37,11 @@ async function main(): Promise<void> {
             },
             // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
             // so we might need to set different graft.base
-            // graft: {
-            //     base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
-            //     baseForSelfHosted: "Qmf7tFs8sEr55bkNYR3ucWkSqR7sYLBDMkRj6Dmpq4fqhs",
-            //     block: 13868230, // DelegateApproval createdBlockNumber
-            // },
+            graft: {
+                base: "QmaW6fhz2v4YxLRPiViZvBj8yZxWvYvprexRDtfFnNfxz9",
+                baseForSelfHosted: "QmbCm38nL6C7v3FS5snzjnQyDMvV8FkM72C3o5RCfGpM9P",
+                block: 46208441, // the previous block of 46208442 (added USDT as collateral)
+            },
         },
     ]
 

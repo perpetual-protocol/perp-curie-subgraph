@@ -41,7 +41,7 @@
     "devDependencies": {
         "@graphprotocol/graph-cli": "0.35.0",
         "@graphprotocol/graph-ts": "0.28.1",
-        "@perp/curie-deployments": "2022.12.6-1670293966016",
+        "@perp/curie-deployments": "2022.12.21-1671615279855",
         "@types/node-fetch": "2.5.12",
         "@uniswap/v3-core": "1.0.0",
         "mustache": "4.2.0",

@@ -86,6 +86,11 @@
                 "createdBlockNumber": 1574932,
                 "name": "contracts/CollateralManager.sol:CollateralManager"
             },
+            "DOGE2USDChainlinkPriceFeedV2": {
+                "address": "0x2Ca59474bDc3E7b1b2e42A38b513090CBAAe599E",
+                "createdBlockNumber": 3488204,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
             "DOGEUSDChainlinkPriceFeedV2": {
                 "address": "0x99bA04589E2841dF3AaE193d4B8580b99E18A8d3",
                 "createdBlockNumber": 3198031,
@@ -137,8 +142,8 @@
                 "name": "contracts/OrderBook.sol:OrderBook"
             },
             "PriceFeedUpdater": {
-                "address": "0xfc0e116fd0c0aFfE0cEe5304eC8C2845CB464D10",
-                "createdBlockNumber": 3198050,
+                "address": "0xBD0f02b363f8a40dB34da1694d4F7Bb03f91205a",
+                "createdBlockNumber": 3488220,
                 "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
             },
             "QuoteToken": {
@@ -179,6 +184,16 @@
             "vBTC": {
                 "address": "0x0F7786d5669aF06A92f6aE468Fd9c2D839e5e5FA",
                 "createdBlockNumber": 1573536,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
+            "vDOGE": {
+                "address": "0xCD357f38313E10F7B015f8be248fFe3963b8Bb67",
+                "createdBlockNumber": 3487585,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
+            "vDOGE2": {
+                "address": "0x3131E84A7F7F3448321c569826727EE061992b8b",
+                "createdBlockNumber": 3487265,
                 "name": "contracts/BaseToken.sol:BaseToken"
             },
             "vETH": {
@@ -244,6 +259,20 @@
                 "quoteSymbol": "vUSD"
             },
             {
+                "address": "0xdC05a586BbadeE42D3F665936b50066D2e17D44b",
+                "baseAddress": "0x3131E84A7F7F3448321c569826727EE061992b8b",
+                "baseSymbol": "vDOGE2",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
+            },
+            {
+                "address": "0xD29979037cbE85727bFCE00D7E2f961470377b0B",
+                "baseAddress": "0xCD357f38313E10F7B015f8be248fFe3963b8Bb67",
+                "baseSymbol": "vDOGE",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
+            },
+            {
                 "address": "0xf294fb6F5b9Ef157B22Cc6E86276E106298f40De",
                 "baseAddress": "0x60A233b9b94c67e94e0a269429Fb40004D4BA494",
                 "baseSymbol": "vETH",
@@ -272,7 +301,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.4.0"
+        "version": "2.4.1"
     },
     "periphery": {
         "chainId": 420,
