@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-the-graph:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -24,6 +24,20 @@ jobs:
         run: |
           npx graph auth --product hosted-service ${{ secrets.THE_GRAPH_ACCESS_TOKEN }}
           npm run deploy-the-graph:optimism
+
+  deploy-self-hosted-cluster:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install
+        run: npm ci
 
       - name: Configure AWS Credentials - aws eks update-kubeconfig
         uses: aws-actions/configure-aws-credentials@v1
@@ -45,13 +59,13 @@ jobs:
         with:
           version: "v1.23.6"
 
-      - name: Deploy to Self-hosted Graph Node
+      - name: Deploy to Self-hosted Graph Node Cluster
         run: |
-          kubectl port-forward service/graph-node 8020:8020 &
+          kubectl port-forward service/graph-node-cluster-index 8020:8020 &
           npm run deploy-self-hosted:optimism
 
   notify:
-    needs: [deploy]
+    needs: [deploy-the-graph, deploy-self-hosted-cluster]
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Discord

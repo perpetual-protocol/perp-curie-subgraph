@@ -31,6 +31,13 @@
                 "name": "Frax",
                 "priceFeedAddress": "0x7539E08d3e5867C06aFC11A7d31C23364A6300A4",
                 "symbol": "FRAX"
+            },
+            {
+                "address": "0x9E16Fc70FAb64414C59E7423d494f8E9Ba5632A5",
+                "decimals": 6,
+                "name": "USDT",
+                "priceFeedAddress": "0x7539E08d3e5867C06aFC11A7d31C23364A6300A4",
+                "symbol": "USDT"
             }
         ],
         "contracts": {
@@ -79,6 +86,16 @@
                 "createdBlockNumber": 1574932,
                 "name": "contracts/CollateralManager.sol:CollateralManager"
             },
+            "DOGE2USDChainlinkPriceFeedV2": {
+                "address": "0x2Ca59474bDc3E7b1b2e42A38b513090CBAAe599E",
+                "createdBlockNumber": 3488204,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
+            "DOGEUSDChainlinkPriceFeedV2": {
+                "address": "0x99bA04589E2841dF3AaE193d4B8580b99E18A8d3",
+                "createdBlockNumber": 3198031,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
             "DelegateApproval": {
                 "address": "0x39A7d8BF822C0f98c56370eaeA171081dC5F56C9",
                 "createdBlockNumber": 1575011,
@@ -125,8 +142,8 @@
                 "name": "contracts/OrderBook.sol:OrderBook"
             },
             "PriceFeedUpdater": {
-                "address": "0xfcc3488431bC5Ff9bF65D204296E0E5E24189c4d",
-                "createdBlockNumber": 1638481,
+                "address": "0xBD0f02b363f8a40dB34da1694d4F7Bb03f91205a",
+                "createdBlockNumber": 3488220,
                 "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
             },
             "QuoteToken": {
@@ -169,6 +186,16 @@
                 "createdBlockNumber": 1573536,
                 "name": "contracts/BaseToken.sol:BaseToken"
             },
+            "vDOGE": {
+                "address": "0xCD357f38313E10F7B015f8be248fFe3963b8Bb67",
+                "createdBlockNumber": 3487585,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
+            "vDOGE2": {
+                "address": "0x3131E84A7F7F3448321c569826727EE061992b8b",
+                "createdBlockNumber": 3487265,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
             "vETH": {
                 "address": "0x60A233b9b94c67e94e0a269429Fb40004D4BA494",
                 "createdBlockNumber": 1573545,
@@ -197,6 +224,7 @@
             "TestUST": "0x75eB27F52C7145E7Be1ed4CbeCe1874E06A7A46A",
             "TestWBTC": "0x648FD1C74213F3B7Bb14B2D7C38bF062C8dfB4F9",
             "USDC": "0xe5e0DE0ABfEc2FFFaC167121E51d7D8f57C8D9bC",
+            "USDT": "0x9E16Fc70FAb64414C59E7423d494f8E9Ba5632A5",
             "UniswapV3Factory": "0xB656dA17129e7EB733A557f4EBc57B76CFbB5d10",
             "WETH9": "0x4200000000000000000000000000000000000006"
         },
@@ -231,6 +259,20 @@
                 "quoteSymbol": "vUSD"
             },
             {
+                "address": "0xdC05a586BbadeE42D3F665936b50066D2e17D44b",
+                "baseAddress": "0x3131E84A7F7F3448321c569826727EE061992b8b",
+                "baseSymbol": "vDOGE2",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
+            },
+            {
+                "address": "0xD29979037cbE85727bFCE00D7E2f961470377b0B",
+                "baseAddress": "0xCD357f38313E10F7B015f8be248fFe3963b8Bb67",
+                "baseSymbol": "vDOGE",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
+            },
+            {
                 "address": "0xf294fb6F5b9Ef157B22Cc6E86276E106298f40De",
                 "baseAddress": "0x60A233b9b94c67e94e0a269429Fb40004D4BA494",
                 "baseSymbol": "vETH",
@@ -259,7 +301,7 @@
                 "quoteSymbol": "vUSD"
             }
         ],
-        "version": "git+ssh://git@github.com:perpetual-protocol/perp-lushan.git#353ee0f8d14c91aeb9e38528def52e3270e8429d"
+        "version": "2.4.1"
     },
     "periphery": {
         "chainId": 420,
@@ -292,7 +334,8 @@
         },
         "externalContracts": {
             "DefaultProxyAdmin": "0xDE1Ae15927D76865f31AEC3231aeFCFa7F2F59d4",
-            "PERP": "0x090beB6896Aa51AB7403c7Be134970223D624dA7"
+            "PERP": "0x090beB6896Aa51AB7403c7Be134970223D624dA7",
+            "PerpetualProtocolReferrer": "0xDb6c7003C120D810D5e25ea09e2659F258687039"
         },
         "network": "optimism-goerli",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"

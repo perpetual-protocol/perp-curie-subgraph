@@ -7,7 +7,7 @@ import { DelegationApproved, DelegationRevoked } from "../../generated/schema"
 import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleDelegationApproved(event: DelegationApprovedEvent): void {
-    // insert delegationApproved
+    // insert DelegationApproved
     const delegationApproved = new DelegationApproved(
         `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
     )
@@ -19,12 +19,12 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
     delegationApproved.delegate = event.params.delegate
     delegationApproved.actions = BigInt.fromI32(event.params.actions)
 
-    // upsert protocol
+    // update protocol
     const protocol = getOrCreateProtocol()
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "DelegationApproved"
@@ -36,7 +36,7 @@ export function handleDelegationApproved(event: DelegationApprovedEvent): void {
 }
 
 export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
-    // insert delegationRevoked
+    // insert DelegationRevoked
     const delegationRevoked = new DelegationRevoked(
         `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
     )
@@ -48,12 +48,12 @@ export function handleDelegationRevoked(event: DelegationRevokedEvent): void {
     delegationRevoked.delegate = event.params.delegate
     delegationRevoked.actions = BigInt.fromI32(event.params.actions)
 
-    // upsert protocol
+    // update protocol
     const protocol = getOrCreateProtocol()
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "DelegationRevoked"

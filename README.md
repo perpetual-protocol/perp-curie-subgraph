@@ -11,24 +11,28 @@
 ### The Graph
 
 - Optimism
-    - Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism`
+    - Playground: https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism
     - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
     - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Healthcheck: `https://api.thegraph.com/index-node/graphql`
 - Optimism Goerli
-    - Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - Playground: https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-goerli
     - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - Healthcheck: `https://api.thegraph.com/index-node/graphql`
 
 ### Self-hosted Graph Node
 
 - Optimism
-    - Explorer: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql`
-    - HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    - WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Playground: https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
+    - HTTP: `https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - WebSocket: `wss://thegraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Healthcheck: `https://thegraph-hc.perp.fi/graphql`
 - Optimism Goerli
-    - Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql`
+    - Playground: https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
     - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - Healthcheck: `https://subgraph-hc.perp.fi/graphql`
 
 ## Deployment
 
@@ -37,13 +41,13 @@ npm i
 
 # deploy to The Graph
 npx graph auth --product hosted-service <YOUR_THE_GRAPH_ACCESS_TOKEN>
-# create a subgraph in the graph dashboard first (need github admin permission)
-npm run deploy-the-graph:optimism-goerli
+# create a subgraph in the graph dashboard first (need GitHub admin permission)
+npm run deploy-the-graph:optimism
 
 # deploy to self-hosted graph node
-kubectl port-forward service/graph-node 8020:8020
-npx graph create perpetual-protocol/perpetual-v2-optimism-goerli --node http://127.0.0.1:8020
-npm run deploy-self-hosted:optimism-goerli
+kubectl port-forward service/graph-node-cluster-index 8020:8020
+npx graph create perpetual-protocol/perpetual-v2-optimism --node http://127.0.0.1:8020
+npm run deploy-self-hosted:optimism
 ```
 
 ---

@@ -5,7 +5,7 @@ import {
     PositionChanged as PositionChangedEvent,
     PositionClosed as PositionClosedEvent,
     PositionLiquidated as PositionLiquidatedEvent,
-    ReferredPositionChanged,
+    ReferredPositionChanged as ReferredPositionChangedEvent,
 } from "../../generated/ClearingHouse/ClearingHouse"
 import {
     FundingPaymentSettled,
@@ -23,14 +23,12 @@ import {
     getOrCreateMaker,
     getOrCreateMarket,
     getOrCreateOpenOrder,
-    getOrCreatePosition,
     getOrCreateProtocol,
     getOrCreateProtocolEventInfo,
     getOrCreateTrader,
     getOrCreateTraderMarket,
     getReferralCode,
     getReferralCodeDayData,
-    getReferralCodeTraderDayData,
     getTraderDayData,
 } from "../utils/stores"
 
@@ -50,7 +48,6 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     positionClosed.openNotionalBeforeClose = fromWei(event.params.openNotional)
     positionClosed.realizedPnl = fromWei(event.params.realizedPnl)
     positionClosed.closedPrice = fromWei(event.params.closedPrice)
-
     positionClosed.blockNumberLogIndex = getBlockNumberLogIndex(event)
     positionClosed.blockNumber = event.block.number
     positionClosed.timestamp = event.block.timestamp
@@ -84,23 +81,11 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     traderMarket.tradingVolume = traderMarket.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionClosed.realizedPnl)
 
-    // upsert Position
-    const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
-    position.blockNumber = event.block.number
-    position.timestamp = event.block.timestamp
-    // NOTE: position size does not consider maker position
-    position.positionSize = BD_ZERO
-    position.openNotional = BD_ZERO
-    position.realizedPnl = position.realizedPnl.plus(positionClosed.realizedPnl)
-    position.entryPrice = BD_ZERO
-    position.tradingVolume = position.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-
-    // update trader day data
+    // update TraderDayData
     const traderDayData = getTraderDayData(event, event.params.trader)
     traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
-    traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "PositionClosed"
@@ -112,7 +97,6 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     market.save()
     trader.save()
     traderMarket.save()
-    position.save()
     traderDayData.save()
 }
 
@@ -160,8 +144,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.timestamp = event.block.timestamp
     market.tradingVolume = market.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
     market.tradingFee = market.tradingFee.plus(positionChanged.fee)
-    market.baseAmount = market.baseAmount.plus(positionChanged.exchangedPositionSize)
-    market.quoteAmount = market.quoteAmount.plus(positionChanged.exchangedPositionNotional)
 
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
@@ -189,35 +171,15 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     traderMarket.realizedPnl = traderMarket.realizedPnl.plus(positionChanged.realizedPnl)
     traderMarket.tradingFee = traderMarket.tradingFee.plus(positionChanged.fee)
 
-    // upsert Position
-    const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
-    position.blockNumber = event.block.number
-    position.timestamp = event.block.timestamp
-    // NOTE: position size does not consider maker position
-    position.positionSize = position.positionSize.plus(positionChanged.exchangedPositionSize)
-    position.openNotional = positionChanged.openNotional
-    // NOTE: according to contract, a position size < 10 wei cannot be closed or liquidated so we set it to 0
-    if (abs(position.positionSize).lt(DUST_POSITION_SIZE)) {
-        position.positionSize = BD_ZERO
-        position.openNotional = BD_ZERO
-        position.entryPrice = BD_ZERO
-    } else {
-        position.entryPrice = abs(position.openNotional.div(position.positionSize))
-    }
-    position.realizedPnl = position.realizedPnl.plus(positionChanged.realizedPnl)
-    position.tradingVolume = position.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
-    position.tradingFee = position.tradingFee.plus(positionChanged.fee)
+    positionChanged.positionSizeAfter = traderMarket.takerPositionSize
+    positionChanged.entryPriceAfter = traderMarket.entryPrice
 
-    positionChanged.positionSizeAfter = position.positionSize
-    positionChanged.entryPriceAfter = position.entryPrice
-
-    // update trader day data
+    // update TraderDayData
     const traderDayData = getTraderDayData(event, event.params.trader)
     traderDayData.tradingVolume = traderDayData.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
-    traderDayData.fee = traderDayData.fee.plus(event.params.fee)
-    traderDayData.realizedPnl = traderDayData.realizedPnl.plus(event.params.realizedPnl)
+    traderDayData.tradingFee = traderDayData.tradingFee.plus(positionChanged.fee)
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "PositionChanged"
@@ -229,7 +191,6 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     market.save()
     trader.save()
     traderMarket.save()
-    position.save()
     traderDayData.save()
 }
 
@@ -249,12 +210,6 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     positionLiquidated.positionSizeAbs = fromWei(event.params.positionSize)
     positionLiquidated.liquidationFee = fromWei(event.params.liquidationFee)
 
-    // upsert Position
-    const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
-    position.blockNumber = event.block.number
-    position.timestamp = event.block.timestamp
-    position.liquidationFee = position.liquidationFee.plus(positionLiquidated.liquidationFee)
-
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
     trader.blockNumber = event.block.number
@@ -267,16 +222,21 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     traderMarket.timestamp = event.block.timestamp
     traderMarket.liquidationFee = traderMarket.liquidationFee.plus(positionLiquidated.liquidationFee)
 
-    // upsert protocolEventInfo info
+    // upsert protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "PositionLiquidated"
 
     // commit changes
     positionLiquidated.save()
-    position.save()
     trader.save()
     traderMarket.save()
+    protocol.save()
     protocolEventInfo.save()
 }
 
@@ -331,11 +291,6 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
             if (fixedDataMap) {
                 traderMarket.takerPositionSize = fixedDataMap.get("takerPositionSize")!
                 traderMarket.openNotional = fixedDataMap.get("openNotional")!
-
-                const position = getOrCreatePosition(event.params.maker, event.params.baseToken)
-                position.positionSize = fixedDataMap.get("takerPositionSize")!
-                position.openNotional = fixedDataMap.get("openNotional")!
-                position.save()
             }
         }
     }
@@ -357,12 +312,17 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     }
     openOrder.collectedFee = openOrder.collectedFee.plus(liquidityChanged.quoteFee)
 
-    // upsert market
+    // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
-    market.baseAmount = market.baseAmount.plus(liquidityChanged.base)
-    market.quoteAmount = market.quoteAmount.plus(liquidityChanged.quote)
+    market.blockNumber = event.block.number
+    market.timestamp = event.block.timestamp
 
-    // upsert protocolEventInfo info
+    // upsert protocol
+    const protocol = getOrCreateProtocol()
+    protocol.blockNumber = event.block.number
+    protocol.timestamp = event.block.timestamp
+
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "LiquidityChanged"
@@ -374,6 +334,7 @@ export function handleLiquidityChanged(event: LiquidityChangedEvent): void {
     traderMarket.save()
     openOrder.save()
     market.save()
+    protocol.save()
     protocolEventInfo.save()
 }
 
@@ -390,12 +351,6 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     fundingPaymentSettled.baseToken = event.params.baseToken
     fundingPaymentSettled.fundingPayment = fromWei(event.params.fundingPayment)
 
-    // upsert Position
-    const position = getOrCreatePosition(event.params.trader, event.params.baseToken)
-    position.blockNumber = event.block.number
-    position.timestamp = event.block.timestamp
-    position.fundingPayment = position.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
-
     // upsert Trader
     const trader = getOrCreateTrader(event.params.trader)
     trader.blockNumber = event.block.number
@@ -408,28 +363,27 @@ export function handleFundingPaymentSettled(event: FundingPaymentSettledEvent): 
     traderMarket.timestamp = event.block.timestamp
     traderMarket.fundingPayment = traderMarket.fundingPayment.plus(fundingPaymentSettled.fundingPayment)
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "FundingPaymentSettled"
 
     // commit changes
     fundingPaymentSettled.save()
-    position.save()
     trader.save()
     traderMarket.save()
     protocolEventInfo.save()
 }
 
-export function handleReferralPositionChanged(event: ReferredPositionChanged): void {
+export function handleReferralPositionChanged(event: ReferredPositionChangedEvent): void {
     // the referral event is called right after position changed, we assume the
     // log index for the position changed is the one prior
     const positionChangedLogIndex = event.logIndex.minus(BigInt.fromI32(1))
-    // // the referral event shares the same tx as the positionChanged event
-    const positionChangedEvent = PositionChanged.load(
-        event.transaction.hash.toHexString() + "-" + positionChangedLogIndex.toString(),
+    // the referral event shares the same tx as the PositionChanged event
+    const positionChanged = PositionChanged.load(
+        `${event.transaction.hash.toHexString()}-${positionChangedLogIndex.toString()}`,
     )
-    if (positionChangedEvent === null) {
+    if (positionChanged === null) {
         return
     }
 
@@ -439,24 +393,19 @@ export function handleReferralPositionChanged(event: ReferredPositionChanged): v
         return
     }
 
-    const tradingVolume = abs(positionChangedEvent.exchangedPositionNotional)
-    const tradingFee = positionChangedEvent.fee
-
     // uptick trading vol and fees for the referral code day tracking
     const referralCodeDayData = getReferralCodeDayData(event, referralCode.id)
-    referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(tradingVolume)
-    referralCodeDayData.fees = referralCodeDayData.fees.plus(tradingFee)
+    referralCodeDayData.tradingVolume = referralCodeDayData.tradingVolume.plus(
+        abs(positionChanged.exchangedPositionNotional),
+    )
+    referralCodeDayData.tradingFee = referralCodeDayData.tradingFee.plus(positionChanged.fee)
 
     // start from timestamp 1660435200 (2022-08-14T00:00:00.000Z)
     // trader is changed from tx sender to the one whose position has changed
     const traderAddr = event.block.timestamp.ge(BigInt.fromI32(1660435200))
-        ? Address.fromBytes(positionChangedEvent.trader)
+        ? Address.fromBytes(positionChanged.trader)
         : event.transaction.from
     const trader = getOrCreateTrader(traderAddr)
-    // uptick trading vol and fees for the referral code day tracking for the trader
-    const referralCodeTraderDayData = getReferralCodeTraderDayData(referralCodeDayData.id, trader.id)
-    referralCodeTraderDayData.tradingVolume = referralCodeTraderDayData.tradingVolume.plus(tradingVolume)
-    referralCodeTraderDayData.fees = referralCodeTraderDayData.fees.plus(tradingFee)
 
     // uptick active traders for the referral code
     const activeTraders = referralCodeDayData.activeReferees
@@ -466,15 +415,14 @@ export function handleReferralPositionChanged(event: ReferredPositionChanged): v
     }
 
     // Add the referrer code to the position changed event itself
-    positionChangedEvent.referralCode = code
+    positionChanged.referralCode = code
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "ReferralPositionChanged"
 
     referralCodeDayData.save()
-    referralCodeTraderDayData.save()
-    positionChangedEvent.save()
+    positionChanged.save()
     protocolEventInfo.save()
 }

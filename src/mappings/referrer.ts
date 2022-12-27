@@ -17,13 +17,14 @@ import { ReferralCode } from "../../generated/schema"
 import { BI_ONE } from "../utils/numbers"
 
 export function handleReferralCodeCreated(event: OnReferralCodeCreated): void {
-    let trader = getOrCreateTrader(event.params.createdFor)
+    // upsert Trader
+    const trader = getOrCreateTrader(event.params.createdFor)
 
     // createdFor represents the referrer
     createReferralCode(event.params.referralCode, event.params.createdFor, event.params.timestamp)
     trader.referrerCode = event.params.referralCode
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "OnReferralCodeCreated"
@@ -53,7 +54,7 @@ export function handleReferralCodeUpserted(event: OnReferralCodeUpserted): void 
             break
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "OnReferralCodeUpserted"
@@ -140,7 +141,7 @@ export function handleUncappedPartnerUpserted(event: OnUncappedPartnerAssigned):
         }
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerAssigned"
@@ -163,7 +164,7 @@ export function handleUncappedPartnerRemoved(event: OnUncappedPartnerRemoved): v
         }
     }
 
-    // upsert protocolEventInfo info
+    // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
     protocolEventInfo.lastProcessedEventName = "OnUncappedPartnerRemoved"
