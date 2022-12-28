@@ -495,8 +495,8 @@
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
     },
     "graft": {
-        "base": "QmaW6fhz2v4YxLRPiViZvBj8yZxWvYvprexRDtfFnNfxz9",
-        "baseForSelfHosted": "QmbCm38nL6C7v3FS5snzjnQyDMvV8FkM72C3o5RCfGpM9P",
-        "block": 46208441
+        "base": "QmaSQgFqFWeKuXExgwSwi4Q7hRkFedxSFwdd7QrFVTSJeh",
+        "baseForSelfHosted": "QmPaaACwCvuKgSoBSYavo91rw2eV2AC6j6nTWTCgn8izu7",
+        "block": 56325617
     }
 }
