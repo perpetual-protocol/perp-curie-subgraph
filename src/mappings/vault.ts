@@ -6,7 +6,7 @@ import {
     Deposited as DepositedEvent,
     Withdrawn as WithdrawnEvent,
 } from "../../generated/Vault/Vault"
-import { USDCAddress } from "../constants"
+import { USDCAddress, Version } from "../constants"
 import { fromWei, RATIO_ONE, VAULT_DECIMALS } from "../utils/numbers"
 import {
     formatTraderId,
@@ -41,6 +41,7 @@ export function handleDeposited(event: DepositedEvent): void {
 
     // upsert Protocol
     const protocol = getOrCreateProtocol()
+    protocol.contractVersion = Version
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 

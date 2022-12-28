@@ -26,6 +26,10 @@ const protocolId = "perpetual-protocol"
 const protocolEventInfoId = "protocol-event-info"
 
 export function getOrCreateProtocol(): Protocol {
+    // NOTE: if we're using grafting, it will not go to the "create" part
+    // since the protocol already exists
+    // for constants that might change per deployments, for instance, protocol.contractVersion,
+    // we need to update it in one of event handlers
     let protocol = Protocol.load(protocolId)
     if (!protocol) {
         protocol = new Protocol(protocolId)
