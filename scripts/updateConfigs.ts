@@ -38,9 +38,9 @@ async function main(): Promise<void> {
             // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
             // so we might need to set different graft.base
             graft: {
-                base: "QmaW6fhz2v4YxLRPiViZvBj8yZxWvYvprexRDtfFnNfxz9",
-                baseForSelfHosted: "QmbCm38nL6C7v3FS5snzjnQyDMvV8FkM72C3o5RCfGpM9P",
-                block: 46208441, // the previous block of 46208442 (added USDT as collateral)
+                base: "QmaSQgFqFWeKuXExgwSwi4Q7hRkFedxSFwdd7QrFVTSJeh",
+                baseForSelfHosted: "QmPaaACwCvuKgSoBSYavo91rw2eV2AC6j6nTWTCgn8izu7",
+                block: 56325617,
             },
         },
     ]
