@@ -19,7 +19,8 @@ import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/t
 import { ADDRESS_ZERO, BD_ZERO, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
-    return event.block.number.times(BigInt.fromI32(1000)).plus(event.logIndex)
+    const index = event.transactionLogIndex.times(BigInt.fromI32(1000)).plus(event.logIndex)
+    return event.block.number.times(BigInt.fromI32(1000_000)).plus(index)
 }
 
 const protocolId = "perpetual-protocol"
