@@ -19,8 +19,13 @@ import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/t
 import { ADDRESS_ZERO, BD_ZERO, BI_ZERO } from "./numbers"
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
-    const index = event.transactionLogIndex.times(BigInt.fromI32(1000)).plus(event.logIndex)
-    return event.block.number.times(BigInt.fromI32(1000_000)).plus(index)
+    // NOTE:
+    // after bedrock upgrade, the current gasLimit per block is 25M
+    // the maximum amount of tx per block is 25M / 21K ~= 1190.48
+    // (the minimum gas usage of tx is 21K)
+    // BlockNumberLogIndex = block.number * 10_000_000 + txLogIndex * 1_000 + logIndex
+    const index = event.transactionLogIndex.times(BigInt.fromI32(1_000)).plus(event.logIndex)
+    return event.block.number.times(BigInt.fromI32(10_000_000)).plus(index)
 }
 
 const protocolId = "perpetual-protocol"
