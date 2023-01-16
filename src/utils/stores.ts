@@ -23,9 +23,10 @@ export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     // after bedrock upgrade, the current gasLimit per block is 25M
     // the maximum amount of tx per block is 25M / 21K ~= 1190.48
     // (the minimum gas usage of tx is 21K)
-    // BlockNumberLogIndex = block.number * 10_000_000 + txLogIndex * 1_000 + logIndex
-    const index = event.transactionLogIndex.times(BigInt.fromI32(1_000)).plus(event.logIndex)
-    return event.block.number.times(BigInt.fromI32(10_000_000)).plus(index)
+    // and assume the maximum amount of event log per tx is 1000
+    // so we set the maximum value of event.logIndex is 10M
+    // (Based on ether.js documentation, the index of this log across all logs in the entire block.)
+    return event.block.number.times(BigInt.fromI32(10_000_000)).plus(event.logIndex)
 }
 
 const protocolId = "perpetual-protocol"
