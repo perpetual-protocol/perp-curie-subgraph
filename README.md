@@ -62,7 +62,7 @@ kubectl port-forward service/graph-node-cluster-index 8020:8020
 npx graph create perpetual-protocol/perpetual-v2-optimism --node http://127.0.0.1:8020
 npm run deploy-self-hosted:optimism
 
-# deploy to Satsuma
+# deploy to Satsuma (currently no automatic deployment in CI)
 npm run codegen-satsuma:optimism
 # remember to set new version label when deploying new one, format: v1.2.3-feature
 # after the indexing completes, we need to manually promote the new version to live on Satsuma dashboard,
