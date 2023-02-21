@@ -35,11 +35,12 @@ async function main(): Promise<void> {
                 ...MetadataOptimismPeriphery,
                 ...{ version: DependenciesOptimismPeriphery["@perp/curie-periphery-contract"] },
             },
-            // // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node,
-            // // so we might need to set different graft.base
+            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node or Satsuma,
+            // so we might need to set different graft.base
             graft: {
                 base: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
                 baseForSelfHosted: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+                baseForSatsuma: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
                 block: 75682240,
             },
         },
