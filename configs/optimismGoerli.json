@@ -15,14 +15,14 @@
                 "address": "0x648FD1C74213F3B7Bb14B2D7C38bF062C8dfB4F9",
                 "decimals": 8,
                 "name": "Test Wrapped BTC",
-                "priceFeedAddress": "0x33dF4B30FC3dcBEe5A1AF28B5969eAe1B3AA04f1",
+                "priceFeedAddress": "0x48234EE3de52395AED8f8ACBaa0A50D226e91f23",
                 "symbol": "TestWBTC"
             },
             {
                 "address": "0x4200000000000000000000000000000000000006",
                 "decimals": 18,
                 "name": "Wrapped Ether",
-                "priceFeedAddress": "0x458b5c9dAe0e61e03B1c3648aA054C3fC6D5619c",
+                "priceFeedAddress": "0x985852b1B17d8389f8D85D3edaFC0aCbBfc2bfB5",
                 "symbol": "WETH"
             },
             {
@@ -66,6 +66,11 @@
                 "createdBlockNumber": 1573319,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
             },
+            "BTCUSDChainlinkPriceFeedV1R1": {
+                "address": "0x48234EE3de52395AED8f8ACBaa0A50D226e91f23",
+                "createdBlockNumber": 5163618,
+                "name": "contracts/ChainlinkPriceFeedV1R1.sol:ChainlinkPriceFeedV1R1"
+            },
             "BTCUSDChainlinkPriceFeedV2": {
                 "address": "0x9Ef580D41824e1f7dA687EE61Bc40369B4865CaF",
                 "createdBlockNumber": 1573335,
@@ -91,6 +96,11 @@
                 "createdBlockNumber": 3488204,
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
             },
+            "DOGE3USDChainlinkPriceFeedV2": {
+                "address": "0x4703F7E7CE9a0D0cd7B35eBc39EdD8A3BB3b7F3b",
+                "createdBlockNumber": 5723861,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
             "DOGEUSDChainlinkPriceFeedV2": {
                 "address": "0x99bA04589E2841dF3AaE193d4B8580b99E18A8d3",
                 "createdBlockNumber": 3198031,
@@ -105,6 +115,11 @@
                 "address": "0x458b5c9dAe0e61e03B1c3648aA054C3fC6D5619c",
                 "createdBlockNumber": 1573321,
                 "name": "contracts/ChainlinkPriceFeed.sol:ChainlinkPriceFeed"
+            },
+            "ETHUSDChainlinkPriceFeedV1R1": {
+                "address": "0x985852b1B17d8389f8D85D3edaFC0aCbBfc2bfB5",
+                "createdBlockNumber": 5163124,
+                "name": "contracts/ChainlinkPriceFeedV1R1.sol:ChainlinkPriceFeedV1R1"
             },
             "ETHUSDChainlinkPriceFeedV2": {
                 "address": "0x9857Ec7fCb83077F5BaCA64f803CE897B6E0F776",
@@ -142,8 +157,8 @@
                 "name": "contracts/OrderBook.sol:OrderBook"
             },
             "PriceFeedUpdater": {
-                "address": "0xBD0f02b363f8a40dB34da1694d4F7Bb03f91205a",
-                "createdBlockNumber": 3488220,
+                "address": "0x316e83F20b3Ba55F6658051a1CD13f7B67646A37",
+                "createdBlockNumber": 5723883,
                 "name": "contracts/PriceFeedUpdater.sol:PriceFeedUpdater"
             },
             "QuoteToken": {
@@ -154,6 +169,11 @@
             "SOLUSDChainlinkPriceFeedV2": {
                 "address": "0xcc37f11C952EE443B3ccd661317D54Eb01931d8b",
                 "createdBlockNumber": 1573352,
+                "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
+            },
+            "UNIUSDChainlinkPriceFeedV2": {
+                "address": "0x9DF2cA792d3910ae8233F3fF48894D3d705755d6",
+                "createdBlockNumber": 3877338,
                 "name": "contracts/ChainlinkPriceFeedV2.sol:ChainlinkPriceFeedV2"
             },
             "USDTUSDChainlinkPriceFeed": {
@@ -196,6 +216,11 @@
                 "createdBlockNumber": 3487265,
                 "name": "contracts/BaseToken.sol:BaseToken"
             },
+            "vDOGE3": {
+                "address": "0x7Ef6FA5Cf6d70B349A3cac2B24Ab381c8549040c",
+                "createdBlockNumber": 5727244,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
             "vETH": {
                 "address": "0x60A233b9b94c67e94e0a269429Fb40004D4BA494",
                 "createdBlockNumber": 1573545,
@@ -214,6 +239,11 @@
             "vSOL": {
                 "address": "0xF02E22DaB456DA50D9824165bBAC5aE1738dCae3",
                 "createdBlockNumber": 1573592,
+                "name": "contracts/BaseToken.sol:BaseToken"
+            },
+            "vUNI": {
+                "address": "0x36ac509E004D2AC5632465206aC7E3eF23B8113f",
+                "createdBlockNumber": 3894908,
                 "name": "contracts/BaseToken.sol:BaseToken"
             }
         },
@@ -266,6 +296,13 @@
                 "quoteSymbol": "vUSD"
             },
             {
+                "address": "0xEd658e15D95baDC8EBBa51c51654C263E78311c5",
+                "baseAddress": "0x7Ef6FA5Cf6d70B349A3cac2B24Ab381c8549040c",
+                "baseSymbol": "vDOGE3",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
+            },
+            {
                 "address": "0xD29979037cbE85727bFCE00D7E2f961470377b0B",
                 "baseAddress": "0xCD357f38313E10F7B015f8be248fFe3963b8Bb67",
                 "baseSymbol": "vDOGE",
@@ -299,9 +336,16 @@
                 "baseSymbol": "vSOL",
                 "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
                 "quoteSymbol": "vUSD"
+            },
+            {
+                "address": "0x1b800CaF5CbEb71a69Bda8EF014A8445131176ad",
+                "baseAddress": "0x36ac509E004D2AC5632465206aC7E3eF23B8113f",
+                "baseSymbol": "vUNI",
+                "quoteAddress": "0xF1c771713B94d57A1fbb22ddc67920458C455b41",
+                "quoteSymbol": "vUSD"
             }
         ],
-        "version": "2.4.1"
+        "version": "2.4.3"
     },
     "periphery": {
         "chainId": 420,
