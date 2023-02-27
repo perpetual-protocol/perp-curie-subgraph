@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
     LimitOrderCancelled as LimitOrderCancelledEvent,
-    LimitOrderFilled as LimitOrderFilledEvent,
+    LimitOrderFilled as LimitOrderFilledEvent
 } from "../../generated/LimitOrderBook/LimitOrderBook"
 import { LimitOrderCancelled, LimitOrderFilled } from "../../generated/schema"
 import { abs, fromWei } from "../utils/numbers"
@@ -9,7 +9,7 @@ import { getBlockNumberLogIndex, getOrCreateProtocolEventInfo } from "../utils/s
 
 export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     // insert LimitOrderFilled
-    const limitOrderFilled = new LimitOrderFilled(`${event.params.orderHash.toHexString()}}`)
+    const limitOrderFilled = new LimitOrderFilled(`${event.params.orderHash.toHexString()}`)
     limitOrderFilled.blockNumberLogIndex = getBlockNumberLogIndex(event)
     limitOrderFilled.blockNumber = event.block.number
     limitOrderFilled.timestamp = event.block.timestamp
@@ -38,7 +38,7 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
 
 export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void {
     // insert LimitOrderCancelled
-    const limitOrderCancelled = new LimitOrderCancelled(`${event.params.orderHash.toHexString()}}`)
+    const limitOrderCancelled = new LimitOrderCancelled(`${event.params.orderHash.toHexString()}`)
     limitOrderCancelled.blockNumberLogIndex = getBlockNumberLogIndex(event)
     limitOrderCancelled.blockNumber = event.block.number
     limitOrderCancelled.timestamp = event.block.timestamp
