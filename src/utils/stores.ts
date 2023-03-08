@@ -4,6 +4,7 @@ import {
     Market,
     OpenOrder,
     Protocol,
+    ProtocolDayData,
     ProtocolEventInfo,
     ProtocolTokenBalance,
     ReferralCode,
@@ -17,6 +18,8 @@ import {
 import { ChainId, Network, Version } from "../constants"
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol } from "../utils/token"
 import { ADDRESS_ZERO, BD_ZERO, BI_ZERO } from "./numbers"
+
+const SECONDS_IN_A_DAY = 86400
 
 export function getBlockNumberLogIndex(event: ethereum.Event): BigInt {
     // NOTE:
@@ -246,11 +249,11 @@ export function getOrCreateProtocolTokenBalance(tokenAddr: Address): ProtocolTok
 export function getTraderDayData(event: ethereum.Event, trader: Address): TraderDayData {
     let _trader = getOrCreateTrader(trader)
     let timestamp = event.block.timestamp.toI32()
-    let dayID = timestamp / 86400
+    let dayID = timestamp / SECONDS_IN_A_DAY
     let id = _trader.id + "-" + dayID.toString()
 
     let dayData = TraderDayData.load(id)
-    let dayStartTimestamp = dayID * 86400
+    let dayStartTimestamp = dayID * SECONDS_IN_A_DAY
 
     if (!dayData) {
         dayData = new TraderDayData(id)
@@ -280,10 +283,10 @@ export function getReferralCode(referralCode: string): ReferralCode | null {
 
 export function getReferralCodeDayData(event: ethereum.Event, referralCode: string): ReferralCodeDayData {
     let timestamp = event.block.timestamp.toI32()
-    let dayID = timestamp / 86400
+    let dayID = timestamp / SECONDS_IN_A_DAY
     let id = referralCode + "-" + dayID.toString()
     let dayData = ReferralCodeDayData.load(id)
-    let dayStartTimestamp = dayID * 86400
+    let dayStartTimestamp = dayID * SECONDS_IN_A_DAY
 
     if (!dayData) {
         dayData = new ReferralCodeDayData(id)
@@ -309,4 +312,21 @@ export function removeAddressFromList(addresses: string[], addressToRemove: stri
         addresses.splice(spliceIndex, 1)
     }
     return addresses
+}
+
+export function getOrCreateProtocolDayData(event: ethereum.Event): ProtocolDayData {
+    let timestamp = event.block.timestamp.toI32()
+    const dayID = timestamp / SECONDS_IN_A_DAY
+    const dayStartTimestamp = dayID * SECONDS_IN_A_DAY
+    const id = dayID.toString()
+    let protocolDayData = ProtocolDayData.load(id)
+    if (!protocolDayData) {
+        protocolDayData = new ProtocolDayData(id)
+        protocolDayData.date = BigInt.fromI32(dayStartTimestamp)
+        protocolDayData.tradingFee = BD_ZERO
+        protocolDayData.tradingVolume = BD_ZERO
+        protocolDayData.liquidationFee = BD_ZERO
+        protocolDayData.save()
+    }
+    return protocolDayData!
 }

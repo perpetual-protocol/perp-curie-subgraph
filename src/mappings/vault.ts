@@ -12,6 +12,7 @@ import {
     formatTraderId,
     getBlockNumberLogIndex,
     getOrCreateProtocol,
+    getOrCreateProtocolDayData,
     getOrCreateProtocolEventInfo,
     getOrCreateProtocolTokenBalance,
     getOrCreateToken,
@@ -176,6 +177,10 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     const protocolNonSettlementTokenBalance = getOrCreateProtocolTokenBalance(event.params.collateralToken)
     protocolNonSettlementTokenBalance.amount = protocolNonSettlementTokenBalance.amount.minus(liquidatedAmount)
 
+    // upsert ProtocolDayData
+    const protocolDayData = getOrCreateProtocolDayData(event)
+    protocolDayData.liquidationFee = protocolDayData.liquidationFee.plus(collateralLiquidated.insuranceFundFee)
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -185,6 +190,7 @@ export function handleCollateralLiquidated(event: CollateralLiquidatedEvent): vo
     trader.save()
     traderNonSettlementTokenBalance.save()
     protocol.save()
+    protocolDayData.save()
     protocolEventInfo.save()
     protocolNonSettlementTokenBalance.save()
 }
