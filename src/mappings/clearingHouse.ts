@@ -59,6 +59,10 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
+    // update ProtocolDayData
+    const protocolDayData = getOrCreateProtocolDayData(event)
+    protocolDayData.tradingVolume = protocolDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
+
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
     market.blockNumber = event.block.number
@@ -94,6 +98,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     // commit changes
     positionClosed.save()
     protocol.save()
+    protocolDayData.save()
     protocolEventInfo.save()
     market.save()
     trader.save()
