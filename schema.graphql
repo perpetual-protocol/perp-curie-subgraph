@@ -726,3 +726,16 @@ type TraderDayData @entity {
     "trading fee aggregated per day for trader"
     tradingFee: BigDecimal!
 }
+
+type ProtocolDayData @entity {
+    "format: <day id>"
+    id: ID!
+    "day start timestamp"
+    date: BigInt!
+    "trading fees per day"
+    tradingFee: BigDecimal!
+    "liquidation fees per day"
+    liquidationFee: BigDecimal!
+    "trading volume per day"
+    tradingVolume: BigDecimal!
+}

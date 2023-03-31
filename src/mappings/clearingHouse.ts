@@ -24,6 +24,7 @@ import {
     getOrCreateMarket,
     getOrCreateOpenOrder,
     getOrCreateProtocol,
+    getOrCreateProtocolDayData,
     getOrCreateProtocolEventInfo,
     getOrCreateTrader,
     getOrCreateTraderMarket,
@@ -57,6 +58,10 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     protocol.tradingVolume = protocol.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
+
+    // update ProtocolDayData
+    const protocolDayData = getOrCreateProtocolDayData(event)
+    protocolDayData.tradingVolume = protocolDayData.tradingVolume.plus(abs(positionClosed.closedPositionNotional))
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
@@ -93,6 +98,7 @@ export function handlePositionClosed(event: PositionClosedEvent): void {
     // commit changes
     positionClosed.save()
     protocol.save()
+    protocolDayData.save()
     protocolEventInfo.save()
     market.save()
     trader.save()
@@ -135,6 +141,11 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     protocol.tradingFee = protocol.tradingFee.plus(positionChanged.fee)
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
+
+    // update ProtocolDayData
+    const protocolDayData = getOrCreateProtocolDayData(event)
+    protocolDayData.tradingFee = protocolDayData.tradingFee.plus(positionChanged.fee)
+    protocolDayData.tradingVolume = protocolDayData.tradingVolume.plus(abs(positionChanged.exchangedPositionNotional))
 
     // upsert Market
     const market = getOrCreateMarket(event.params.baseToken)
@@ -185,6 +196,7 @@ export function handlePositionChanged(event: PositionChangedEvent): void {
     // commit changes
     positionChanged.save()
     protocol.save()
+    protocolDayData.save()
     protocolEventInfo.save()
     market.save()
     trader.save()
@@ -225,6 +237,10 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     protocol.blockNumber = event.block.number
     protocol.timestamp = event.block.timestamp
 
+    // upsert ProtocolDayData
+    const protocolDayData = getOrCreateProtocolDayData(event)
+    protocolDayData.liquidationFee = protocolDayData.liquidationFee.plus(positionLiquidated.liquidationFee)
+
     // upsert ProtocolEventInfo
     const protocolEventInfo = getOrCreateProtocolEventInfo()
     protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
@@ -235,6 +251,7 @@ export function handlePositionLiquidated(event: PositionLiquidatedEvent): void {
     trader.save()
     traderMarket.save()
     protocol.save()
+    protocolDayData.save()
     protocolEventInfo.save()
 }
 
