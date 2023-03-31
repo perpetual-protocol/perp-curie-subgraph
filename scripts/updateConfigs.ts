@@ -37,12 +37,13 @@ async function main(): Promise<void> {
             },
             // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node or Satsuma,
             // so we might need to set different graft.base
-            graft: {
-                base: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-                baseForSelfHosted: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-                baseForSatsuma: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-                block: 75682240,
-            },
+            // disable graft if you need to do a full re-index
+            // graft: {
+            //     base: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     baseForSelfHosted: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     baseForSatsuma: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     block: 75682240,
+            // },
         },
     ]
 
