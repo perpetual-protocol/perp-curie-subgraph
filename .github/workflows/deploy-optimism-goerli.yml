@@ -1,7 +1,9 @@
 name: Deploy Staging (Optimism Goerli)
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - develop
 
 jobs:
   deploy-the-graph:
