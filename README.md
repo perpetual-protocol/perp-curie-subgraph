@@ -68,8 +68,9 @@ npm run codegen-satsuma:optimism
 # after the indexing completes, we need to manually promote the new version to live on Satsuma dashboard,
 # also need to update the endpoint url for our backend services
 npx graph deploy perpetual-v2-optimism \
-  --version-label v2.0.1-op-market \
+  --version-label v2.0.2-protocoldaydata \
   --node https://app.satsuma.xyz/api/subgraphs/deploy \
+  --ipfs https://api.thegraph.com/ipfs/ \
   --deploy-key <SATSUMA_DEPLOY_KEY>
 ```
 
