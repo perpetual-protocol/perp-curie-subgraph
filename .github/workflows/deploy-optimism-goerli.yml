@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy-the-graph:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: optimism-goerli
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
           npm run deploy-the-graph:optimism-goerli
 
   deploy-self-hosted-cluster:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     environment: optimism-goerli
     steps:
       - name: Checkout
