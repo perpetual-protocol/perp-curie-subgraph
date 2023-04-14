@@ -26,7 +26,7 @@ jobs:
           npx graph auth --product hosted-service ${{ secrets.THE_GRAPH_ACCESS_TOKEN }}
           npm run deploy-the-graph:optimism
 
-  deploy-self-hosted-cluster:
+  deploy-self-hosted:
     runs-on: ubuntu-20.04
     environment: optimism
     steps:
@@ -66,8 +66,29 @@ jobs:
           kubectl port-forward service/graph-node-cluster-index 8020:8020 &
           npm run deploy-self-hosted:optimism
 
+  deploy-satsuma:
+    runs-on: ubuntu-20.04
+    environment: optimism
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install
+        run: npm ci
+
+      - name: Deploy to Satsuma
+        run: |
+          npm run deploy-satsuma:optimism
+        env:
+          SATSUMA_DEPLOY_KEY: "${{ secrets.SATSUMA_DEPLOY_KEY }}"
+
   notify:
-    needs: [deploy-the-graph, deploy-self-hosted-cluster]
+    needs: [deploy-the-graph, deploy-self-hosted, deploy-satsuma]
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Discord
