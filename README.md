@@ -38,8 +38,8 @@
 
 - Optimism
     - Playground: https://subgraph.satsuma-prod.com/perp/perpetual-v2-optimism/playground
-    - HTTP: `https://subgraph.satsuma-prod.com/<QUERY_KEY>/perp/perpetual-v2-optimism/api`
-    - Healthcheck: `https://subgraph.satsuma-prod.com/<QUERY_KEY>/perp/perpetual-v2-optimism/status`
+    - HTTP: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/api`
+    - Healthcheck: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/status`
 
 ## Deployment
 
