@@ -38,8 +38,8 @@
 
 - Optimism
     - Playground: https://subgraph.satsuma-prod.com/perp/perpetual-v2-optimism/playground
-    - HTTP: `https://subgraph.satsuma-prod.com/<QUERY_KEY>/perp/perpetual-v2-optimism/api`
-    - Healthcheck: `https://subgraph.satsuma-prod.com/<QUERY_KEY>/perp/perpetual-v2-optimism/status`
+    - HTTP: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/api`
+    - Healthcheck: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/status`
 
 ## Deployment
 
@@ -47,7 +47,9 @@
 
 Update `scripts/updateConfigs.ts` if we're using [graft](https://thegraph.com/docs/en/developing/creating-a-subgraph/#grafting-onto-existing-subgraphs) to speed up indexing.
 
-### Deploy
+### Local Deploy
+
+We will automatically trigger deployments in CI, but we can also deploy from a local machine.
 
 ```bash
 npm i
@@ -62,16 +64,9 @@ kubectl port-forward service/graph-node-cluster-index 8020:8020
 npx graph create perpetual-protocol/perpetual-v2-optimism --node http://127.0.0.1:8020
 npm run deploy-self-hosted:optimism
 
-# deploy to Satsuma (currently no automatic deployment in CI)
+# deploy to Satsuma
 npm run codegen-satsuma:optimism
-# remember to set new version label when deploying new one, format: v1.2.3-feature
-# after the indexing completes, we need to manually promote the new version to live on Satsuma dashboard,
-# also need to update the endpoint url for our backend services
-npx graph deploy perpetual-v2-optimism \
-  --version-label v2.0.2-protocoldaydata \
-  --node https://app.satsuma.xyz/api/subgraphs/deploy \
-  --ipfs https://api.thegraph.com/ipfs/ \
-  --deploy-key <SATSUMA_DEPLOY_KEY>
+npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key <SATSUMA_DEPLOY_KEY>
 ```
 
 ---
