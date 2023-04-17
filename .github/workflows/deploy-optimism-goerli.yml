@@ -1,17 +1,20 @@
 name: Deploy Staging (Optimism Goerli)
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - develop
 
 jobs:
   deploy-the-graph:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    environment: optimism-goerli
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "16"
 
@@ -24,13 +27,14 @@ jobs:
           npm run deploy-the-graph:optimism-goerli
 
   deploy-self-hosted-cluster:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    environment: optimism-goerli
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "16"
 
@@ -40,8 +44,8 @@ jobs:
       - name: Configure AWS Credentials - aws eks update-kubeconfig
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: "${{ secrets.AWS_SUBGRAPH_STAGING_DEPLOYER_ACCESS_KEY_ID }}"
-          aws-secret-access-key: "${{ secrets.AWS_SUBGRAPH_STAGING_DEPLOYER_SECRET_ACCESS_KEY }}"
+          aws-access-key-id: "${{ secrets.AWS_SUBGRAPH_DEPLOYER_ACCESS_KEY_ID }}"
+          aws-secret-access-key: "${{ secrets.AWS_SUBGRAPH_DEPLOYER_SECRET_ACCESS_KEY }}"
           aws-region: ap-northeast-1
 
       - name: Setup kubeconfig
