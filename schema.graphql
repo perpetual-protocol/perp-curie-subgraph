@@ -642,7 +642,7 @@ type LimitOrderFilled @entity(immutable: true) {
     baseToken: Bytes!
     "hash of the filled limit order"
     orderHash: Bytes!
-    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder, 3 is OtcMakerOrder"
     orderType: BigInt!
     "address of keeper"
     keeper: Bytes!
@@ -674,7 +674,7 @@ type LimitOrderCancelled @entity(immutable: true) {
     baseToken: Bytes!
     "hash of the cancelled limit order"
     orderHash: Bytes!
-    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder, 3 is OtcMakerOrder"
     orderType: BigInt!
     "position size: + is long and - is short"
     positionSize: BigDecimal!
