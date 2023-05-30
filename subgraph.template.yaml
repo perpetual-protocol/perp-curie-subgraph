@@ -170,7 +170,7 @@ dataSources:
       entities:
         - Repaid
         - FeeDistributed
-        - ThresholdChanged
+        - DistributionThresholdChanged
         - Protocol
         - ProtocolEventInfo
       abis:
@@ -181,8 +181,8 @@ dataSources:
           handler: handleRepaid
         - event: FeeDistributed(uint256,uint256,uint256,uint256)
           handler: handleFeeDistributed
-        - event: ThresholdChanged(uint256)
-          handler: handleThresholdChanged
+        - event: DistributionThresholdChanged(uint256)
+          handler: handleDistributionThresholdChanged
 
   - kind: ethereum/contract
     name: CollateralManager

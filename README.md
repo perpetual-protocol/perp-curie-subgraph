@@ -43,9 +43,6 @@
 
 ## Development
 
-### Assumptions
-
-- Currently we assume the settlement token decimals is 6 (i.e. USDC)
 ### Checklist
 
 - `scripts/updateABIs.ts`

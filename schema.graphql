@@ -211,36 +211,46 @@ type Repaid @entity(immutable: true) {
     timestamp: BigInt!
 }
 
-type ThresholdChanged @entity {
-    "format: <tx hash>-<tx log index>"
+type DistributionThresholdChanged @entity {
+    "format: txHash-eventLogIndex"
     id: ID!
+    "distribution threshold amount"
+    distributionThreshold: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
     "block timestamp"
     timestamp: BigInt!
-    "threshold amount"
-    threshold: BigDecimal!
 }
 
 type FeeDistributed @entity {
-    "format: <tx hash>-<tx log index>"
+    "format: txHash-eventLogIndex"
     id: ID!
-    "block timestamp"
-    timestamp: BigInt!
     "surplus amount"
     surplus: BigDecimal!
     "capacity of insuranceFund"
     insuranceFundCapacity: BigDecimal!
     "usdc freeCollateral balance of insuranceFund"
     insuranceFundFreeCollateral: BigDecimal!
-    "threshold amount"
-    threshold: BigDecimal!
+    "distribution threshold amount"
+    distributionThreshold: BigDecimal!
     "caller"
     caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
 }
 
 # ClearingHouse
 
-type PositionChanged @entity {
-    "format: <tx hash>-<tx log index>"
+type PositionChanged @entity(immutable: true) {
+    "format: txHash-eventLogIndex"
     id: ID!
     "transaction hash"
     txHash: Bytes!

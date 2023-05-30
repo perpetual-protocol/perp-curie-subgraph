@@ -2,9 +2,9 @@ import { BigInt } from "@graphprotocol/graph-ts"
 import {
     FeeDistributed as FeeDistributedEvent,
     Repaid as RepaidEvent,
-    ThresholdChanged as ThresholdChangedEvent,
+    DistributionThresholdChanged as DistributionThresholdChangedEvent,
 } from "../../generated/InsuranceFund/InsuranceFund"
-import { FeeDistributed, Repaid, ThresholdChanged } from "../../generated/schema"
+import { FeeDistributed, Repaid, DistributionThresholdChanged } from "../../generated/schema"
 import { fromWei, VAULT_DECIMALS } from "../utils/numbers"
 import { getBlockNumberLogIndex, getOrCreateProtocol, getOrCreateProtocolEventInfo } from "../utils/stores"
 
@@ -13,12 +13,14 @@ export function handleFeeDistributed(event: FeeDistributedEvent): void {
 
     // insert feeDistributed
     const feeDistributed = new FeeDistributed(`${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`)
-    feeDistributed.timestamp = event.block.timestamp
     feeDistributed.surplus = surplus
     feeDistributed.insuranceFundCapacity = fromWei(event.params.insuranceFundCapacity, VAULT_DECIMALS)
     feeDistributed.insuranceFundFreeCollateral = fromWei(event.params.insuranceFundFreeCollateral, VAULT_DECIMALS)
-    feeDistributed.threshold = fromWei(event.params.threshold, VAULT_DECIMALS)
+    feeDistributed.distributionThreshold = fromWei(event.params.distributionThreshold, VAULT_DECIMALS)
     feeDistributed.caller = event.transaction.from
+    feeDistributed.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    feeDistributed.blockNumber = event.block.number
+    feeDistributed.timestamp = event.block.timestamp
 
     // update protocol
     const protocol = getOrCreateProtocol()
@@ -29,22 +31,24 @@ export function handleFeeDistributed(event: FeeDistributedEvent): void {
     protocol.save()
 }
 
-export function handleThresholdChanged(event: ThresholdChangedEvent): void {
-    const threshold = fromWei(event.params.threshold, VAULT_DECIMALS)
+export function handleDistributionThresholdChanged(event: DistributionThresholdChangedEvent): void {
+    const distributionThreshold = fromWei(event.params.distributionThreshold, VAULT_DECIMALS)
 
-    // insert thresholdChanged
-    const thresholdChanged = new ThresholdChanged(
+    // insert DistributionThresholdChanged
+    const distributionThresholdChanged = new DistributionThresholdChanged(
         `${event.transaction.hash.toHexString()}-${event.logIndex.toString()}`,
     )
-    thresholdChanged.timestamp = event.block.timestamp
-    thresholdChanged.threshold = threshold
+    distributionThresholdChanged.distributionThreshold = distributionThreshold
+    distributionThresholdChanged.blockNumberLogIndex = getBlockNumberLogIndex(event)
+    distributionThresholdChanged.blockNumber = event.block.number
+    distributionThresholdChanged.timestamp = event.block.timestamp
 
     // update protocol
     const protocol = getOrCreateProtocol()
-    protocol.insuranceFundFeeDistributionThreshold = threshold
+    protocol.insuranceFundFeeDistributionThreshold = distributionThreshold
 
     // commit changes
-    thresholdChanged.save()
+    distributionThresholdChanged.save()
     protocol.save()
 }
 
