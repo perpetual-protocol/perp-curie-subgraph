@@ -5,7 +5,7 @@ import {
 } from "../../generated/LimitOrderBook/LimitOrderBook"
 import { LimitOrderCancelled, LimitOrderFilled } from "../../generated/schema"
 import { abs, fromWei } from "../utils/numbers"
-import { getBlockNumberLogIndex } from "../utils/stores"
+import { getBlockNumberLogIndex, getOrCreateProtocolEventInfo } from "../utils/stores"
 
 export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
     // insert LimitOrderFilled
@@ -26,8 +26,14 @@ export function handleLimitOrderFilled(event: LimitOrderFilledEvent): void {
         limitOrderFilled.exchangedPositionNotional.div(limitOrderFilled.exchangedPositionSize),
     )
 
+    // upsert ProtocolEventInfo
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "LimitOrderFilled"
+
     // commit changes
     limitOrderFilled.save()
+    protocolEventInfo.save()
 }
 
 export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void {
@@ -45,6 +51,12 @@ export function handleLimitOrderCancelled(event: LimitOrderCancelledEvent): void
     limitOrderCancelled.positionNotional = fromWei(event.params.positionNotional)
     limitOrderCancelled.limitPrice = abs(limitOrderCancelled.positionNotional.div(limitOrderCancelled.positionSize))
 
+    // upsert ProtocolEventInfo
+    const protocolEventInfo = getOrCreateProtocolEventInfo()
+    protocolEventInfo.totalEventCount = protocolEventInfo.totalEventCount.plus(BigInt.fromI32(1))
+    protocolEventInfo.lastProcessedEventName = "LimitOrderCancelled"
+
     // commit changes
     limitOrderCancelled.save()
+    protocolEventInfo.save()
 }

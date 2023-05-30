@@ -1,7 +1,5 @@
 ![image](https://user-images.githubusercontent.com/105896/160323162-cf5b2e70-a9e1-49c8-a84e-da18df6e4f7b.png)
 
-
-
 # perp-curie-subgraph
 
 ## Changelog
@@ -12,41 +10,36 @@
 
 ### The Graph
 
--   Optimism
-    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism`
-    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
--   Optimism Kovan
-    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan`
-    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
-    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
--   Optimism Kovan Dev 1
-    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    -    WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
--   Optimism Kovan Dev 2
-    -   Explorer: `https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    -   HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    -   WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
+- Optimism
+    - Playground: https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism
+    - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Healthcheck: `https://api.thegraph.com/index-node/graphql`
+- Optimism Goerli
+    - Playground: https://thegraph.com/hosted-service/subgraph/perpetual-protocol/perpetual-v2-optimism-goerli
+    - HTTP: `https://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - Healthcheck: `https://api.thegraph.com/index-node/graphql`
 
 ### Self-hosted Graph Node
 
--   Optimism
-    -   Explorer: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql`
-    -   HTTP: `https://subgraph-api-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    -   WebSocket: `wss://subgraph-ws-singapore.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
--   Optimism Kovan
-    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan/graphql`
-    -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
-    -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan`
--   Optimism Kovan Dev 1
-    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1/graphql`
-    -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
-    -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev1`
--   Optimism Kovan Dev 2
-    -   Explorer: `https://subgraph.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2/graphql`
-    -   HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
-    -   WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-kovan-dev2`
+- Optimism
+    - Playground: https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
+    - HTTP: `https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - WebSocket: `wss://thegraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
+    - Healthcheck: `https://thegraph-hc.perp.fi/graphql`
+- Optimism Goerli
+    - Playground: https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
+    - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
+    - Healthcheck: `https://subgraph-hc.perp.fi/graphql`
+
+### Satsuma
+
+- Optimism
+    - Playground: https://subgraph.satsuma-prod.com/perp/perpetual-v2-optimism/playground
+    - HTTP: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/api`
+    - Healthcheck: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/status`
 
 ## Development
 
@@ -60,18 +53,30 @@
 
 ## Deployment
 
+### Configure
+
+Update `scripts/updateConfigs.ts` if we're using [graft](https://thegraph.com/docs/en/developing/creating-a-subgraph/#grafting-onto-existing-subgraphs) to speed up indexing.
+
+### Local Deploy
+
+We will automatically trigger deployments in CI, but we can also deploy from a local machine.
+
 ```bash
 npm i
 
 # deploy to The Graph
-npx graph auth --product hosted-service <YOUR_THE_GRAPH_ACCESS_TOKEN>
-# create a subgraph in the graph dashboard first (need github admin permission)
-npm run deploy-the-graph:optimism-kovan
+npx graph auth --product hosted-service <THE_GRAPH_ACCESS_TOKEN>
+# create a subgraph in the graph dashboard first (need GitHub admin permission)
+npm run deploy-the-graph:optimism
 
-# deploy to self-hosted graph node
-kubectl port-forward service/graph-node 8020:8020
-npx graph create perpetual-protocol/perpetual-v2-optimism-kovan --node http://127.0.0.1:8020
-npm run deploy-self-hosted:optimism-kovan
+# deploy to Self-hosted Graph Node
+kubectl port-forward service/graph-node-cluster-index 8020:8020
+npx graph create perpetual-protocol/perpetual-v2-optimism --node http://127.0.0.1:8020
+npm run deploy-self-hosted:optimism
+
+# deploy to Satsuma
+npm run codegen-satsuma:optimism
+npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key <SATSUMA_DEPLOY_KEY>
 ```
 
 ---

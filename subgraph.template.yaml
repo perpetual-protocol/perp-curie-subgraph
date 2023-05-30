@@ -1,4 +1,4 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: Perpetual Protocol Curie (V2) Subgraph
 repository: https://github.com/perpetual-protocol/perp-curie-subgraph
 schema:
@@ -13,11 +13,12 @@ dataSources:
       startBlock: {{ core.contracts.MarketRegistry.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/marketRegistry.ts
       entities:
         - Protocol
+        - ProtocolEventInfo
         - Market
       abis:
         - name: MarketRegistry
@@ -37,16 +38,20 @@ dataSources:
       startBlock: {{ core.contracts.Vault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/vault.ts
       entities:
         - Deposited
         - Withdrawn
-        - Protocol
-        - Trader
         - CollateralLiquidated
         - BadDebtSettled
+        - Protocol
+        - ProtocolEventInfo
+        - ProtocolTokenBalance
+        - Trader
+        - TraderTokenBalance
+        - Token
       abis:
         - name: Vault
           file: ./abis/Vault.json
@@ -69,11 +74,12 @@ dataSources:
       startBlock: {{ core.contracts.Exchange.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/exchange.ts
       entities:
         - FundingUpdated
+        - ProtocolEventInfo
       abis:
         - name: Exchange
           file: ./abis/Exchange.json
@@ -90,24 +96,24 @@ dataSources:
       startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/clearingHouse.ts
       entities:
         - PositionChanged
         - PositionClosed
-        - Protocol
-        - Market
-        - Trader
-        - Position
         - PositionLiquidated
         - LiquidityChanged
+        - FundingPaymentSettled
+        - Protocol
+        - ProtocolEventInfo
+        - Market
+        - Trader
+        - TraderMarket
         - Maker
         - OpenOrder
-        - FundingPaymentSettled
         - TraderDayData
         - ReferralCodeDayData
-        - ReferralCodeWeeklyData
         - ReferralCode
       abis:
         - name: ClearingHouse
@@ -135,13 +141,13 @@ dataSources:
       startBlock: {{ core.contracts.AccountBalance.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/accountBalance.ts
       entities:
-        - Protocol
         - PnlRealized
         - Trader
+        - ProtocolEventInfo
       abis:
         - name: AccountBalance
           file: ./abis/AccountBalance.json
@@ -158,14 +164,15 @@ dataSources:
       startBlock: {{ core.contracts.InsuranceFund.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/insuranceFund.ts
       entities:
-        - Protocol
         - Repaid
         - FeeDistributed
         - ThresholdChanged
+        - Protocol
+        - ProtocolEventInfo
       abis:
         - name: InsuranceFund
           file: ./abis/InsuranceFund.json
@@ -186,11 +193,13 @@ dataSources:
       startBlock: {{ core.contracts.CollateralManager.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/collateralManager.ts
       entities:
+        - CollateralAdded
         - Token
+        - ProtocolEventInfo
       abis:
         - name: CollateralManager
           file: ./abis/CollateralManager.json
@@ -207,12 +216,13 @@ dataSources:
       startBlock: {{ core.contracts.DelegateApproval.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/delegateApproval.ts
       entities:
         - DelegationApproved
         - DelegationRevoked
+        - ProtocolEventInfo
       abis:
         - name: DelegateApproval
           file: ./abis/DelegateApproval.json
@@ -231,12 +241,13 @@ dataSources:
       startBlock: {{ periphery.contracts.LimitOrderBook.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/limitOrderBook.ts
       entities:
         - LimitOrderFilled
         - LimitOrderCancelled
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderBook
           file: ./abis/LimitOrderBook.json
@@ -255,11 +266,12 @@ dataSources:
       startBlock: {{ periphery.contracts.LimitOrderRewardVault.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/limitOrderRewardVault.ts
       entities:
         - Disbursed
+        - ProtocolEventInfo
       abis:
         - name: LimitOrderRewardVault
           file: ./abis/LimitOrderRewardVault.json
@@ -267,24 +279,24 @@ dataSources:
         - event: Disbursed(bytes32,address,address,uint256)
           handler: handleDisbursed
 
-  {{#referral}}
+  {{#periphery.externalContracts.PerpetualProtocolReferrer}}
   - kind: ethereum/contract
     name: Referrer
     network: {{ network }}
     source:
       abi: Referrer
-      address: "{{ referral.contracts.PerpetualProtocolReferrer }}"
+      address: "{{ periphery.externalContracts.PerpetualProtocolReferrer }}"
       startBlock: {{ core.contracts.ClearingHouse.createdBlockNumber }}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/mappings/referrer.ts
       entities:
         - ReferralCode
-        - Trader
         - ReferralCodeDayData
-        - ReferralCodeWeeklyData
+        - Trader
+        - ProtocolEventInfo
       abis:
         - name: Referrer
           file: ./abis/Referrer.json
@@ -297,7 +309,7 @@ dataSources:
           handler: handleUncappedPartnerUpserted
         - event: OnUncappedPartnerRemoved(address)
           handler: handleUncappedPartnerRemoved
-  {{/referral}}
+  {{/periphery.externalContracts.PerpetualProtocolReferrer}}
 
 {{#graft}}
 features:

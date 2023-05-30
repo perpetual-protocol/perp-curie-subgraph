@@ -1,9 +1,9 @@
 import fetch, { RequestInfo } from "node-fetch"
 
 // const SUBGRAPH_ENDPOINT = "https://api.thegraph.com/index-node/graphql" as RequestInfo
-const SUBGRAPH_ENDPOINT = "https://subgraph-singapore.perp.fi:8030/graphql" as RequestInfo
+const SUBGRAPH_ENDPOINT = "https://thegraph-hc.perp.fi/graphql" as RequestInfo
 
-// const SUBGRAPH_NAME = "perpetual-protocol/perpetual-v2-optimism-kovan"
+// const SUBGRAPH_NAME = "perpetual-protocol/perpetual-v2-optimism-goerli"
 const SUBGRAPH_NAME = "perpetual-protocol/perpetual-v2-optimism"
 
 async function query(query: string): Promise<any> {

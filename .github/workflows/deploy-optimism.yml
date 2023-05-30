@@ -6,14 +6,15 @@ on:
       - main
 
 jobs:
-  deploy:
-    runs-on: ubuntu-20.04
+  deploy-the-graph:
+    runs-on: ubuntu-latest
+    environment: optimism
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "16"
 
@@ -25,11 +26,26 @@ jobs:
           npx graph auth --product hosted-service ${{ secrets.THE_GRAPH_ACCESS_TOKEN }}
           npm run deploy-the-graph:optimism
 
+  deploy-self-hosted:
+    runs-on: ubuntu-latest
+    environment: optimism
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install
+        run: npm ci
+
       - name: Configure AWS Credentials - aws eks update-kubeconfig
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: "${{ secrets.AWS_SUBGRAPH_PRODUCTION_DEPLOYER_ACCESS_KEY_ID }}"
-          aws-secret-access-key: "${{ secrets.AWS_SUBGRAPH_PRODUCTION_DEPLOYER_SECRET_ACCESS_KEY }}"
+          aws-access-key-id: "${{ secrets.AWS_SUBGRAPH_DEPLOYER_ACCESS_KEY_ID }}"
+          aws-secret-access-key: "${{ secrets.AWS_SUBGRAPH_DEPLOYER_SECRET_ACCESS_KEY }}"
           aws-region: ap-southeast-1
 
       - name: Setup kubeconfig
@@ -45,13 +61,34 @@ jobs:
         with:
           version: "v1.23.6"
 
-      - name: Deploy to Self-hosted Graph Node
+      - name: Deploy to Self-hosted Graph Node Cluster
         run: |
-          kubectl port-forward service/graph-node 8020:8020 &
+          kubectl port-forward service/graph-node-cluster-index 8020:8020 &
           npm run deploy-self-hosted:optimism
 
+  deploy-satsuma:
+    runs-on: ubuntu-latest
+    environment: optimism
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install
+        run: npm ci
+
+      - name: Deploy to Satsuma
+        run: |
+          npm run deploy-satsuma:optimism
+        env:
+          SATSUMA_DEPLOY_KEY: "${{ secrets.SATSUMA_DEPLOY_KEY }}"
+
   notify:
-    needs: [deploy]
+    needs: [deploy-the-graph, deploy-self-hosted, deploy-satsuma]
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Discord

@@ -1,18 +1,10 @@
-import DependenciesOptimismKovanDev1 from "@perp/curie-deployments/optimism-kovan-dev1/core/dependencies.json"
-import MetadataOptimismKovanDev1 from "@perp/curie-deployments/optimism-kovan-dev1/core/metadata.json"
-import DependenciesOptimismKovanDev2 from "@perp/curie-deployments/optimism-kovan-dev2/core/dependencies.json"
-import MetadataOptimismKovanDev2 from "@perp/curie-deployments/optimism-kovan-dev2/core/metadata.json"
-import DependenciesOptimismKovan from "@perp/curie-deployments/optimism-kovan/core/dependencies.json"
-import MetadataOptimismKovan from "@perp/curie-deployments/optimism-kovan/core/metadata.json"
+import DependenciesOptimismGoerli from "@perp/curie-deployments/optimism-goerli/core/dependencies.json"
+import MetadataOptimismGoerli from "@perp/curie-deployments/optimism-goerli/core/metadata.json"
 import DependenciesOptimism from "@perp/curie-deployments/optimism/core/dependencies.json"
 import MetadataOptimism from "@perp/curie-deployments/optimism/core/metadata.json"
 
-import DependenciesOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/dependencies.json"
-import MetadataOptimismKovanDev1Periphery from "@perp/curie-deployments/optimism-kovan-dev1/periphery/metadata.json"
-import DependenciesOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/dependencies.json"
-import MetadataOptimismKovanDev2Periphery from "@perp/curie-deployments/optimism-kovan-dev2/periphery/metadata.json"
-import DependenciesOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/dependencies.json"
-import MetadataOptimismKovanPeriphery from "@perp/curie-deployments/optimism-kovan/periphery/metadata.json"
+import DependenciesOptimismGoerliPeriphery from "@perp/curie-deployments/optimism-goerli/periphery/dependencies.json"
+import MetadataOptimismGoerliPeriphery from "@perp/curie-deployments/optimism-goerli/periphery/metadata.json"
 import DependenciesOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/dependencies.json"
 import MetadataOptimismPeriphery from "@perp/curie-deployments/optimism/periphery/metadata.json"
 
@@ -21,39 +13,15 @@ import fs from "fs"
 async function main(): Promise<void> {
     const configs = [
         {
-            name: "optimismKovanDev1",
-            network: "optimism-kovan",
+            name: "optimismGoerli",
+            network: "optimism-goerli",
             core: {
-                ...MetadataOptimismKovanDev1,
-                ...{ version: DependenciesOptimismKovanDev1["@perp/curie-contract"] },
+                ...MetadataOptimismGoerli,
+                ...{ version: DependenciesOptimismGoerli["@perp/curie-contract"] },
             },
             periphery: {
-                ...MetadataOptimismKovanDev1Periphery,
-                ...{ version: DependenciesOptimismKovanDev1Periphery["@perp/curie-periphery-contract"] },
-            },
-        },
-        {
-            name: "optimismKovanDev2",
-            network: "optimism-kovan",
-            core: {
-                ...MetadataOptimismKovanDev2,
-                ...{ version: DependenciesOptimismKovanDev2["@perp/curie-contract"] },
-            },
-            periphery: {
-                ...MetadataOptimismKovanDev2Periphery,
-                ...{ version: DependenciesOptimismKovanDev2Periphery["@perp/curie-periphery-contract"] },
-            },
-        },
-        {
-            name: "optimismKovan",
-            network: "optimism-kovan",
-            core: {
-                ...MetadataOptimismKovan,
-                ...{ version: DependenciesOptimismKovan["@perp/curie-contract"] },
-            },
-            periphery: {
-                ...MetadataOptimismKovanPeriphery,
-                ...{ version: DependenciesOptimismKovanPeriphery["@perp/curie-periphery-contract"] },
+                ...MetadataOptimismGoerliPeriphery,
+                ...{ version: DependenciesOptimismGoerliPeriphery["@perp/curie-periphery-contract"] },
             },
         },
         {
@@ -67,15 +35,15 @@ async function main(): Promise<void> {
                 ...MetadataOptimismPeriphery,
                 ...{ version: DependenciesOptimismPeriphery["@perp/curie-periphery-contract"] },
             },
-            referral: {
-                contracts: {
-                    PerpetualProtocolReferrer: "0xbfBa3368d94b8b006A4fd59C13b9e9F9b071D106",
-                },
-            },
-            graft: {
-                base: "QmTzc1kxV7SZBbw2ApRRQbBndDzYGSyzMogDaMmt6bMJRo",
-                block: 13868230, // DelegateApproval createdBlockNumber
-            },
+            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node or Satsuma,
+            // so we might need to set different graft.base
+            // disable graft if you need to do a full re-index
+            // graft: {
+            //     base: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     baseForSelfHosted: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     baseForSatsuma: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
+            //     block: 75682240,
+            // },
         },
     ]
 
