@@ -41,6 +41,13 @@
     - HTTP: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/api`
     - Healthcheck: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/status`
 
+## Development
+
+### Checklist
+
+- `scripts/updateABIs.ts`
+  - when adding new contracts, remember to include the newly added contract names to `abiNames` so it would be pre-processed
+
 ## Deployment
 
 ### Configure

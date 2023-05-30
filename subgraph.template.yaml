@@ -169,6 +169,8 @@ dataSources:
       file: ./src/mappings/insuranceFund.ts
       entities:
         - Repaid
+        - FeeDistributed
+        - DistributionThresholdChanged
         - Protocol
         - ProtocolEventInfo
       abis:
@@ -177,6 +179,10 @@ dataSources:
       eventHandlers:
         - event: Repaid(uint256,uint256)
           handler: handleRepaid
+        - event: FeeDistributed(uint256,uint256,uint256,uint256)
+          handler: handleFeeDistributed
+        - event: DistributionThresholdChanged(uint256)
+          handler: handleDistributionThresholdChanged
 
   - kind: ethereum/contract
     name: CollateralManager
