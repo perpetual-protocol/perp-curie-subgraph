@@ -41,6 +41,13 @@
     - HTTP: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/api`
     - Healthcheck: `https://subgraph.satsuma-prod.com/<SATSUMA_QUERY_KEY>/perp/perpetual-v2-optimism/status`
 
+## Development
+
+### Checklist
+
+- `scripts/updateABIs.ts`
+  - when adding new contracts, remember to include the newly added contract names to `abiNames` so it would be pre-processed
+
 ## Deployment
 
 ### Configure
@@ -68,6 +75,11 @@ npm run deploy-self-hosted:optimism
 npm run codegen-satsuma:optimism
 npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key <SATSUMA_DEPLOY_KEY>
 ```
+
+### Post Deploy
+
+Wait until all three subgraphs are synced, then click "Promote to Live" button on the newly deployed version to 
+enable it on Satsuma dashboard. Otherwise, clients might get different results from Satsuma, The Graph, and self-hosted.
 
 ---
 

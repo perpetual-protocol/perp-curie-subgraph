@@ -21,6 +21,10 @@ type Protocol @entity {
     totalSettledBadDebt: BigDecimal
     "total repaid"
     totalRepaid: BigDecimal
+    "threshold amount for Insurance Fund to distribute surplus"
+    insuranceFundFeeDistributionThreshold: BigDecimal!
+    "total amount of surplus Insurance Fund has distributed"
+    insuranceFundFeeDistributionTotalAmount: BigDecimal!
     "last updated block number"
     blockNumber: BigInt!
     "last updated block timestamp"
@@ -197,6 +201,42 @@ type Repaid @entity(immutable: true) {
     "insurance fund balance after repaid"
     tokenBalanceAfterRepaid: BigDecimal!
     "caller address"
+    caller: Bytes!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type DistributionThresholdChanged @entity {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "distribution threshold amount"
+    distributionThreshold: BigDecimal!
+
+    "(block number * 1000 + tx log index) for sorting"
+    blockNumberLogIndex: BigInt!
+    "block number"
+    blockNumber: BigInt!
+    "block timestamp"
+    timestamp: BigInt!
+}
+
+type FeeDistributed @entity {
+    "format: txHash-eventLogIndex"
+    id: ID!
+    "surplus amount"
+    surplus: BigDecimal!
+    "capacity of insuranceFund"
+    insuranceFundCapacity: BigDecimal!
+    "usdc freeCollateral balance of insuranceFund"
+    insuranceFundFreeCollateral: BigDecimal!
+    "distribution threshold amount"
+    distributionThreshold: BigDecimal!
+    "caller"
     caller: Bytes!
 
     "(block number * 1000 + tx log index) for sorting"
@@ -602,7 +642,7 @@ type LimitOrderFilled @entity(immutable: true) {
     baseToken: Bytes!
     "hash of the filled limit order"
     orderHash: Bytes!
-    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder, 3 is OtcMakerOrder"
     orderType: BigInt!
     "address of keeper"
     keeper: Bytes!
@@ -634,7 +674,7 @@ type LimitOrderCancelled @entity(immutable: true) {
     baseToken: Bytes!
     "hash of the cancelled limit order"
     orderHash: Bytes!
-    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder"
+    "limit order type: 0 is LimitOrder, 1 is StopLossLimitOrder, 2 is TakeProfitLimitOrder, 3 is OtcMakerOrder"
     orderType: BigInt!
     "position size: + is long and - is short"
     positionSize: BigDecimal!

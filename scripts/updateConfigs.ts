@@ -38,12 +38,23 @@ async function main(): Promise<void> {
             // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node or Satsuma,
             // so we might need to set different graft.base
             // disable graft if you need to do a full re-index
-            // graft: {
-            //     base: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-            //     baseForSelfHosted: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-            //     baseForSatsuma: "QmdDjf1BQb27EafqcW78GGKKXaKHK6rXyD9at5uQxaQj3o",
-            //     block: 75682240,
-            // },
+            // To fetch the subgraph IDs:
+            //     curl --location 'https://your/healthcheck/endpoint' \
+            //         --header 'Content-Type: application/json' \
+            //         --header 'Accept: application/json' \
+            //         --data '{"query":"{\n  indexingStatusForCurrentVersion(subgraphName: \"perpetual-protocol/perpetual-v2-optimism\") {\n    subgraph\n  }\n}","variables":{}}'
+            //
+            // Healthcheck endpoints for each deployment target can be found in the README.
+            // For Satsuma-based subgraph, log in to https://app.satsuma.xyz/
+            //   -> choose target subgraph
+            //   -> find "Deployment ID"
+            graft: {
+                base: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
+                baseForSelfHosted: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
+                baseForSatsuma: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
+                // The block number to restore and start re-syncing from.
+                block: 53189383,
+            },
         },
     ]
 
