@@ -76,6 +76,11 @@ npm run codegen-satsuma:optimism
 npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key <SATSUMA_DEPLOY_KEY>
 ```
 
+### Post Deploy
+
+Wait until all three subgraphs are synced, then click "Promote to Live" button on the newly deployed version to 
+enable it on Satsuma dashboard. Otherwise, clients might get different results from Satsuma, The Graph, and self-hosted.
+
 ---
 
 > If any features/functionalities described in the Perpetual Protocol documentation, code comments, marketing, community discussion or announcements, pre-production or testing code, or other non-production-code sources, vary or differ from the code used in production, in case of any dispute, the code used in production shall prevail.
