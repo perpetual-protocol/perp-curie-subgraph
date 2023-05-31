@@ -24,7 +24,12 @@ export function handleFeeDistributed(event: FeeDistributedEvent): void {
 
     // update protocol
     const protocol = getOrCreateProtocol()
-    protocol.insuranceFundFeeDistributionTotalAmount = protocol.insuranceFundFeeDistributionTotalAmount.plus(surplus)
+    // protocol.insuranceFundFeeDistributionTotalAmount could be null due to backward compatibility
+    if (protocol.insuranceFundFeeDistributionTotalAmount !== null) {
+        protocol.insuranceFundFeeDistributionTotalAmount = protocol.insuranceFundFeeDistributionTotalAmount!.plus(surplus)
+    } else {
+        protocol.insuranceFundFeeDistributionTotalAmount = surplus
+    }
 
     // commit changes
     feeDistributed.save()
