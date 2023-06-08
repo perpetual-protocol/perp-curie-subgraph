@@ -36,7 +36,7 @@
         "deploy-self-hosted:optimism-kovan-dev2": "npm run codegen:optimism-kovan-dev2 && graph deploy --version-label $(git rev-parse --short HEAD) --node http://127.0.0.1:8020 --ipfs https://api.thegraph.com/ipfs/ perpetual-protocol/perpetual-v2-optimism-kovan-dev2",
         "deploy-self-hosted:optimism-goerli": "npm run codegen:optimism-goerli && graph deploy --version-label $(git rev-parse --short HEAD) --node http://127.0.0.1:8020 --ipfs https://api.thegraph.com/ipfs/ perpetual-protocol/perpetual-v2-optimism-goerli",
         "deploy-self-hosted:optimism": "npm run codegen:optimism && graph deploy --version-label $(git rev-parse --short HEAD) --node http://127.0.0.1:8020 --ipfs https://api.thegraph.com/ipfs/ perpetual-protocol/perpetual-v2-optimism",
-        "deploy-satsuma:optimism": "npm run codegen-satsuma:optimism && graph deploy --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key $SATSUMA_DEPLOY_KEY perpetual-v2-optimism",
+        "deploy-satsuma:optimism": "npm run codegen-satsuma:optimism && graph deploy --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key $SATSUMA_DEPLOY_KEY perpetual-v2-optimism",
         "health-check": "ts-node ./scripts/healthCheck.ts",
         "list-subgraph-ids": "ts-node ./scripts/listSubgraphIds.ts"
     },
