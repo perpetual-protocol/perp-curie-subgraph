@@ -12,22 +12,12 @@ class Main {
                 name: "perpetual-protocol/perpetual-v2-optimism",
                 endpoint: "https://api.thegraph.com/index-node/graphql",
             },
-            {
-                label: "self-hosted",
-                name: "perpetual-protocol/perpetual-v2-optimism",
-                endpoint: "https://thegraph-hc.perp.fi/graphql",
-            },
         ],
         goerli: [
             {
                 label: "official",
                 name: "perpetual-protocol/perpetual-v2-optimism-goerli",
                 endpoint: "https://api.thegraph.com/index-node/graphql",
-            },
-            {
-                label: "self-hosted",
-                name: "perpetual-protocol/perpetual-v2-optimism-goerli",
-                endpoint: "https://subgraph-hc.perp.fi/graphql",
             },
         ],
     }
@@ -55,7 +45,7 @@ class Main {
 
     private createQuery(queryName: string, subgraphName: string) {
         return `{
-            ${queryName}(subgraphName: "${subgraphName}") 
+            ${queryName}(subgraphName: "${subgraphName}")
             { subgraph }
         }`
     }
