@@ -37,7 +37,7 @@
     "author": "",
     "license": "BSD 3-Clause License",
     "devDependencies": {
-        "@graphprotocol/graph-cli": "0.35.0",
+        "@graphprotocol/graph-cli": "0.60.0",
         "@graphprotocol/graph-ts": "0.28.1",
         "@perp/curie-deployments": "2023.2.21-1676965315297",
         "@types/node-fetch": "2.5.12",
