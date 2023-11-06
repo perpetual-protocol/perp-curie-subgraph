@@ -30,7 +30,7 @@
         "deploy-the-graph:optimism-kovan-dev2": "npm run codegen:optimism-kovan-dev2 && graph deploy --product hosted-service perpetual-protocol/perpetual-v2-optimism-kovan-dev2",
         "deploy-the-graph:optimism-goerli": "npm run codegen:optimism-goerli && graph deploy --product hosted-service perpetual-protocol/perpetual-v2-optimism-goerli",
         "deploy-the-graph:optimism": "npm run codegen:optimism && graph deploy --product hosted-service perpetual-protocol/perpetual-v2-optimism",
-        "deploy-satsuma:optimism": "npm run codegen-satsuma:optimism && graph deploy --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key $SATSUMA_DEPLOY_KEY perpetual-v2-optimism",
+        "deploy-satsuma:optimism": "npm run codegen-satsuma:optimism && graph deploy --version-label $(git rev-parse --short HEAD) --node https://subgraphs.alchemy.com/api/subgraphs/deploy --ipfs https://ipfs.satsuma.xyz --deploy-key $SATSUMA_DEPLOY_KEY perpetual-v2-optimism",
         "health-check": "ts-node ./scripts/healthCheck.ts",
         "list-subgraph-ids": "ts-node ./scripts/listSubgraphIds.ts"
     },
