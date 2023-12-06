@@ -520,5 +520,10 @@
         },
         "network": "optimism",
         "version": "git+ssh://git@github.com:perpetual-protocol/perp-curie-periphery-contract.git#a8fb8b9d6ee5836b0e652e6789c3c2469155fb2f"
+    },
+    "graft": {
+        "base": "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
+        "baseForSatsuma": "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
+        "block": 113120599
     }
 }
