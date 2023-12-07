@@ -22,9 +22,9 @@ type Protocol @entity {
     "total repaid"
     totalRepaid: BigDecimal
     "threshold amount for Insurance Fund to distribute surplus"
-    insuranceFundFeeDistributionThreshold: BigDecimal!
+    insuranceFundFeeDistributionThreshold: BigDecimal
     "total amount of surplus Insurance Fund has distributed"
-    insuranceFundFeeDistributionTotalAmount: BigDecimal!
+    insuranceFundFeeDistributionTotalAmount: BigDecimal
     "last updated block number"
     blockNumber: BigInt!
     "last updated block timestamp"

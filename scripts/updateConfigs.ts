@@ -48,12 +48,12 @@ async function main(): Promise<void> {
             // For Satsuma-based subgraph, log in to https://app.satsuma.xyz/
             //   -> choose target subgraph
             //   -> find "Deployment ID"
-            // graft: {
-            //     base: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
-            //     baseForSatsuma: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
-            //     // The block number to restore and start re-syncing from.
-            //     block: 53189383,
-            // },
+            graft: {
+                base: "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
+                baseForSatsuma: "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
+                // The block number to restore and start re-syncing from.
+                block: 113120599,
+            },
         },
     ]
 
