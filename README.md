@@ -21,19 +21,6 @@
     - WebSocket: `wss://api.thegraph.com/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
     - Healthcheck: `https://api.thegraph.com/index-node/graphql`
 
-### Self-hosted Graph Node
-
-- Optimism
-    - Playground: https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism/graphql
-    - HTTP: `https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    - WebSocket: `wss://thegraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism`
-    - Healthcheck: `https://thegraph-hc.perp.fi/graphql`
-- Optimism Goerli
-    - Playground: https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli/graphql
-    - HTTP: `https://subgraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
-    - WebSocket: `wss://subgraph-ws.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism-goerli`
-    - Healthcheck: `https://subgraph-hc.perp.fi/graphql`
-
 ### Satsuma
 
 - Optimism
@@ -66,11 +53,6 @@ npx graph auth --product hosted-service <THE_GRAPH_ACCESS_TOKEN>
 # create a subgraph in the graph dashboard first (need GitHub admin permission)
 npm run deploy-the-graph:optimism
 
-# deploy to Self-hosted Graph Node
-kubectl port-forward service/graph-node-cluster-index 8020:8020
-npx graph create perpetual-protocol/perpetual-v2-optimism --node http://127.0.0.1:8020
-npm run deploy-self-hosted:optimism
-
 # deploy to Satsuma
 npm run codegen-satsuma:optimism
 npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short HEAD) --node https://app.satsuma.xyz/api/subgraphs/deploy --ipfs https://api.thegraph.com/ipfs/ --deploy-key <SATSUMA_DEPLOY_KEY>
@@ -78,8 +60,7 @@ npx graph deploy perpetual-v2-optimism --version-label $(git rev-parse --short H
 
 ### Post Deploy
 
-Wait until all three subgraphs are synced, then click "Promote to Live" button on the newly deployed version to 
-enable it on Satsuma dashboard. Otherwise, clients might get different results from Satsuma, The Graph, and self-hosted.
+Wait until all three subgraphs are synced, then click "Promote to Live" button on the newly deployed version to enable it on Satsuma dashboard. Otherwise, clients might get different results from The Graph and Satsuma.
 
 ---
 

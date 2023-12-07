@@ -35,7 +35,7 @@ async function main(): Promise<void> {
                 ...MetadataOptimismPeriphery,
                 ...{ version: DependenciesOptimismPeriphery["@perp/curie-periphery-contract"] },
             },
-            // NOTE: subgraph id exists in The Graph might not exist in self-hosted graph node or Satsuma,
+            // NOTE: subgraph id exists in The Graph might not exist in Satsuma,
             // so we might need to set different graft.base
             // disable graft if you need to do a full re-index
             // To fetch the subgraph IDs:
@@ -49,11 +49,10 @@ async function main(): Promise<void> {
             //   -> choose target subgraph
             //   -> find "Deployment ID"
             graft: {
-                base: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
-                baseForSelfHosted: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
-                baseForSatsuma: "QmW6xjaqSA37ZxsQ9WLp5fqReHpgXrridcWrk4DcpMqGa2",
+                base: "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
+                baseForSatsuma: "QmVyf7ovnBMjNJioxg2Z8h22JHSgrEZd58wCwqLhV9AdG8",
                 // The block number to restore and start re-syncing from.
-                block: 53189383,
+                block: 113120599,
             },
         },
     ]
